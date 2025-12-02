@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AM Beauty Studio | 專屬霧眉霧唇設計</title>
+    <style>
+        /* 您的品牌色調設定 */
+        :root {
+            --primary: #D6BFA8;   /* 標題緞帶色 */
+            --secondary: #E6C2C2; /* 價格區塊粉色 */
+            --bg: #FDFBF7;        /* 米白紙質感背景 */
+            --text: #5A483F;      /* 深咖啡色文字 */
+            --accent: #FFFFFF;    /* 純白卡片底 */
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* 頂部 Hero 區塊 */
+        .hero {
+            background-color: var(--primary);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .hero h1 { margin: 0; font-size: 2rem; }
+        .hero p { margin-top: 10px; opacity: 0.9; }
+
+        /* 容器 */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 卡片設計 */
+        .card {
+            background: var(--accent);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(90, 72, 63, 0.05);
+            border: 1px solid rgba(214, 191, 168, 0.3);
+            text-align: center;
+        }
+
+        .section-title {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 5px 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        /* 服務項目 */
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        .service-item {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #eee;
+        }
+        .price-tag {
+            color: #C17E7E;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        /* 按鈕樣式 */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px 0;
+            background-color: var(--secondary);
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+        .btn:hover { opacity: 0.9; }
+        
+        /* 嵌入區塊 iframe RWD */
+        .iframe-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+        }
+        .iframe-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="hero">
+        <h1>AM Beauty Studio</h1>
+        <p>打造妳的偽素顏小心機</p>
+    </div>
+
+    <div class="container">
+        
+        <!-- 服務價目表 -->
+        <div class="card">
+            <div class="section-title">服務項目</div>
+            <div class="service-grid">
+                <div class="service-item">
+                    <h3>無痛霧眉</h3>
+                    <p class="price-tag">NT$ 4,800</p>
+                    <small>#新眉清透 #自然妝感</small>
+                </div>
+                <div class="service-item">
+                    <h3>少女霧唇</h3>
+                    <p class="price-tag">NT$ 5,200</p>
+                    <small>#改善暗沉 #氣色感</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- 補色查詢 (嵌入您的網頁) -->
+        <div class="card" style="border: 2px dashed var(--secondary);">
+            <div class="section-title" style="background: var(--secondary);">舊客補色查詢</div>
+            <p>忘記什麼時候做的嗎？輸入資料立即查詢補色優惠期限！</p>
+            
+            <!-- 請將 src 換成您的補色網頁網址 -->
+            <iframe src="https://example.com/check" style="width:100%; height:300px; border:none; background:#fafafa;"></iframe>
+        </div>
+
+        <!-- 預約按鈕區 -->
+        <div class="card">
+            <h3>準備好變美了嗎？</h3>
+            <a href="您的神美系統連結" class="btn" style="background-color: var(--primary);">立即預約諮詢</a>
+            <br>
+            <a href="您的LINE連結" class="btn" style="background-color: #06C755;">LINE 官方客服</a>
+        </div>
+
+    </div>
+
+</body>
+</html>
