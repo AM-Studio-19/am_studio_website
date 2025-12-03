@@ -5,18 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AM Beauty Studio | 專屬霧眉霧唇設計</title>
     
-    <!-- 1. 引入 Tailwind CSS -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      tailwind.config = {
-        corePlugins: {
-          preflight: false, // 不重置原本樣式
-        }
-      }
+      tailwind.config = { corePlugins: { preflight: false } }
     </script>
 
     <style>
-        /* 您的品牌色調設定 */
+        /* 品牌色調 */
         :root {
             --primary: #D6BFA8;   /* 奶茶棕 */
             --secondary: #E6C2C2; /* 玫瑰粉 */
@@ -35,8 +31,10 @@
             margin: 0;
             padding: 0;
             line-height: 1.6;
+            padding-bottom: 100px; /* 為了不被懸浮按鈕擋住 */
         }
 
+        /* 頂部 Hero */
         .hero {
             background-color: var(--primary);
             color: white;
@@ -75,96 +73,149 @@
             font-size: 1.1rem;
         }
 
-        /* 服務項目 Grid */
+        /* --- 服務項目卡片 (修改版) --- */
         .service-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
+            gap: 20px;
         }
         .service-item {
             background: #fff;
-            padding: 0 0 15px 0; /* 修改：padding 改在內部控制，因為有圖片 */
-            border-radius: 10px;
+            padding: 15px; /* 增加內距，讓圖片不要滿版 */
+            border-radius: 15px;
             border: 1px solid #eee;
-            overflow: hidden; /* 確保圖片圓角不跑掉 */
             transition: transform 0.2s;
+            cursor: pointer; /* 讓滑鼠變成手手，提示可點擊 */
         }
-        .service-item:hover {
-            transform: translateY(-5px); /* 滑鼠移過去會浮起來 */
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        .service-item:active {
+            transform: scale(0.98); /* 點擊時有微縮效果 */
         }
         .service-img-box {
             width: 100%;
-            height: 200px; /* 固定圖片高度，保持整齊 */
-            background-color: #f0f0f0;
+            height: 200px;
+            background-color: #f9f9f9;
             overflow: hidden;
+            border-radius: 10px; /* 圖片圓角 */
+            margin-bottom: 10px;
         }
         .service-img-box img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* 讓圖片填滿不變形 */
+            object-fit: cover;
         }
-        .service-info {
-            padding: 15px;
-        }
+        .service-info h3 { margin: 5px 0; font-size: 1.1rem; }
         .price-tag {
             color: #C17E7E;
             font-size: 1.2rem;
             font-weight: bold;
             margin: 5px 0;
         }
+        .more-info-hint {
+            font-size: 0.8rem;
+            color: var(--primary);
+            margin-top: 5px;
+            text-decoration: underline;
+        }
 
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 15px 0;
-            background-color: var(--secondary);
-            color: #fff;
+        /* --- 懸浮預約按鈕 --- */
+        .floating-cta {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 400px;
+            background-color: var(--text); /* 深咖色更有質感 */
+            color: white;
+            padding: 15px 20px;
+            border-radius: 50px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
             text-align: center;
             text-decoration: none;
-            border-radius: 50px;
             font-weight: bold;
-            margin-top: 15px;
-            transition: 0.3s;
-            cursor: pointer;
-            border: none;
-            font-size: 1rem;
+            font-size: 1.1rem;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: bottom 0.3s;
         }
-        .btn:hover { opacity: 0.9; }
+        .floating-cta:hover { background-color: #4a3b33; }
 
-        /* 搜尋框樣式 */
-        .search-input {
-            width: 100%;
-            padding: 15px;
-            font-size: 16px;
-            border: 2px solid var(--secondary);
-            border-radius: 10px;
-            background-color: #fafafa;
-            color: var(--text);
+        /* --- 彈出視窗 (Modal) --- */
+        .modal-overlay {
+            display: none; /* 預設隱藏 */
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
             box-sizing: border-box;
-            outline: none;
-            transition: 0.3s;
-            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
-        .search-input:focus {
-            border-color: var(--primary);
-            background-color: white;
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 20px;
+            padding: 25px;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s;
+            max-height: 80vh; /* 防止太高超出螢幕 */
+            overflow-y: auto;
         }
-        
-        .result-enter { animation: slideIn 0.5s ease-out forwards; opacity: 0; transform: translateY(20px); }
-        @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
+        .modal-close {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 2rem;
+            color: #aaa;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .modal-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .modal-title { font-size: 1.5rem; font-weight: bold; color: var(--text); margin: 0; }
+        .modal-price { color: #C17E7E; font-size: 1.3rem; font-weight: bold; margin: 5px 0 15px 0; }
+        .modal-desc { 
+            color: #666; 
+            text-align: left; 
+            background: #fdfbf7; 
+            padding: 15px; 
+            border-radius: 10px; 
+            line-height: 1.8;
+        }
 
-        .collapsible-content { 
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
-            max-height: 0; 
-            overflow: hidden; 
-            opacity: 0; 
+        /* 顯示動畫 */
+        .modal-overlay.show { display: flex; opacity: 1; }
+        .modal-overlay.show .modal-content { transform: translateY(0); }
+
+        /* 搜尋按鈕樣式 */
+        .btn {
+            display: block; width: 100%; padding: 12px 0;
+            background-color: var(--secondary); color: #fff;
+            border-radius: 50px; font-weight: bold; margin-top: 10px;
+            cursor: pointer; border: none; font-size: 1rem;
         }
-        .collapsible-content.expanded { 
-            max-height: 1000px; 
-            opacity: 1; 
+        .search-input {
+            width: 100%; padding: 12px; font-size: 16px;
+            border: 2px solid var(--secondary); border-radius: 10px;
+            background-color: #fafafa; outline: none; text-align: center;
         }
 
+        /* 摺疊內容 */
+        .collapsible-content { transition: all 0.4s; max-height: 0; overflow: hidden; opacity: 0; }
+        .collapsible-content.expanded { max-height: 1000px; opacity: 1; }
     </style>
 </head>
 <body>
@@ -176,13 +227,14 @@
 
     <div class="container">
         
-        <!-- 區塊 1：動態服務價目表 (現在是空的，靠 JS 填入) -->
+        <!-- 區塊 1：動態服務列表 -->
         <div class="card">
             <div class="section-title">服務項目</div>
-            <!-- 這裡多加了一個 id="service-list" -->
+            <!-- 點擊卡片會跳出彈窗 -->
             <div id="service-list" class="service-grid">
-                <p style="width:100%; text-align:center; color:#ccc;">正在載入最新服務...</p>
+                <p style="width:100%; color:#ccc;">正在載入服務...</p>
             </div>
+            <p style="margin-top:15px; color:#aaa; font-size:0.8rem;">(點擊項目查看詳情)</p>
         </div>
 
         <!-- 區塊 2：舊客補色查詢 -->
@@ -197,147 +249,179 @@
                 
                 <button onclick="searchRecord()" id="searchButton" class="btn">
                     <span>立即查詢</span>
-                    <svg id="loadingIndicator" class="hidden animate-spin h-5 w-5 text-white ml-2 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
+                    <svg id="loadingIndicator" class="hidden animate-spin h-5 w-5 text-white ml-2 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                 </button>
             </div>
-
             <div id="messageArea" class="hidden mt-4 p-3 rounded-xl text-sm font-bold"></div>
             <div id="resultsArea" class="mt-6 text-left"></div>
         </div>
 
-        <!-- 區塊 3：預約與客服 -->
-        <div class="card">
-            <h3>準備好變美了嗎？</h3>
-            <a id="link_booking" href="#" class="btn" style="background-color: var(--primary);">立即預約諮詢</a>
-            <br>
-            <a href="https://line.me/ti/p/你的ID" class="btn" style="background-color: #06C755;">LINE 官方客服</a>
-        </div>
-
     </div>
 
-    <!-- ================= JAVASCRIPT 區域 ================= -->
+    <!-- 🌟 懸浮預約按鈕 (Floating CTA) -->
+    <!-- 注意：href 請填入您的神美預約連結 -->
+    <a id="floatBookingBtn" href="#" class="floating-cta">
+        <span>📅 立即預約</span>
+    </a>
+
+    <!-- 🌟 彈出視窗 (Modal) 結構 -->
+    <div id="serviceModal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal(event)">&times;</span>
+            <img id="modalImg" class="modal-img" src="" alt="">
+            <h2 id="modalTitle" class="modal-title"></h2>
+            <div id="modalPrice" class="modal-price"></div>
+            <div id="modalDesc" class="modal-desc"></div>
+            
+            <!-- 彈窗內的預約按鈕 -->
+            <button onclick="document.getElementById('floatBookingBtn').click()" class="btn" style="background-color: var(--text);">
+                對此項目有興趣 (預約)
+            </button>
+        </div>
+    </div>
+
+
+    <!-- ================= JAVASCRIPT ================= -->
     <script>
-        // -----------------------------------------------------------
-        // ⚠️ 設定區：請在這裡貼上您的連結
-        // -----------------------------------------------------------
+        // ▼▼▼ 設定區 ▼▼▼
         
-        // 1.「服務項目」CSV 網址 (Step 1 產生的那個新網址)
+        // 1.「服務項目」CSV 網址 (維持您剛剛給我的那個正確網址)
         const SERVICES_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1138837231&single=true&output=csv'; 
 
-        // 2.「基本設定」CSV 網址 (原本那個價格/連結設定)
-        const SETTINGS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pubhtml?gid=0&single=true'; 
+        // 2.「基本設定」CSV 網址 (原本那個)
+        const SETTINGS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQxxxxxxxx/pub?output=csv'; 
 
         // 3. GAS 查詢 API
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx6grwl5DidK6DScAaZLM8udp-Pjn_FrB33bv6ES0JkwAiiIx-xxJHicxANVGH7caSpEg/exec"; 
         
-        // -----------------------------------------------------------
+        // ▲▲▲ 設定區結束 ▲▲▲
 
         document.addEventListener("DOMContentLoaded", function() {
-            loadServices(); // 載入動態服務
-            loadSettings(); // 載入預約連結設定
+            loadServices();
+            loadSettings();
         });
 
-        // 功能 A: 載入服務卡片
+        // --- 功能 A: 載入服務與點擊事件 ---
         function loadServices() {
             fetch(SERVICES_CSV_URL)
             .then(r => r.text())
             .then(csvText => {
                 const rows = csvText.split('\n');
                 const container = document.getElementById('service-list');
-                
-                // 清空載入中文字
                 container.innerHTML = ''; 
 
-                // 從第 1 列開始跑 (第 0 列通常是標題 Name,Price...)
-                // 檢查一下如果 csv 是空的就不跑
-                if(rows.length <= 1) return;
-
-                // 簡單判斷第一行是不是標題，如果是 'Name' 開頭就跳過
                 let startIndex = 0;
                 if(rows[0].toLowerCase().includes('name')) startIndex = 1;
 
                 for(let i = startIndex; i < rows.length; i++) {
                     const row = rows[i].trim();
-                    if(!row) continue; // 跳過空行
-
-                    // 切割 CSV (Name, Price, Desc, Image)
+                    if(!row) continue; 
+                    
+                    // 使用正則表達式處理 CSV 引號 (較健壯)
+                    // 這裡簡單處理：假設沒有逗號在內容裡
                     const cols = row.split(',');
                     
-                    // 確保欄位足夠 (至少要有 Name 和 Price)
                     if(cols.length >= 2) {
                         const name = cols[0].trim();
                         const price = cols[1].trim();
-                        const desc = cols[2] ? cols[2].trim() : '';
+                        const tag = cols[2] ? cols[2].trim() : '';
                         const imgName = cols[3] ? cols[3].trim() : '';
+                        // 取得第 5 欄 Detail，如果沒有就留空
+                        let detail = cols[4] ? cols[4].trim() : '';
 
-                        // 如果有填圖片檔名，就顯示圖片；沒填就顯示預設灰色
-                        let imgHtml = '';
-                        if(imgName) {
-                            imgHtml = `<img src="${imgName}" alt="${name}">`;
-                        } else {
-                            // 預設圖片 (如果您有預設圖可改這裡)
-                            imgHtml = `<div style="width:100%;height:100%;background:#eee;display:flex;align-items:center;justify-content:center;color:#aaa;">無圖片</div>`;
-                        }
+                        // 圖片處理
+                        let imgHtml = imgName ? `<img src="${imgName}" alt="${name}">` : `<div style="width:100%;height:100%;background:#f0f0f0;display:flex;align-items:center;justify-content:center;color:#ccc;">No Image</div>`;
 
-                        // 生成卡片 HTML
-                        const cardHtml = `
-                        <div class="service-item">
-                            <div class="service-img-box">
-                                ${imgHtml}
-                            </div>
+                        // 建立卡片元素
+                        const div = document.createElement('div');
+                        div.className = 'service-item';
+                        div.innerHTML = `
+                            <div class="service-img-box">${imgHtml}</div>
                             <div class="service-info">
-                                <h3 style="margin:0 0 5px 0;">${name}</h3>
+                                <h3>${name}</h3>
                                 <p class="price-tag">NT$ ${price}</p>
-                                <small style="color:#888;">${desc}</small>
+                                <small style="color:#888;">${tag}</small>
+                                <div class="more-info-hint">查看詳情 ></div>
                             </div>
-                        </div>
                         `;
-                        container.innerHTML += cardHtml;
+                        
+                        // 綁定點擊事件：開啟彈窗
+                        // 將資料傳給 showModal 函式
+                        div.onclick = function() {
+                            showModal(name, price, imgName, detail);
+                        };
+
+                        container.appendChild(div);
                     }
                 }
             })
             .catch(err => {
-                console.error("載入服務失敗", err);
-                document.getElementById('service-list').innerHTML = '<p>載入失敗，請檢查 CSV 連結</p>';
+                console.error("載入失敗", err);
+                document.getElementById('service-list').innerHTML = '<p>載入失敗，請檢查網路或 CSV</p>';
             });
         }
 
-        // 功能 B: 載入基本設定 (預約連結等)
+        // --- 功能 B: 彈出視窗控制 ---
+        const modal = document.getElementById('serviceModal');
+        const modalImg = document.getElementById('modalImg');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalPrice = document.getElementById('modalPrice');
+        const modalDesc = document.getElementById('modalDesc');
+
+        function showModal(name, price, img, detail) {
+            modalTitle.textContent = name;
+            modalPrice.textContent = 'NT$ ' + price;
+            modalImg.src = img || '';
+            modalImg.style.display = img ? 'block' : 'none';
+            
+            // 處理換行：把 | 變成 <br>
+            modalDesc.innerHTML = detail ? detail.replace(/\|/g, '<br>') : '暫無詳細介紹';
+
+            modal.classList.add('show');
+            // 禁止背景滾動
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(e) {
+            // 如果點到遮罩(灰色背景) 或是 關閉按鈕，才關閉
+            if(e.target === modal || e.target.classList.contains('modal-close')) {
+                modal.classList.remove('show');
+                document.body.style.overflow = ''; // 恢復滾動
+            }
+        }
+
+        // --- 功能 C: 設定載入 (連結) ---
         function loadSettings() {
             fetch(SETTINGS_CSV_URL).then(r => r.text()).then(csv => {
                 csv.split('\n').forEach(row => {
                     const [id, content] = row.split(',');
                     if(id && content) {
-                        const el = document.getElementById(id.trim());
+                        const el = document.getElementById(id.trim()); // 找 floatBookingBtn
                         if(el) {
                             if(el.tagName==='A') el.href=content.trim();
-                            else if(el.tagName==='IMG') el.src=content.trim();
-                            // 注意：這裡我們不再改 price_brow 等文字，因為已經變成動態卡片了
-                            // 但可以用來改預約按鈕連結
+                            // 如果是 id="link_booking" 的，也可以一併更新到 floatBookingBtn
+                            if(id.trim() === 'link_booking') {
+                                document.getElementById('floatBookingBtn').href = content.trim();
+                            }
                         }
                     }
                 });
-            }).catch(() => console.log("設定表未連結或讀取失敗"));
+            }).catch(() => console.log("設定讀取失敗"));
         }
 
-        // 功能 C: 補色查詢 (邏輯維持不變)
+        // --- 功能 D: 補色查詢 (維持不變) ---
         function maskPhoneNumber(phone) {
             if (!phone) return '';
             const str = String(phone).replace(/'/g, '').trim();
             if (str.length < 8) return str;
             return str.substring(0, 4) + '***' + str.substring(str.length - 3);
         }
-
         function toggleCollapse(btn, contentId) {
             const content = document.getElementById(contentId);
             const isExpanded = content.classList.toggle('expanded');
             const btnText = btn.querySelector('.btn-text');
             if(btnText) btnText.textContent = isExpanded ? '收起詳細價目' : '查看完整價目表';
         }
-
         function displayMessage(type, content) {
             const msg = document.getElementById('messageArea');
             msg.textContent = content;
@@ -347,7 +431,6 @@
             }`;
             msg.classList.remove('hidden');
         }
-
         function checkIsExpired(dateStr) {
             if (!dateStr) return false;
             const target = new Date(dateStr);
@@ -355,15 +438,12 @@
             today.setHours(0,0,0,0);
             return today > target;
         }
-
         function getPriceCardHtml(info, useOrangeTheme) {
             if (!info) return '';
             const dateText = (info.dateRange || '').replace(/【.*?】/g,'');
             let priceText = info.price === 0 ? '免費' : (info.price ? `NT$ ${info.price}` : '請洽詢');
-            
             let themeClass = 'bg-gradient-to-br from-pink-50 to-white border-pink-200 text-pink-900';
             let badgeClass = 'bg-pink-500';
-
             if (info.price === 0) {
                 themeClass = 'bg-gradient-to-br from-green-50 to-white border-green-200 text-green-900';
                 badgeClass = 'bg-green-600';
@@ -371,7 +451,6 @@
                 themeClass = 'bg-gradient-to-br from-orange-50 to-white border-orange-200 text-orange-900';
                 badgeClass = 'bg-orange-500';
             }
-
             return `
             <div class="mt-2 p-3 rounded-xl border ${themeClass} shadow-sm relative overflow-hidden">
                 <div class="flex justify-between items-center">
@@ -384,20 +463,16 @@
                         ${priceText}
                     </span>
                 </div>
-            </div>
-            `;
+            </div>`;
         }
-
         function createCard(r, index) {
             const cid = `detail-${index}`;
             const customDate = r.customFreeDate;
             const eyebrowDate = r.eyebrowDiscountDate;
             const type = r.customerType || '一般客戶';
-            
             const isFreeValid = customDate && !checkIsExpired(customDate);
             const isEyebrowValid = eyebrowDate && !checkIsExpired(eyebrowDate);
             const maskedPhone = maskPhoneNumber(r.phone);
-
             let rangesHtml = (r.touchUpRanges || []).map(t => {
                 const isFree = t.price === 0;
                 return `
@@ -408,14 +483,12 @@
                     </span>
                 </div>`;
             }).join('');
-
             return `
             <div class="bg-white rounded-2xl p-4 shadow-lg border border-gray-100 result-enter mb-6 relative">
                 <div class="flex items-center justify-between mb-2">
                     <div>
                         <h3 class="text-base font-bold text-gray-800 flex flex-wrap items-center gap-2">
-                        ${r.name} 
-                        ${maskedPhone ? `<span class="text-sm font-normal text-gray-400">(${maskedPhone})</span>` : ''}
+                        ${r.name} ${maskedPhone ? `<span class="text-sm font-normal text-gray-400">(${maskedPhone})</span>` : ''}
                         </h3>
                         <div class="flex items-center gap-2 mt-0.5">
                             <span class="text-[10px] font-normal text-white bg-gray-400 px-1.5 py-0.5 rounded-full">${type}</span>
@@ -427,93 +500,37 @@
                         <p class="text-sm font-bold text-gray-600">${r.lastDate || '無'}</p>
                     </div>
                 </div>
-
-                ${r.specialReminder ? `
-                    <div class="mb-2 bg-yellow-50 border border-yellow-200 text-yellow-800 p-2.5 rounded-xl flex items-start gap-2 shadow-sm">
-                    <span class="text-lg">💡</span>
-                    <div class="text-xs text-left">
-                        <p class="font-bold">特別提醒</p>
-                        <p>${r.specialReminder}</p>
-                    </div>
-                    </div>
-                ` : ''}
-
-                ${isFreeValid ? `
-                <div class="mb-2 bg-green-50 border border-green-200 rounded-lg p-2 flex items-center gap-2">
-                    <div class="bg-green-100 p-1 rounded-full text-green-600 text-xs">🎁</div>
-                    <div>
-                    <p class="text-[10px] text-green-800 font-bold">免費補色到期日</p>
-                    <p class="text-sm font-black text-green-700">${customDate}</p>
-                    </div>
-                </div>` : ''}
-
-                ${isEyebrowValid ? `
-                <div class="mb-2 bg-orange-50 border border-orange-200 rounded-lg p-2 flex items-center gap-2">
-                    <div class="bg-orange-100 p-1 rounded-full text-orange-600 text-xs">🔥</div>
-                    <div>
-                    <p class="text-[10px] text-orange-800 font-bold">首次補色優惠期限</p>
-                    <p class="text-sm font-black text-orange-700">${eyebrowDate}</p>
-                    </div>
-                </div>` : ''}
-
+                ${r.specialReminder ? `<div class="mb-2 bg-yellow-50 border border-yellow-200 text-yellow-800 p-2.5 rounded-xl flex items-start gap-2 shadow-sm"><span class="text-lg">💡</span><div class="text-xs text-left"><p class="font-bold">特別提醒</p><p>${r.specialReminder}</p></div></div>` : ''}
+                ${isFreeValid ? `<div class="mb-2 bg-green-50 border border-green-200 rounded-lg p-2 flex items-center gap-2"><div class="bg-green-100 p-1 rounded-full text-green-600 text-xs">🎁</div><div><p class="text-[10px] text-green-800 font-bold">免費補色到期日</p><p class="text-sm font-black text-green-700">${customDate}</p></div></div>` : ''}
+                ${isEyebrowValid ? `<div class="mb-2 bg-orange-50 border border-orange-200 rounded-lg p-2 flex items-center gap-2"><div class="bg-orange-100 p-1 rounded-full text-orange-600 text-xs">🔥</div><div><p class="text-[10px] text-orange-800 font-bold">首次補色優惠期限</p><p class="text-sm font-black text-orange-700">${eyebrowDate}</p></div></div>` : ''}
                 ${getPriceCardHtml(r.currentPriceInfo, isEyebrowValid)}
-
                 <div class="mt-3">
-                    <button onclick="toggleCollapse(this, '${cid}')" 
-                            class="w-full py-1.5 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg text-gray-500 font-bold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer">
-                        <span class="btn-text">查看完整價目表</span>
-                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </button>
-                    
-                    <div id="${cid}" class="collapsible-content bg-gray-50 rounded-lg px-3 mt-1">
-                        <div class="py-2 space-y-0">
-                            ${rangesHtml}
-                            <p class="text-[10px] text-gray-400 text-center mt-2 pt-2 border-t border-gray-200">系統試算僅供參考，實際費用以現場狀況為準</p>
-                        </div>
-                    </div>
+                    <button onclick="toggleCollapse(this, '${cid}')" class="w-full py-1.5 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg text-gray-500 font-bold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer"><span class="btn-text">查看完整價目表</span><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                    <div id="${cid}" class="collapsible-content bg-gray-50 rounded-lg px-3 mt-1"><div class="py-2 space-y-0">${rangesHtml}<p class="text-[10px] text-gray-400 text-center mt-2 pt-2 border-t border-gray-200">系統試算僅供參考，實際費用以現場狀況為準</p></div></div>
                 </div>
-            </div>
-            `;
+            </div>`;
         }
-
         function searchRecord() {
             const q = document.getElementById('queryInput').value.trim();
             if (!q) return displayMessage('error', '請輸入姓名或電話');
-            
             const btn = document.getElementById('searchButton');
             const loading = document.getElementById('loadingIndicator');
             const msgArea = document.getElementById('messageArea');
             const resultsArea = document.getElementById('resultsArea');
-            
-            btn.disabled = true;
-            btn.style.opacity = '0.7';
-            loading.classList.remove('hidden');
-            msgArea.classList.add('hidden');
-            resultsArea.innerHTML = '';
-
+            btn.disabled = true; btn.style.opacity = '0.7';
+            loading.classList.remove('hidden'); msgArea.classList.add('hidden'); resultsArea.innerHTML = '';
             fetch(`${GAS_API_URL}?q=${encodeURIComponent(q)}`)
                 .then(response => response.json())
                 .then(res => {
-                    if (res.error) {
-                        displayMessage('error', res.error);
-                    } else if (res.message) {
-                        displayMessage('info', res.message);
-                    } else if (res.data && res.data.length > 0) {
+                    if (res.error) displayMessage('error', res.error);
+                    else if (res.message) displayMessage('info', res.message);
+                    else if (res.data && res.data.length > 0) {
                         displayMessage('success', `查詢成功：找到 ${res.data.length} 筆資料`);
                         resultsArea.innerHTML = res.data.map((r, i) => createCard(r, i)).join('');
-                    } else {
-                        displayMessage('info', '查無資料，請確認輸入是否正確');
-                    }
+                    } else displayMessage('info', '查無資料，請確認輸入是否正確');
                 })
-                .catch(err => {
-                    console.error(err);
-                    displayMessage('error', '連線失敗，請稍後再試');
-                })
-                .finally(() => {
-                    btn.disabled = false;
-                    btn.style.opacity = '1';
-                    loading.classList.add('hidden');
-                });
+                .catch(err => { console.error(err); displayMessage('error', '連線失敗，請稍後再試'); })
+                .finally(() => { btn.disabled = false; btn.style.opacity = '1'; loading.classList.add('hidden'); });
         }
     </script>
 </body>
