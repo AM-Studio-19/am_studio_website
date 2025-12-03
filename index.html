@@ -184,7 +184,7 @@
             </div>
         </div>
 
-        <!-- 區塊 2：【整合版】舊客補色查詢 (不再是 iframe) -->
+        <!-- 區塊 2：舊客補色查詢 (整合版) -->
         <div class="card" style="border: 2px dashed var(--secondary);">
             <div class="section-title" style="background: var(--secondary);">舊客補色查詢</div>
             <p style="margin-bottom: 20px;">忘記什麼時候做的嗎？輸入資料立即查詢優惠！</p>
@@ -208,7 +208,7 @@
             <!-- 訊息顯示區 -->
             <div id="messageArea" class="hidden mt-4 p-3 rounded-xl text-sm font-bold"></div>
 
-            <!-- 搜尋結果顯示區 (這裡會用到 Tailwind 樣式) -->
+            <!-- 搜尋結果顯示區 -->
             <div id="resultsArea" class="mt-6 text-left"></div>
         </div>
 
@@ -231,7 +231,6 @@
         const contentSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQxxxxxxxx/pub?output=csv'; // <--- 請換成您的價格表網址
         
         document.addEventListener("DOMContentLoaded", function() {
-            // 嘗試讀取價格表，如果網址是範例的會報錯，不影響下方查詢功能
             fetch(contentSheetUrl).then(r => r.text()).then(csv => {
                 csv.split('\n').forEach(row => {
                     const [id, content] = row.split(',');
@@ -249,15 +248,12 @@
 
 
         /* 
-           PART 2: 補色查詢系統邏輯 (移植自您的 back-search) 
+           PART 2: 補色查詢系統邏輯 
         */
         
         // 1. 您的 GAS API 網址 (已填入)
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx6grwl5DidK6DScAaZLM8udp-Pjn_FrB33bv6ES0JkwAiiIx-xxJHicxANVGH7caSpEg/exec"; 
         
-        // 2. 您的神美預約網址
-        const BOOKING_URL = "https://liff.line.me/1661306685-kQp9pya4"; 
-
         // 輔助函式：隱藏電話
         function maskPhoneNumber(phone) {
             if (!phone) return '';
@@ -394,10 +390,7 @@
                 <!-- 今日價格卡片 -->
                 ${getPriceCardHtml(r.currentPriceInfo, isEyebrowValid)}
 
-                <!-- 預約按鈕 -->
-                <a href="${BOOKING_URL}" class="block mt-4 w-full py-3 bg-[#06c755] hover:bg-[#05b34c] text-white font-bold rounded-xl text-center shadow-md transition flex justify-center items-center gap-2 no-underline">
-                    <span>立即前往預約</span>
-                </a>
+                <!-- 已移除「立即前往預約」按鈕 -->
 
                 <!-- 特別提醒 -->
                 ${r.specialReminder ? `
@@ -471,161 +464,6 @@
                     loading.classList.add('hidden');
                 });
         }
-    </script>
-</body>
-</html>            background: var(--primary);
-            color: white;
-            padding: 5px 20px;
-            border-radius: 20px;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        /* 服務項目 */
-        .service-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-        }
-        .service-item {
-            background: #fff;
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid #eee;
-        }
-        .price-tag {
-            color: #C17E7E;
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        /* 按鈕樣式 */
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 15px 0;
-            background-color: var(--secondary);
-            color: #fff;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            margin-top: 10px;
-            transition: 0.3s;
-        }
-        .btn:hover { opacity: 0.9; }
-        
-        /* 嵌入區塊 iframe RWD */
-        .iframe-container {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
-        }
-        .iframe-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-    </style>
-</head>
-<body>
-
-    <div class="hero">
-        <h1>AM Beauty Studio</h1>
-        <p>打造妳的偽素顏小心機</p>
-    </div>
-
-    <div class="container">
-        
-        <!-- 服務價目表 -->
-        <div class="card">
-            <div class="section-title">服務項目</div>
-            <div class="service-grid">
-                <div class="service-item">
-                    <h3>無痛霧眉</h3>
-                    <p class="price-tag"><span id="price_brow">Loading...</span></p>
-                    <small>#新眉清透 #自然妝感</small>
-                </div>
-                <div class="service-item">
-                    <h3>少女霧唇</h3>
-                    <p class="price-tag"><span id="price_lip">Loading...</span></p>
-                    <small>#改善暗沉 #氣色感</small>
-                </div>
-            </div>
-        </div>
-
-       <!-- 舊客補色查詢 -->
-        <div class="card" style="border: 2px dashed var(--secondary); padding: 10px;">
-            <div class="section-title" style="background: var(--secondary);">舊客補色查詢</div>
-            <p>忘記什麼時候做的嗎？輸入資料立即查詢補色優惠期限！</p>
-            
-            <!-- 這裡放入您的真正網址 -->
-           <iframe 
-                src="https://am-studio-19.github.io/back-search/" 
-                style="width: 100%; height: 600px; border: none; transform: scale(0.95); transform-origin: top center;"
-                title="補色查詢">
-            </iframe>
-            
-        </div>
-            
-        </div>
-
-        <!-- 預約按鈕區 -->
-        <div class="card">
-            <h3>準備好變美了嗎？</h3>
-            <a id="link_booking" href="#" class="btn">立即預約諮詢</a>
-            <br>
-            <a href="您的LINE連結" class="btn" style="background-color: #06C755;">LINE 官方客服</a>
-        </div>
-
-    </div>
-<!-- Google Sheet 連線腳本 -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // ▼▼▼ 請把下面的網址換成您剛剛複製的 Google Sheet CSV 網址 ▼▼▼
-            const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?output=csv'; 
-            // ▲▲▲ 就是這裡 ▲▲▲
-
-            fetch(sheetUrl)
-                .then(response => response.text())
-                .then(csvText => {
-                    const rows = csvText.split('\n'); // 把資料一行一行切開
-                    rows.forEach(row => {
-                        // 簡單的 CSV 解析：切開逗號
-                        const cols = row.split(',');
-                        if (cols.length >= 2) {
-                            const id = cols[0].trim();       // A欄: ID
-                            const content = cols[1].trim();  // B欄: 內容
-                            
-                            // 找網頁上有沒有這個 ID，有的話就更新內容
-                            const element = document.getElementById(id);
-                            
-                            if (element) {
-                                // 如果是連結 (a 標籤)，要改 href
-                                if (element.tagName === 'A') {
-                                    element.href = content;
-                                } 
-                                // 如果是圖片 (img 標籤)，要改 src
-                                else if (element.tagName === 'IMG') {
-                                    element.src = content;
-                                }
-                                // 其他文字，直接換字
-                                else {
-                                    element.textContent = content;
-                                }
-                            }
-                        }
-                    });
-                })
-                .catch(error => console.error('讀取後台失敗:', error));
-        });
     </script>
 </body>
 </html>
