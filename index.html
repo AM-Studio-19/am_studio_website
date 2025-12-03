@@ -139,12 +139,12 @@
             <div class="service-grid">
                 <div class="service-item">
                     <h3>無痛霧眉</h3>
-                    <p class="price-tag">NT$ 4,800</p>
+                    <p class="price-tag">NT$ <span id="price_brow">Loading...</span></p>
                     <small>#新眉清透 #自然妝感</small>
                 </div>
                 <div class="service-item">
                     <h3>少女霧唇</h3>
-                    <p class="price-tag">NT$ 5,200</p>
+                    <p class="price-tag">NT$ <span id="price_brow">Loading...</span></p>
                     <small>#改善暗沉 #氣色感</small>
                 </div>
             </div>
@@ -169,12 +169,52 @@
         <!-- 預約按鈕區 -->
         <div class="card">
             <h3>準備好變美了嗎？</h3>
-            <a href="您的神美系統連結" class="btn" style="background-color: var(--primary);">立即預約諮詢</a>
+            <a id="link_booking" href="#" class="btn">立即預約諮詢</a>
             <br>
             <a href="您的LINE連結" class="btn" style="background-color: #06C755;">LINE 官方客服</a>
         </div>
 
     </div>
+<!-- Google Sheet 連線腳本 -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // ▼▼▼ 請把下面的網址換成您剛剛複製的 Google Sheet CSV 網址 ▼▼▼
+            const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?output=csv'; 
+            // ▲▲▲ 就是這裡 ▲▲▲
 
+            fetch(sheetUrl)
+                .then(response => response.text())
+                .then(csvText => {
+                    const rows = csvText.split('\n'); // 把資料一行一行切開
+                    rows.forEach(row => {
+                        // 簡單的 CSV 解析：切開逗號
+                        const cols = row.split(',');
+                        if (cols.length >= 2) {
+                            const id = cols[0].trim();       // A欄: ID
+                            const content = cols[1].trim();  // B欄: 內容
+                            
+                            // 找網頁上有沒有這個 ID，有的話就更新內容
+                            const element = document.getElementById(id);
+                            
+                            if (element) {
+                                // 如果是連結 (a 標籤)，要改 href
+                                if (element.tagName === 'A') {
+                                    element.href = content;
+                                } 
+                                // 如果是圖片 (img 標籤)，要改 src
+                                else if (element.tagName === 'IMG') {
+                                    element.src = content;
+                                }
+                                // 其他文字，直接換字
+                                else {
+                                    element.textContent = content;
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error('讀取後台失敗:', error));
+        });
+    </script>
 </body>
 </html>
