@@ -10,7 +10,7 @@
     <script>
       tailwind.config = {
         corePlugins: {
-          preflight: false, // 關鍵：不重置原本網頁樣式
+          preflight: false, // 不重置原本樣式
         }
       }
     </script>
@@ -75,6 +75,7 @@
             font-size: 1.1rem;
         }
 
+        /* 服務項目 Grid */
         .service-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -82,15 +83,35 @@
         }
         .service-item {
             background: #fff;
-            padding: 15px;
+            padding: 0 0 15px 0; /* 修改：padding 改在內部控制，因為有圖片 */
             border-radius: 10px;
             border: 1px solid #eee;
+            overflow: hidden; /* 確保圖片圓角不跑掉 */
+            transition: transform 0.2s;
+        }
+        .service-item:hover {
+            transform: translateY(-5px); /* 滑鼠移過去會浮起來 */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .service-img-box {
+            width: 100%;
+            height: 200px; /* 固定圖片高度，保持整齊 */
+            background-color: #f0f0f0;
+            overflow: hidden;
+        }
+        .service-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 讓圖片填滿不變形 */
+        }
+        .service-info {
+            padding: 15px;
         }
         .price-tag {
             color: #C17E7E;
             font-size: 1.2rem;
             font-weight: bold;
-            margin: 10px 0;
+            margin: 5px 0;
         }
 
         .btn {
@@ -111,6 +132,7 @@
         }
         .btn:hover { opacity: 0.9; }
 
+        /* 搜尋框樣式 */
         .search-input {
             width: 100%;
             padding: 15px;
@@ -154,20 +176,12 @@
 
     <div class="container">
         
-        <!-- 區塊 1：服務價目表 -->
+        <!-- 區塊 1：動態服務價目表 (現在是空的，靠 JS 填入) -->
         <div class="card">
             <div class="section-title">服務項目</div>
-            <div class="service-grid">
-                <div class="service-item">
-                    <h3>無痛霧眉</h3>
-                    <p class="price-tag">NT$ <span id="price_brow">載入中...</span></p>
-                    <small id="brow_desc">...</small>
-                </div>
-                <div class="service-item">
-                    <h3>少女霧唇</h3>
-                    <p class="price-tag">NT$ <span id="price_lip">載入中...</span></p>
-                    <small id="lip_desc">...</small>
-                </div>
+            <!-- 這裡多加了一個 id="service-list" -->
+            <div id="service-list" class="service-grid">
+                <p style="width:100%; text-align:center; color:#ccc;">正在載入最新服務...</p>
             </div>
         </div>
 
@@ -191,8 +205,6 @@
             </div>
 
             <div id="messageArea" class="hidden mt-4 p-3 rounded-xl text-sm font-bold"></div>
-
-            <!-- 搜尋結果顯示區 -->
             <div id="resultsArea" class="mt-6 text-left"></div>
         </div>
 
@@ -208,11 +220,94 @@
 
     <!-- ================= JAVASCRIPT 區域 ================= -->
     <script>
-        // Google Sheet 價格表
-        const contentSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQxxxxxxxx/pub?output=csv'; 
+        // -----------------------------------------------------------
+        // ⚠️ 設定區：請在這裡貼上您的連結
+        // -----------------------------------------------------------
         
+        // 1.「服務項目」CSV 網址 (Step 1 產生的那個新網址)
+        const SERVICES_CSV_URL = '您的_Services_CSV_網址'; 
+
+        // 2.「基本設定」CSV 網址 (原本那個價格/連結設定)
+        const SETTINGS_CSV_URL = '您的_原本價格設定_CSV_網址'; 
+
+        // 3. GAS 查詢 API
+        const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx6grwl5DidK6DScAaZLM8udp-Pjn_FrB33bv6ES0JkwAiiIx-xxJHicxANVGH7caSpEg/exec"; 
+        
+        // -----------------------------------------------------------
+
         document.addEventListener("DOMContentLoaded", function() {
-            fetch(contentSheetUrl).then(r => r.text()).then(csv => {
+            loadServices(); // 載入動態服務
+            loadSettings(); // 載入預約連結設定
+        });
+
+        // 功能 A: 載入服務卡片
+        function loadServices() {
+            fetch(SERVICES_CSV_URL)
+            .then(r => r.text())
+            .then(csvText => {
+                const rows = csvText.split('\n');
+                const container = document.getElementById('service-list');
+                
+                // 清空載入中文字
+                container.innerHTML = ''; 
+
+                // 從第 1 列開始跑 (第 0 列通常是標題 Name,Price...)
+                // 檢查一下如果 csv 是空的就不跑
+                if(rows.length <= 1) return;
+
+                // 簡單判斷第一行是不是標題，如果是 'Name' 開頭就跳過
+                let startIndex = 0;
+                if(rows[0].toLowerCase().includes('name')) startIndex = 1;
+
+                for(let i = startIndex; i < rows.length; i++) {
+                    const row = rows[i].trim();
+                    if(!row) continue; // 跳過空行
+
+                    // 切割 CSV (Name, Price, Desc, Image)
+                    const cols = row.split(',');
+                    
+                    // 確保欄位足夠 (至少要有 Name 和 Price)
+                    if(cols.length >= 2) {
+                        const name = cols[0].trim();
+                        const price = cols[1].trim();
+                        const desc = cols[2] ? cols[2].trim() : '';
+                        const imgName = cols[3] ? cols[3].trim() : '';
+
+                        // 如果有填圖片檔名，就顯示圖片；沒填就顯示預設灰色
+                        let imgHtml = '';
+                        if(imgName) {
+                            imgHtml = `<img src="${imgName}" alt="${name}">`;
+                        } else {
+                            // 預設圖片 (如果您有預設圖可改這裡)
+                            imgHtml = `<div style="width:100%;height:100%;background:#eee;display:flex;align-items:center;justify-content:center;color:#aaa;">無圖片</div>`;
+                        }
+
+                        // 生成卡片 HTML
+                        const cardHtml = `
+                        <div class="service-item">
+                            <div class="service-img-box">
+                                ${imgHtml}
+                            </div>
+                            <div class="service-info">
+                                <h3 style="margin:0 0 5px 0;">${name}</h3>
+                                <p class="price-tag">NT$ ${price}</p>
+                                <small style="color:#888;">${desc}</small>
+                            </div>
+                        </div>
+                        `;
+                        container.innerHTML += cardHtml;
+                    }
+                }
+            })
+            .catch(err => {
+                console.error("載入服務失敗", err);
+                document.getElementById('service-list').innerHTML = '<p>載入失敗，請檢查 CSV 連結</p>';
+            });
+        }
+
+        // 功能 B: 載入基本設定 (預約連結等)
+        function loadSettings() {
+            fetch(SETTINGS_CSV_URL).then(r => r.text()).then(csv => {
                 csv.split('\n').forEach(row => {
                     const [id, content] = row.split(',');
                     if(id && content) {
@@ -220,16 +315,15 @@
                         if(el) {
                             if(el.tagName==='A') el.href=content.trim();
                             else if(el.tagName==='IMG') el.src=content.trim();
-                            else el.textContent=content.trim();
+                            // 注意：這裡我們不再改 price_brow 等文字，因為已經變成動態卡片了
+                            // 但可以用來改預約按鈕連結
                         }
                     }
                 });
-            }).catch(() => console.log("尚未設定價格表 CSV，跳過載入"));
-        });
+            }).catch(() => console.log("設定表未連結或讀取失敗"));
+        }
 
-        // GAS API
-        const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx6grwl5DidK6DScAaZLM8udp-Pjn_FrB33bv6ES0JkwAiiIx-xxJHicxANVGH7caSpEg/exec"; 
-
+        // 功能 C: 補色查詢 (邏輯維持不變)
         function maskPhoneNumber(phone) {
             if (!phone) return '';
             const str = String(phone).replace(/'/g, '').trim();
@@ -278,7 +372,6 @@
                 badgeClass = 'bg-orange-500';
             }
 
-            // 修改：縮減了 padding (p-3) 和 margin (mt-2)，讓卡片更緊湊
             return `
             <div class="mt-2 p-3 rounded-xl border ${themeClass} shadow-sm relative overflow-hidden">
                 <div class="flex justify-between items-center">
@@ -305,7 +398,6 @@
             const isEyebrowValid = eyebrowDate && !checkIsExpired(eyebrowDate);
             const maskedPhone = maskPhoneNumber(r.phone);
 
-            // 修改：移除 border-dashed，改用 py-1.5 縮減行距
             let rangesHtml = (r.touchUpRanges || []).map(t => {
                 const isFree = t.price === 0;
                 return `
@@ -319,8 +411,6 @@
 
             return `
             <div class="bg-white rounded-2xl p-4 shadow-lg border border-gray-100 result-enter mb-6 relative">
-                
-                <!-- 標頭 (縮小了 margin-bottom) -->
                 <div class="flex items-center justify-between mb-2">
                     <div>
                         <h3 class="text-base font-bold text-gray-800 flex flex-wrap items-center gap-2">
@@ -338,7 +428,6 @@
                     </div>
                 </div>
 
-                <!-- 1. 特別提醒 (移到最上方，縮小 padding) -->
                 ${r.specialReminder ? `
                     <div class="mb-2 bg-yellow-50 border border-yellow-200 text-yellow-800 p-2.5 rounded-xl flex items-start gap-2 shadow-sm">
                     <span class="text-lg">💡</span>
@@ -349,7 +438,6 @@
                     </div>
                 ` : ''}
 
-                <!-- 2. 優惠提示區 (縮小 padding) -->
                 ${isFreeValid ? `
                 <div class="mb-2 bg-green-50 border border-green-200 rounded-lg p-2 flex items-center gap-2">
                     <div class="bg-green-100 p-1 rounded-full text-green-600 text-xs">🎁</div>
@@ -368,10 +456,8 @@
                     </div>
                 </div>` : ''}
 
-                <!-- 3. 今日價格卡片 (緊湊版) -->
                 ${getPriceCardHtml(r.currentPriceInfo, isEyebrowValid)}
 
-                <!-- 摺疊詳細區 -->
                 <div class="mt-3">
                     <button onclick="toggleCollapse(this, '${cid}')" 
                             class="w-full py-1.5 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg text-gray-500 font-bold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer">
@@ -381,13 +467,11 @@
                     
                     <div id="${cid}" class="collapsible-content bg-gray-50 rounded-lg px-3 mt-1">
                         <div class="py-2 space-y-0">
-                            <!-- 已移除虛線，僅保留極淡的分隔線 -->
                             ${rangesHtml}
                             <p class="text-[10px] text-gray-400 text-center mt-2 pt-2 border-t border-gray-200">系統試算僅供參考，實際費用以現場狀況為準</p>
                         </div>
                     </div>
                 </div>
-
             </div>
             `;
         }
