@@ -1,92 +1,3 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AM Beauty Studio</title>
-    <style>
-        :root {
-            --primary: #D6BFA8;
-            --secondary: #E6C2C2;
-            --bg: #FDFBF7;
-            --text: #5A483F;
-        }
-        body {
-            /* 設定背景圖片 */
-            background-image: url('bg.png'); 
-            
-            /* 讓圖片鋪滿整個螢幕，且不重複 */
-            background-size: cover; 
-            background-repeat: no-repeat;
-            
-            /* 重點：讓背景固定住！當妳往下滑手機時，背景紙不會動，只有內容會動 */
-            background-attachment: fixed;
-            
-            color: var(--text);
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-        }
-        }
-        .card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            border: 2px solid var(--primary);
-        }
-        .price {
-            color: #C17E7E; /* 深粉紅 */
-            font-weight: bold;
-            font-size: 1.5em;
-        }
-        .btn {
-            background-color: var(--secondary);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 10px;
-        }
-    </style>
-</head>
-<body>
-
-    <!-- 範例：服務卡片 -->
-    <div class="card">
-        <h2 id="service_name_1">無痛霧眉</h2> <!-- 這裡的文字會被 JS 替換 -->
-        <img src="your-brow-image.jpg" alt="霧眉" style="width:100%; border-radius:10px;">
-        <p id="service_desc_1">正在讀取介紹...</p>
-        <div class="price">NT$ <span id="price_brow">...</span></div>
-        <a href="您的神美連結" class="btn">立即預約</a>
-    </div>
-
-    <!-- 舊客補色查詢嵌入 -->
-    <div class="card" style="background-color: #FFF0F0;">
-        <h3>舊客補色查詢</h3>
-        <!-- 這裡放入您的補色網頁連結 iframe -->
-        <iframe src="您的補色查詢網頁網址" style="width:100%; height:300px; border:none;"></iframe>
-    </div>
-
-    <script>
-        // 這是讓您可以透過 Google Sheet 改文字的魔法
-        // 把這裡換成您的 Google Sheet CSV 連結
-        const sheetUrl = 'YOUR_GOOGLE_SHEET_CSV_URL'; 
-
-        // 簡單的讀取資料函式 (使用 PapaParse 或自行撰寫 fetch)
-        fetch(sheetUrl)
-            .then(response => response.text())
-            .then(data => {
-                // 這裡會解析 CSV 並把網頁上的 id 對應內容換掉
-                // 例如：找到 id="price_brow" 把內容換成 "4800"
-                console.log("資料讀取成功，開始更新網頁內容...");
-                // 實際解析邏輯需搭配簡單的 CSV parser 庫
-            });
-    </script>
-</body>
 </html><!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -104,7 +15,16 @@
         }
 
         body {
-            background-color: var(--bg);
+            /* 設定背景圖片 */
+            background-image: url('bg.png'); 
+            
+            /* 讓圖片鋪滿整個螢幕，且不重複 */
+            background-size: cover; 
+            background-repeat: no-repeat;
+            
+            /* 重點：讓背景固定住！當妳往下滑手機時，背景紙不會動，只有內容會動 */
+            background-attachment: fixed;
+            
             color: var(--text);
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             margin: 0;
