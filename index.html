@@ -73,7 +73,7 @@
             font-size: 1.1rem;
         }
 
-        /* --- 服務項目卡片 (修改版) --- */
+        /* --- 服務項目卡片 --- */
         .service-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -81,21 +81,21 @@
         }
         .service-item {
             background: #fff;
-            padding: 15px; /* 增加內距，讓圖片不要滿版 */
+            padding: 15px; 
             border-radius: 15px;
             border: 1px solid #eee;
             transition: transform 0.2s;
-            cursor: pointer; /* 讓滑鼠變成手手，提示可點擊 */
+            cursor: pointer; 
         }
         .service-item:active {
-            transform: scale(0.98); /* 點擊時有微縮效果 */
+            transform: scale(0.98); 
         }
         .service-img-box {
             width: 100%;
             height: 200px;
             background-color: #f9f9f9;
             overflow: hidden;
-            border-radius: 10px; /* 圖片圓角 */
+            border-radius: 10px; 
             margin-bottom: 10px;
         }
         .service-img-box img {
@@ -125,7 +125,7 @@
             transform: translateX(-50%);
             width: 90%;
             max-width: 400px;
-            background-color: var(--text); /* 深咖色更有質感 */
+            background-color: var(--text); 
             color: white;
             padding: 15px 20px;
             border-radius: 50px;
@@ -145,7 +145,7 @@
 
         /* --- 彈出視窗 (Modal) --- */
         .modal-overlay {
-            display: none; /* 預設隱藏 */
+            display: none; 
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
@@ -167,7 +167,7 @@
             position: relative;
             transform: translateY(20px);
             transition: transform 0.3s;
-            max-height: 80vh; /* 防止太高超出螢幕 */
+            max-height: 80vh; 
             overflow-y: auto;
         }
         .modal-close {
@@ -184,6 +184,7 @@
             object-fit: cover;
             border-radius: 10px;
             margin-bottom: 20px;
+            display: none; /* 預設隱藏，有圖才開 */
         }
         .modal-title { font-size: 1.5rem; font-weight: bold; color: var(--text); margin: 0; }
         .modal-price { color: #C17E7E; font-size: 1.3rem; font-weight: bold; margin: 5px 0 15px 0; }
@@ -194,6 +195,7 @@
             padding: 15px; 
             border-radius: 10px; 
             line-height: 1.8;
+            white-space: pre-wrap; /* 關鍵：保留換行符號 */
         }
 
         /* 顯示動畫 */
@@ -259,12 +261,11 @@
     </div>
 
     <!-- 🌟 懸浮預約按鈕 (Floating CTA) -->
-    <!-- 注意：href 請填入您的神美預約連結 -->
     <a id="floatBookingBtn" href="#" class="floating-cta">
         <span>📅 立即預約</span>
     </a>
 
-    <!-- 🌟 彈出視窗 (Modal) 結構 -->
+    <!-- 🌟 彈出視窗 (Modal) -->
     <div id="serviceModal" class="modal-overlay" onclick="closeModal(event)">
         <div class="modal-content">
             <span class="modal-close" onclick="closeModal(event)">&times;</span>
@@ -273,7 +274,6 @@
             <div id="modalPrice" class="modal-price"></div>
             <div id="modalDesc" class="modal-desc"></div>
             
-            <!-- 彈窗內的預約按鈕 -->
             <button onclick="document.getElementById('floatBookingBtn').click()" class="btn" style="background-color: var(--text);">
                 對此項目有興趣 (預約)
             </button>
@@ -285,10 +285,10 @@
     <script>
         // ▼▼▼ 設定區 ▼▼▼
         
-        // 1.「服務項目」CSV 網址 (維持您剛剛給我的那個正確網址)
+        // 1.「服務項目」CSV 網址 (您提供的正確網址)
         const SERVICES_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1138837231&single=true&output=csv'; 
 
-        // 2.「基本設定」CSV 網址 (原本那個)
+        // 2.「基本設定」CSV 網址
         const SETTINGS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQxxxxxxxx/pub?output=csv'; 
 
         // 3. GAS 查詢 API
@@ -301,32 +301,51 @@
             loadSettings();
         });
 
+        // ✨ 強化版 CSV 解析器：支援引號內的換行與逗號 ✨
+        function parseCSV(str) {
+            const arr = [];
+            let quote = false; 
+            let col = 0, row = 0;
+
+            for (let c = 0; c < str.length; c++) {
+                let cc = str[c], nc = str[c+1];
+                arr[row] = arr[row] || [];
+                arr[row][col] = arr[row][col] || '';
+
+                if (cc == '"' && quote && nc == '"') { arr[row][col] += '"'; ++c; continue; }
+                if (cc == '"') { quote = !quote; continue; }
+                if (cc == ',' && !quote) { ++col; continue; }
+                if (cc == '\r' && nc == '\n' && !quote) { ++row; col = 0; ++c; continue; }
+                if (cc == '\n' && !quote) { ++row; col = 0; continue; }
+                if (cc == '\r' && !quote) { ++row; col = 0; continue; }
+
+                arr[row][col] += cc;
+            }
+            return arr;
+        }
+
         // --- 功能 A: 載入服務與點擊事件 ---
         function loadServices() {
             fetch(SERVICES_CSV_URL)
             .then(r => r.text())
             .then(csvText => {
-                const rows = csvText.split('\n');
+                // 使用強化版解析器，不再只是 split('\n')
+                const rows = parseCSV(csvText);
                 const container = document.getElementById('service-list');
                 container.innerHTML = ''; 
 
+                // 尋找標題列
                 let startIndex = 0;
-                if(rows[0].toLowerCase().includes('name')) startIndex = 1;
+                if(rows.length > 0 && rows[0][0] && rows[0][0].toLowerCase().includes('name')) startIndex = 1;
 
                 for(let i = startIndex; i < rows.length; i++) {
-                    const row = rows[i].trim();
-                    if(!row) continue; 
-                    
-                    // 使用正則表達式處理 CSV 引號 (較健壯)
-                    // 這裡簡單處理：假設沒有逗號在內容裡
-                    const cols = row.split(',');
-                    
-                    if(cols.length >= 2) {
+                    const cols = rows[i];
+                    // 確保至少有 Name 和 Price
+                    if(cols.length >= 2 && cols[0].trim() !== '') {
                         const name = cols[0].trim();
                         const price = cols[1].trim();
                         const tag = cols[2] ? cols[2].trim() : '';
                         const imgName = cols[3] ? cols[3].trim() : '';
-                        // 取得第 5 欄 Detail，如果沒有就留空
                         let detail = cols[4] ? cols[4].trim() : '';
 
                         // 圖片處理
@@ -345,8 +364,6 @@
                             </div>
                         `;
                         
-                        // 綁定點擊事件：開啟彈窗
-                        // 將資料傳給 showModal 函式
                         div.onclick = function() {
                             showModal(name, price, imgName, detail);
                         };
@@ -357,7 +374,7 @@
             })
             .catch(err => {
                 console.error("載入失敗", err);
-                document.getElementById('service-list').innerHTML = '<p>載入失敗，請檢查網路或 CSV</p>';
+                document.getElementById('service-list').innerHTML = '<p>載入失敗，請檢查 CSV 連結</p>';
             });
         }
 
@@ -371,37 +388,47 @@
         function showModal(name, price, img, detail) {
             modalTitle.textContent = name;
             modalPrice.textContent = 'NT$ ' + price;
-            modalImg.src = img || '';
-            modalImg.style.display = img ? 'block' : 'none';
             
-            // 處理換行：把 | 變成 <br>
-            modalDesc.innerHTML = detail ? detail.replace(/\|/g, '<br>') : '暫無詳細介紹';
+            if(img) {
+                modalImg.src = img;
+                modalImg.style.display = 'block';
+            } else {
+                modalImg.style.display = 'none';
+            }
+            
+            // 處理換行：支援 Google Sheet 的 Alt+Enter (\n) 以及 | 符號
+            let formattedDetail = '暫無詳細介紹';
+            if(detail) {
+                // 先把 | 換成換行，再把換行符號全部轉成 HTML 的 <br>
+                formattedDetail = detail.replace(/\|/g, '\n').replace(/\n/g, '<br>');
+            }
+            modalDesc.innerHTML = formattedDetail;
 
             modal.classList.add('show');
-            // 禁止背景滾動
             document.body.style.overflow = 'hidden';
         }
 
         function closeModal(e) {
-            // 如果點到遮罩(灰色背景) 或是 關閉按鈕，才關閉
             if(e.target === modal || e.target.classList.contains('modal-close')) {
                 modal.classList.remove('show');
-                document.body.style.overflow = ''; // 恢復滾動
+                document.body.style.overflow = ''; 
             }
         }
 
         // --- 功能 C: 設定載入 (連結) ---
         function loadSettings() {
             fetch(SETTINGS_CSV_URL).then(r => r.text()).then(csv => {
+                // 設定檔比較單純，維持簡單分割即可
                 csv.split('\n').forEach(row => {
-                    const [id, content] = row.split(',');
-                    if(id && content) {
-                        const el = document.getElementById(id.trim()); // 找 floatBookingBtn
+                    const parts = row.split(',');
+                    if(parts.length >= 2) {
+                        const id = parts[0].trim();
+                        const content = parts[1].trim();
+                        const el = document.getElementById(id);
                         if(el) {
-                            if(el.tagName==='A') el.href=content.trim();
-                            // 如果是 id="link_booking" 的，也可以一併更新到 floatBookingBtn
-                            if(id.trim() === 'link_booking') {
-                                document.getElementById('floatBookingBtn').href = content.trim();
+                            if(el.tagName==='A') el.href=content;
+                            if(id === 'link_booking') {
+                                document.getElementById('floatBookingBtn').href = content;
                             }
                         }
                     }
