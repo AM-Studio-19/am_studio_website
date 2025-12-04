@@ -18,7 +18,6 @@
             --secondary: #E6C2C2; /* 玫瑰粉 */
             --text: #5A483F;      /* 深咖字 */
             --accent: #FFFFFF;    /* 純白 */
-            --bg-color: #FDFBF7;
         }
 
         body {
@@ -29,203 +28,105 @@
             color: var(--text);
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             margin: 0; padding: 0;
-            padding-bottom: 100px; /* 避開懸浮按鈕 */
+            padding-bottom: 100px;
             scroll-behavior: smooth;
         }
 
-        /* --- 頂部導覽列 (Sticky Nav) --- */
+        /* 導覽列 */
         .nav-bar {
-            position: sticky;
-            top: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(5px);
-            z-index: 900;
-            padding: 10px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            display: flex;
-            justify-content: space-around;
-            overflow-x: auto;
-            white-space: nowrap;
+            position: sticky; top: 0; background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px); z-index: 900; padding: 10px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex;
+            justify-content: space-around; overflow-x: auto; white-space: nowrap;
         }
         .nav-item {
-            color: var(--text);
-            text-decoration: none;
-            font-weight: bold;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.95rem;
-            transition: 0.3s;
+            color: var(--text); text-decoration: none; font-weight: bold;
+            padding: 8px 15px; border-radius: 20px; font-size: 0.95rem; transition: 0.3s;
         }
-        .nav-item.active, .nav-item:hover {
-            background-color: var(--secondary);
-            color: white;
-        }
+        .nav-item:hover { background-color: var(--secondary); color: white; }
 
-        /* --- 容器與通用卡片 --- */
         .container { max-width: 800px; margin: 0 auto; padding: 15px; }
-        
-        .section-header {
-            text-align: center; margin: 30px 0 20px 0;
-            position: relative;
-        }
+        .section-header { text-align: center; margin: 30px 0 20px 0; }
         .section-header h2 {
-            display: inline-block;
-            background: var(--primary); color: white;
-            padding: 6px 20px; border-radius: 20px;
-            font-size: 1.1rem; margin: 0;
+            display: inline-block; background: var(--primary); color: white;
+            padding: 6px 20px; border-radius: 20px; font-size: 1.1rem; margin: 0;
         }
 
+        /* --- 作品集分類按鈕 --- */
+        .filter-buttons {
+            display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;
+        }
+        .filter-btn {
+            padding: 5px 15px; border: 1px solid var(--primary);
+            border-radius: 20px; color: var(--primary); background: transparent;
+            cursor: pointer; font-size: 0.9rem; transition: 0.3s;
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--primary); color: white;
+        }
+
+        /* --- 卡片與網格 --- */
         .card {
-            background: var(--accent);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 10px rgba(90, 72, 63, 0.05);
+            background: var(--accent); border-radius: 15px; padding: 20px;
+            margin-bottom: 20px; box-shadow: 0 4px 10px rgba(90, 72, 63, 0.05);
             border: 1px solid rgba(214, 191, 168, 0.3);
         }
-
-        /* --- 1. 補色查詢 (置頂) --- */
-        .search-box {
-            background: #fff; border: 2px dashed var(--secondary);
-            padding: 25px; border-radius: 15px; text-align: center;
-        }
-        .search-input {
-            width: 100%; padding: 12px; font-size: 16px;
-            border: 2px solid var(--secondary); border-radius: 10px;
-            background-color: #fafafa; outline: none; text-align: center;
-        }
-        .btn {
-            display: block; width: 100%; padding: 12px 0;
-            background-color: var(--secondary); color: #fff;
-            border-radius: 50px; font-weight: bold; margin-top: 10px;
-            cursor: pointer; border: none; font-size: 1rem;
-        }
-
-        /* --- 2. 服務項目 (文字卡片) --- */
-        .service-list-text {
-            display: grid; grid-template-columns: 1fr; gap: 15px;
-        }
-        .service-text-card {
-            background: white; padding: 20px;
-            border-radius: 12px; border-left: 5px solid var(--primary);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            display: flex; justify-content: space-between; align-items: center;
-            cursor: pointer; transition: 0.2s;
-        }
-        .service-text-card:active { transform: scale(0.98); background: #f9f9f9; }
-        .stc-left h3 { margin: 0; font-size: 1.1rem; color: var(--text); }
-        .stc-left span { font-size: 0.8rem; color: #999; }
-        .stc-right { color: #C17E7E; font-weight: bold; font-size: 1.1rem; }
-
-        /* --- 3. 顧客好評 (Masonry/List) --- */
-        .review-grid { display: grid; gap: 15px; }
-        .review-card {
-            background: white; padding: 15px; border-radius: 12px;
-            border: 1px solid #eee;
-        }
-        .review-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
-        .review-name { font-weight: bold; font-size: 0.95rem; }
-        .review-stars { color: #FFD700; letter-spacing: 2px; }
-        .review-content { font-size: 0.9rem; color: #666; line-height: 1.5; }
-        .review-date { font-size: 0.75rem; color: #ccc; text-align: right; margin-top: 5px; }
-
-        /* --- 4. 留色作品 (Grid) --- */
-        .portfolio-grid {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
-        }
+        .portfolio-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
         .portfolio-item {
-            position: relative; padding-bottom: 100%; /* 1:1 正方形 */
-            overflow: hidden; border-radius: 10px;
+            position: relative; padding-bottom: 100%; border-radius: 10px; overflow: hidden;
+            animation: fadeIn 0.5s ease;
         }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .portfolio-item img {
-            position: absolute; top: 0; left: 0;
-            width: 100%; height: 100%; object-fit: cover;
-            transition: 0.5s;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; transition: 0.5s;
         }
-        .portfolio-item:hover img { transform: scale(1.1); }
         .portfolio-tag {
             position: absolute; bottom: 0; left: 0; width: 100%;
-            background: rgba(0,0,0,0.5); color: white;
-            font-size: 0.75rem; padding: 5px; text-align: center;
+            background: rgba(0,0,0,0.6); color: white; font-size: 0.75rem;
+            padding: 5px; text-align: center;
         }
 
-        /* --- 彈出視窗 (Modal) 與 圖片輪播 --- */
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%; background: rgba(0,0,0,0.7);
-            z-index: 2000; align-items: center; justify-content: center;
-            opacity: 0; transition: opacity 0.3s;
+        /* --- 補色查詢 --- */
+        .search-box { background: #fff; border: 2px dashed var(--secondary); padding: 25px; border-radius: 15px; text-align: center; }
+        .search-input { width: 100%; padding: 12px; border: 2px solid var(--secondary); border-radius: 10px; background-color: #fafafa; outline: none; text-align: center; }
+        .btn { display: block; width: 100%; padding: 12px 0; background-color: var(--secondary); color: #fff; border-radius: 50px; font-weight: bold; margin-top: 10px; cursor: pointer; border: none; }
+
+        /* --- 服務項目文字卡 --- */
+        .service-list-text { display: grid; gap: 15px; }
+        .service-text-card {
+            background: white; padding: 20px; border-radius: 12px;
+            border-left: 5px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex; justify-content: space-between; align-items: center; cursor: pointer;
         }
-        .modal-overlay.show { display: flex; opacity: 1; }
         
-        .modal-content {
-            background: #fff; width: 90%; max-width: 500px;
-            max-height: 85vh; overflow-y: auto;
-            border-radius: 20px; padding: 0; position: relative;
-        }
-        .modal-close-btn {
-            position: absolute; top: 15px; right: 15px; z-index: 10;
-            background: rgba(0,0,0,0.5); color: white;
-            width: 30px; height: 30px; border-radius: 50%;
-            text-align: center; line-height: 30px; cursor: pointer;
-        }
-
-        /* 輪播容器 (CSS Scroll Snap) */
-        .carousel-container {
-            display: flex; overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            -webkit-overflow-scrolling: touch;
-            height: 300px; background: #f0f0f0;
-        }
-        .carousel-slide {
-            min-width: 100%; height: 100%;
-            scroll-snap-align: center;
-            position: relative;
-        }
-        .carousel-slide img {
-            width: 100%; height: 100%; object-fit: cover;
-        }
-        .carousel-hint {
-            position: absolute; bottom: 10px; right: 10px;
-            background: rgba(0,0,0,0.6); color: white;
-            padding: 2px 8px; border-radius: 10px; font-size: 0.7rem;
-            pointer-events: none;
-        }
-
+        /* --- 彈窗與輪播 --- */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; align-items: center; justify-content: center; }
+        .modal-overlay.show { display: flex; }
+        .modal-content { background: #fff; width: 90%; max-width: 500px; max-height: 85vh; overflow-y: auto; border-radius: 20px; padding: 0; position: relative; }
+        .modal-close-btn { position: absolute; top: 15px; right: 15px; z-index: 10; background: rgba(0,0,0,0.5); color: white; width: 30px; height: 30px; border-radius: 50%; text-align: center; line-height: 30px; cursor: pointer; }
+        .carousel-container { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; height: 300px; background: #f0f0f0; }
+        .carousel-slide { min-width: 100%; height: 100%; scroll-snap-align: center; position: relative; }
+        .carousel-slide img { width: 100%; height: 100%; object-fit: cover; }
         .modal-body { padding: 20px; }
-        .modal-title { font-size: 1.4rem; font-weight: bold; margin: 0 0 5px 0; }
-        .modal-price { color: #C17E7E; font-size: 1.2rem; font-weight: bold; }
-        .modal-desc { 
-            margin-top: 15px; color: #555; font-size: 0.95rem; line-height: 1.6;
-            white-space: pre-wrap; background: #f9f9f9; padding: 15px; border-radius: 10px;
-        }
 
-        /* --- 懸浮預約 --- */
-        .floating-cta {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            width: 85%; max-width: 350px; background: var(--text); color: white;
-            padding: 15px; border-radius: 50px; text-align: center;
-            text-decoration: none; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            z-index: 950; display: flex; justify-content: center; gap: 8px;
-        }
+        /* --- 懸浮按鈕 --- */
+        .floating-cta { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 85%; max-width: 350px; background: var(--text); color: white; padding: 15px; border-radius: 50px; text-align: center; text-decoration: none; font-weight: bold; z-index: 950; display: flex; justify-content: center; gap: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 
-        /* 查詢結果樣式 (Tailwind) */
-        .collapsible-content { transition: all 0.4s; max-height: 0; overflow: hidden; opacity: 0; }
-        .collapsible-content.expanded { max-height: 1000px; opacity: 1; }
-        .result-enter { animation: slideIn 0.5s ease-out forwards; opacity: 0; transform: translateY(20px); }
-        @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
-
+        /* --- 顧客好評 --- */
+        .review-grid { display: grid; gap: 15px; }
+        .review-card { background: white; padding: 15px; border-radius: 12px; border: 1px solid #eee; }
+        .review-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .review-stars { color: #FFD700; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
-    <!-- 頁首 Hero -->
     <div style="background: var(--primary); color: white; padding: 30px 20px; text-align: center;">
         <h1 style="margin:0; font-size:1.8rem;">AM Beauty Studio</h1>
         <p style="margin:5px 0 0 0; opacity:0.9;">打造妳的偽素顏小心機</p>
     </div>
 
-    <!-- 導覽列 -->
     <nav class="nav-bar">
         <a href="#search" class="nav-item">補色查詢</a>
         <a href="#services" class="nav-item">服務項目</a>
@@ -235,39 +136,41 @@
 
     <div class="container">
 
-        <!-- 1. 補色查詢 (最優先) -->
+        <!-- 1. 補色查詢 -->
         <section id="search">
             <div class="search-box">
                 <h3 style="margin-top:0; color:var(--primary);">舊客補色查詢</h3>
                 <p style="font-size:0.9rem; color:#888; margin-bottom:15px;">輸入姓名或電話立即查詢優惠</p>
-                
                 <div style="max-width: 100%; margin: 0 auto;">
-                    <input type="text" id="queryInput" class="search-input" 
-                           placeholder="例如：林小美 或 0912..." 
-                           onkeydown="if(event.key === 'Enter') searchRecord()">
-                    
-                    <button onclick="searchRecord()" id="searchButton" class="btn">
-                        立即查詢
-                    </button>
+                    <input type="text" id="queryInput" class="search-input" placeholder="例如：林小美 或 0912..." onkeydown="if(event.key === 'Enter') searchRecord()">
+                    <button onclick="searchRecord()" id="searchButton" class="btn">立即查詢</button>
                 </div>
-                <!-- 結果區 -->
                 <div id="messageArea" class="hidden mt-4 p-3 rounded-xl text-sm font-bold"></div>
                 <div id="resultsArea" class="mt-6 text-left"></div>
             </div>
         </section>
 
-        <!-- 2. 服務項目 (文字列表) -->
+        <!-- 2. 服務項目 -->
         <section id="services">
             <div class="section-header"><h2>服務項目</h2></div>
             <div id="service-text-list" class="service-list-text">
-                <p style="text-align:center; color:#ccc;">正在載入服務...</p>
+                <p style="text-align:center; color:#ccc;">正在載入...</p>
             </div>
-            <p style="text-align:center; font-size:0.8rem; color:#aaa; margin-top:10px;">點擊項目查看多圖與介紹</p>
+            <p style="text-align:center; font-size:0.8rem; color:#aaa; margin-top:10px;">點擊項目查看詳情</p>
         </section>
 
-        <!-- 3. 留色作品 -->
+        <!-- 3. 留色作品 (新增分類) -->
         <section id="portfolio">
             <div class="section-header"><h2>留色作品集</h2></div>
+            
+            <!-- 分類按鈕 -->
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterPortfolio('all', this)">全部</button>
+                <button class="filter-btn" onclick="filterPortfolio('brow', this)">霧眉</button>
+                <button class="filter-btn" onclick="filterPortfolio('lip', this)">霧唇</button>
+                <button class="filter-btn" onclick="filterPortfolio('dark', this)">烏唇案例</button>
+            </div>
+
             <div id="portfolio-grid" class="portfolio-grid">
                 <!-- JS 載入 -->
             </div>
@@ -276,69 +179,40 @@
         <!-- 4. 顧客好評 -->
         <section id="reviews">
             <div class="section-header"><h2>顧客好評</h2></div>
-            <div id="review-list" class="review-grid">
-                <!-- JS 載入 -->
-            </div>
+            <div id="review-list" class="review-grid"></div>
         </section>
 
     </div>
 
-    <!-- 懸浮預約按鈕 -->
-    <a id="floatBookingBtn" href="#" class="floating-cta">
-        <span>📅 立即預約諮詢</span>
-    </a>
+    <a id="floatBookingBtn" href="#" class="floating-cta"><span>📅 立即預約諮詢</span></a>
 
-    <!-- 彈出視窗 (含輪播) -->
     <div id="serviceModal" class="modal-overlay" onclick="closeModal(event)">
         <div class="modal-content">
             <div class="modal-close-btn" onclick="closeModal(event)">&times;</div>
-            
-            <!-- 圖片輪播區 -->
-            <div id="carouselContainer" class="carousel-container">
-                <!-- JS 動態插入圖片 -->
-            </div>
-
+            <div id="carouselContainer" class="carousel-container"></div>
             <div class="modal-body">
-                <h2 id="modalTitle" class="modal-title"></h2>
-                <div id="modalPrice" class="modal-price"></div>
-                <div id="modalDesc" class="modal-desc"></div>
-                <button onclick="document.getElementById('floatBookingBtn').click()" class="btn" style="background: var(--text); margin-top:20px;">
-                    預約此項目
-                </button>
+                <h2 id="modalTitle" style="font-size:1.4rem; font-weight:bold;"></h2>
+                <div id="modalPrice" style="color:#C17E7E; font-weight:bold; font-size:1.2rem; margin:5px 0;"></div>
+                <div id="modalDesc" style="margin-top:15px; color:#555; background:#f9f9f9; padding:15px; border-radius:10px; white-space:pre-wrap;"></div>
+                <button onclick="document.getElementById('floatBookingBtn').click()" class="btn" style="background:var(--text); margin-top:20px;">預約此項目</button>
             </div>
         </div>
     </div>
 
-
-    <!-- ================= JAVASCRIPT ================= -->
     <script>
-        // ▼▼▼ 設定區：請填入您的 CSV 網址 ▼▼▼
-        
-        // 1. Services CSV
+        // ▼▼▼ 設定區 ▼▼▼
         const SERVICES_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1138837231&single=true&output=csv';
-        
-        // 2. Reviews CSV (請換成您的網址)
-        const REVIEWS_CSV = '您的_Reviews_CSV_網址'; 
-
-        // 3. Portfolio CSV (請換成您的網址)
-        const PORTFOLIO_CSV = '您的_Portfolio_CSV_網址';
-
-        // 4. Settings CSV
+        const REVIEWS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=174294022&single=true&output=csv'; 
+        const PORTFOLIO_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1127370948&single=true&output=csv'; // 記得換
         const SETTINGS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQxxxxxxxx/pub?output=csv'; 
-
-        // 5. GAS API
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx6grwl5DidK6DScAaZLM8udp-Pjn_FrB33bv6ES0JkwAiiIx-xxJHicxANVGH7caSpEg/exec"; 
         
-        // ▲▲▲ 設定結束 ▲▲▲
+        let allPortfolioData = []; // 儲存所有作品資料
 
         document.addEventListener("DOMContentLoaded", function() {
-            loadServices();
-            loadReviews();
-            loadPortfolio();
-            loadSettings();
+            loadServices(); loadReviews(); loadPortfolio(); loadSettings();
         });
 
-        // 通用 CSV 解析器
         function parseCSV(str) {
             const arr = []; let quote = false; let col = 0, row = 0;
             for (let c = 0; c < str.length; c++) {
@@ -355,190 +229,106 @@
             return arr;
         }
 
-        // --- 1. 載入服務 (文字卡片) ---
+        // --- 1. 載入服務 ---
         function loadServices() {
             fetch(SERVICES_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt);
                 const list = document.getElementById('service-text-list');
                 list.innerHTML = '';
-                
-                // 跳過標題列
                 let start = (rows[0][0].toLowerCase().includes('name')) ? 1 : 0;
-                
                 for(let i=start; i<rows.length; i++){
-                    const c = rows[i];
-                    if(c.length<2 || !c[0]) continue;
-                    
-                    const name = c[0].trim();
-                    const price = c[1].trim();
-                    const desc = c[2] ? c[2].trim() : ''; // 簡短標籤
-                    const images = c[3] ? c[3].trim() : ''; // 多圖字串
-                    const detail = c[4] ? c[4].trim() : ''; // 詳細介紹
-
+                    const c = rows[i]; if(c.length<2 || !c[0]) continue;
                     const div = document.createElement('div');
                     div.className = 'service-text-card';
-                    div.innerHTML = `
-                        <div class="stc-left">
-                            <h3>${name}</h3>
-                            <span>${desc}</span>
-                        </div>
-                        <div class="stc-right">NT$ ${price}</div>
-                    `;
-                    div.onclick = () => openServiceModal(name, price, detail, images);
+                    div.innerHTML = `<div class="stc-left"><h3>${c[0]}</h3><span>${c[2]||''}</span></div><div class="stc-right">NT$ ${c[1]}</div>`;
+                    div.onclick = () => openServiceModal(c[0], c[1], c[4], c[3]);
                     list.appendChild(div);
                 }
-            }).catch(()=> document.getElementById('service-text-list').innerHTML='載入失敗');
+            });
         }
-
-        // --- 2. 彈窗與輪播邏輯 ---
-        function openServiceModal(name, price, detail, imagesStr) {
-            document.getElementById('modalTitle').textContent = name;
-            document.getElementById('modalPrice').textContent = 'NT$ ' + price;
-            
-            // 處理換行
-            const formattedDetail = detail ? detail.replace(/\|/g, '\n') : '暫無詳細介紹';
-            document.getElementById('modalDesc').textContent = formattedDetail;
-
-            // 處理圖片輪播
-            const carousel = document.getElementById('carouselContainer');
-            carousel.innerHTML = ''; // 清空
-            
-            if(imagesStr) {
-                const imgs = imagesStr.split(';'); // 用分號切割
-                imgs.forEach((img, idx) => {
-                    if(img.trim()){
-                        const slide = document.createElement('div');
-                        slide.className = 'carousel-slide';
-                        slide.innerHTML = `
-                            <img src="${img.trim()}" alt="${name}">
-                            ${imgs.length > 1 ? `<div class="carousel-hint">${idx+1}/${imgs.length}</div>` : ''}
-                        `;
-                        carousel.appendChild(slide);
-                    }
-                });
-                carousel.style.display = 'flex';
-            } else {
-                carousel.style.display = 'none'; // 沒圖就隱藏
-            }
-
+        function openServiceModal(n, p, d, imgs) {
+            document.getElementById('modalTitle').textContent = n;
+            document.getElementById('modalPrice').textContent = 'NT$ ' + p;
+            document.getElementById('modalDesc').textContent = d ? d.replace(/\|/g, '\n') : '暫無介紹';
+            const c = document.getElementById('carouselContainer'); c.innerHTML = '';
+            if(imgs) imgs.split(';').forEach(src=>{ if(src.trim()) c.innerHTML += `<div class="carousel-slide"><img src="${src.trim()}"></div>`; });
+            c.style.display = imgs ? 'flex' : 'none';
             document.getElementById('serviceModal').classList.add('show');
             document.body.style.overflow = 'hidden';
         }
-
-        function closeModal(e) {
-            const modal = document.getElementById('serviceModal');
-            if(e.target === modal || e.target.classList.contains('modal-close-btn')) {
-                modal.classList.remove('show');
-                document.body.style.overflow = '';
+        function closeModal(e) { 
+            const m = document.getElementById('serviceModal'); 
+            if(e.target===m || e.target.classList.contains('modal-close-btn')) {
+                m.classList.remove('show'); document.body.style.overflow = '';
             }
         }
 
-        // --- 3. 載入顧客好評 ---
+        // --- 2. 載入作品 (含分類功能) ---
+        function loadPortfolio() {
+            fetch(PORTFOLIO_CSV).then(r=>r.text()).then(txt=>{
+                const rows = parseCSV(txt);
+                allPortfolioData = []; // 清空
+
+                let start = (rows[0][0].toLowerCase().includes('image')) ? 1 : 0;
+                for(let i=start; i<rows.length; i++){
+                    const c = rows[i]; if(!c[0]) continue;
+                    // c[0]=Img, c[1]=Desc, c[2]=Category
+                    allPortfolioData.push({ img: c[0], desc: c[1]||'', cat: (c[2]||'').trim().toLowerCase() });
+                }
+                renderPortfolio(allPortfolioData); // 預設顯示全部
+            });
+        }
+
+        function filterPortfolio(cat, btn) {
+            // 切換按鈕樣式
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+
+            if(cat === 'all') {
+                renderPortfolio(allPortfolioData);
+            } else {
+                const filtered = allPortfolioData.filter(item => item.cat === cat);
+                renderPortfolio(filtered);
+            }
+        }
+
+        function renderPortfolio(data) {
+            const grid = document.getElementById('portfolio-grid');
+            grid.innerHTML = '';
+            if(data.length === 0) { grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#ccc">暫無此分類作品</p>'; return; }
+            
+            data.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'portfolio-item';
+                div.innerHTML = `<img src="${item.img}" loading="lazy">${item.desc ? `<div class="portfolio-tag">${item.desc}</div>` : ''}`;
+                grid.appendChild(div);
+            });
+        }
+
+        // --- 3. 載入好評 ---
         function loadReviews() {
             fetch(REVIEWS_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt);
                 const list = document.getElementById('review-list');
-                list.innerHTML = '';
-                
                 let start = (rows[0][0].toLowerCase().includes('name')) ? 1 : 0;
                 for(let i=start; i<rows.length; i++){
-                    const c = rows[i];
-                    if(c.length<3 || !c[0]) continue;
-                    
-                    const name = c[0];
-                    const stars = parseInt(c[1]) || 5;
-                    const content = c[2];
-                    const date = c[3] || '';
-                    
-                    const starStr = '★'.repeat(stars) + '☆'.repeat(5-stars);
-                    
-                    const div = document.createElement('div');
-                    div.className = 'review-card';
-                    div.innerHTML = `
-                        <div class="review-header">
-                            <span class="review-name">${name}</span>
-                            <span class="review-stars">${starStr}</span>
-                        </div>
-                        <div class="review-content">${content}</div>
-                        <div class="review-date">${date}</div>
-                    `;
-                    list.appendChild(div);
+                    const c = rows[i]; if(c.length<3 || !c[0]) continue;
+                    list.innerHTML += `<div class="review-card"><div class="review-header"><span style="font-weight:bold">${c[0]}</span><span class="review-stars">${'★'.repeat(c[1]||5)}</span></div><div style="font-size:0.9rem;color:#666">${c[2]}</div><div style="font-size:0.75rem;color:#ccc;text-align:right">${c[3]||''}</div></div>`;
                 }
-            }).catch(()=> document.getElementById('review-list').innerHTML='<p style="text-align:center;color:#ccc">尚無評論資料</p>');
+            });
         }
 
-        // --- 4. 載入作品集 ---
-        function loadPortfolio() {
-            fetch(PORTFOLIO_CSV).then(r=>r.text()).then(txt=>{
-                const rows = parseCSV(txt);
-                const grid = document.getElementById('portfolio-grid');
-                grid.innerHTML = '';
-
-                let start = (rows[0][0].toLowerCase().includes('image')) ? 1 : 0;
-                for(let i=start; i<rows.length; i++){
-                    const c = rows[i];
-                    if(!c[0]) continue;
-                    const img = c[0];
-                    const desc = c[1] || '';
-
-                    const div = document.createElement('div');
-                    div.className = 'portfolio-item';
-                    div.innerHTML = `
-                        <img src="${img}" loading="lazy">
-                        ${desc ? `<div class="portfolio-tag">${desc}</div>` : ''}
-                    `;
-                    grid.appendChild(div);
-                }
-            }).catch(()=> document.getElementById('portfolio-grid').innerHTML='<p style="text-align:center;color:#ccc">載入失敗</p>');
-        }
-
-        // --- 5. 載入基本設定 ---
+        // --- 4. 載入設定 ---
         function loadSettings() {
             fetch(SETTINGS_CSV).then(r=>r.text()).then(csv => {
                 csv.split('\n').forEach(row => {
                     const [id, content] = row.split(',');
-                    if(id && content && id.trim() === 'link_booking') {
-                        document.getElementById('floatBookingBtn').href = content.trim();
-                    }
+                    if(id && id.trim() === 'link_booking') document.getElementById('floatBookingBtn').href = content.trim();
                 });
             });
         }
 
-        // --- 6. 補色查詢 (保留原功能) ---
-        function maskPhoneNumber(p) { if(!p)return''; let s=String(p).replace(/'/g,'').trim(); return s.length<8?s:s.substring(0,4)+'***'+s.substring(s.length-3); }
-        function toggleCollapse(btn, id) { 
-            const el=document.getElementById(id); el.classList.toggle('expanded'); 
-            btn.querySelector('.btn-text').textContent=el.classList.contains('expanded')?'收起':'查看完整價目表';
-        }
-        function displayMessage(t, c) {
-            const m=document.getElementById('messageArea'); m.textContent=c; m.className=`mt-4 p-3 rounded-xl text-sm font-bold ${t==='error'?'bg-red-50 text-red-600':'bg-green-50 text-green-600'}`; m.classList.remove('hidden');
-        }
-        function checkIsExpired(d) { if(!d)return false; return new Date() > new Date(d); }
-        
-        // 這裡省略 getPriceCardHtml, createCard 的重複代碼，請直接使用上方完整版，此處邏輯與之前相同
-        function getPriceCardHtml(info, useOrange) {
-             if (!info) return '';
-             let priceText = info.price === 0 ? '免費' : (info.price ? `NT$ ${info.price}` : '請洽詢');
-             let badgeClass = info.price === 0 ? 'bg-green-600' : (useOrange ? 'bg-orange-500' : 'bg-pink-500');
-             let theme = info.price === 0 ? 'bg-green-50 border-green-200' : (useOrange ? 'bg-orange-50 border-orange-200' : 'bg-pink-50 border-pink-200');
-             return `<div class="mt-2 p-3 rounded-xl border ${theme} flex justify-between items-center"><div class="text-xs"><h3>今日價格</h3><p>${(info.dateRange||'').replace(/【.*?】/g,'')}</p></div><span class="px-3 py-1 text-white rounded-lg ${badgeClass}">${priceText}</span></div>`;
-        }
-
-        function createCard(r, i) {
-            const cid = `d-${i}`; const masked = maskPhoneNumber(r.phone);
-            const isFree = r.customFreeDate && !checkIsExpired(r.customFreeDate);
-            const isEye = r.eyebrowDiscountDate && !checkIsExpired(r.eyebrowDiscountDate);
-            const ranges = (r.touchUpRanges||[]).map(t=>`<div class="flex justify-between py-1 border-b border-gray-100 text-sm"><span>${t.dateRange}</span><span class="font-bold">${t.price===0?'免費':'$'+t.price}</span></div>`).join('');
-            
-            return `
-            <div class="bg-white rounded-2xl p-4 shadow-lg border border-gray-100 mb-6 result-enter">
-                <div class="flex justify-between mb-2"><div><h3 class="font-bold text-gray-800">${r.name} <span class="text-gray-400 text-sm">(${masked})</span></h3><p class="text-xs text-pink-500">${r.service}</p></div><div class="text-right text-xs text-gray-400"><p>上次預約</p><p class="text-gray-600 font-bold">${r.lastDate||'無'}</p></div></div>
-                ${r.specialReminder?`<div class="bg-yellow-50 text-yellow-800 p-2 rounded text-xs mb-2">💡 ${r.specialReminder}</div>`:''}
-                ${getPriceCardHtml(r.currentPriceInfo, isEye)}
-                <div class="mt-3"><button onclick="toggleCollapse(this,'${cid}')" class="w-full py-1 bg-gray-50 text-gray-500 text-xs rounded"><span class="btn-text">查看完整價目表</span></button><div id="${cid}" class="collapsible-content bg-gray-50 px-3 mt-1"><div class="py-2">${ranges}</div></div></div>
-            </div>`;
-        }
-
+        // --- 補色查詢功能 ---
         function searchRecord() {
             const q=document.getElementById('queryInput').value.trim();
             if(!q) return displayMessage('error','請輸入資料');
@@ -549,6 +339,14 @@
                 else displayMessage('info','查無資料');
             }).finally(()=>{ btn.textContent='立即查詢'; btn.disabled=false; });
         }
+        function displayMessage(t, c) { const m=document.getElementById('messageArea'); m.textContent=c; m.className=`mt-4 p-3 rounded-xl text-sm font-bold ${t==='error'?'bg-red-50 text-red-600':'bg-green-50 text-green-600'}`; m.classList.remove('hidden'); }
+        function checkIsExpired(d) { if(!d)return false; return new Date() > new Date(d); }
+        function maskPhoneNumber(p) { if(!p)return''; let s=String(p).replace(/'/g,'').trim(); return s.length<8?s:s.substring(0,4)+'***'+s.substring(s.length-3); }
+        function toggleCollapse(btn, id) { const el=document.getElementById(id); el.classList.toggle('expanded'); btn.querySelector('.btn-text').textContent=el.classList.contains('expanded')?'收起':'查看完整價目表'; }
+        
+        // 價格卡片渲染 (省略長代碼，與之前相同)
+        function getPriceCardHtml(info, useOrange) { if (!info) return ''; let p = info.price===0?'免費':(info.price?`NT$ ${info.price}`:'洽詢'); let bg = info.price===0?'bg-green-600':(useOrange?'bg-orange-500':'bg-pink-500'); let theme = info.price===0?'bg-green-50 border-green-200':(useOrange?'bg-orange-50 border-orange-200':'bg-pink-50 border-pink-200'); return `<div class="mt-2 p-3 rounded-xl border ${theme} flex justify-between items-center"><div class="text-xs"><h3>今日價格</h3><p>${(info.dateRange||'').replace(/【.*?】/g,'')}</p></div><span class="px-3 py-1 text-white rounded-lg ${bg}">${p}</span></div>`; }
+        function createCard(r, i) { const cid=`d-${i}`; const ranges=(r.touchUpRanges||[]).map(t=>`<div class="flex justify-between py-1 border-b border-gray-100 text-sm"><span>${t.dateRange}</span><span class="font-bold">${t.price===0?'免費':'$'+t.price}</span></div>`).join(''); return `<div class="bg-white rounded-2xl p-4 shadow-lg border border-gray-100 mb-6 result-enter"><div class="flex justify-between mb-2"><div><h3 class="font-bold text-gray-800">${r.name} <span class="text-gray-400 text-sm">(${maskPhoneNumber(r.phone)})</span></h3><p class="text-xs text-pink-500">${r.service}</p></div><div class="text-right text-xs text-gray-400"><p>上次預約</p><p class="text-gray-600 font-bold">${r.lastDate||'無'}</p></div></div>${r.specialReminder?`<div class="bg-yellow-50 text-yellow-800 p-2 rounded text-xs mb-2">💡 ${r.specialReminder}</div>`:''} ${getPriceCardHtml(r.currentPriceInfo, r.eyebrowDiscountDate && !checkIsExpired(r.eyebrowDiscountDate))} <div class="mt-3"><button onclick="toggleCollapse(this,'${cid}')" class="w-full py-1 bg-gray-50 text-gray-500 text-xs rounded"><span class="btn-text">查看完整價目表</span></button><div id="${cid}" class="collapsible-content bg-gray-50 px-3 mt-1"><div class="py-2">${ranges}</div></div></div></div>`; }
     </script>
 </body>
 </html>
