@@ -65,7 +65,7 @@
             display: flex; justify-content: space-between; align-items: center; cursor: pointer;
         }
 
-        /* --- 3. 留色作品 (3欄 + 橢圓標籤) --- */
+        /* --- 3. 留色作品 (折疊式設計) --- */
         .filter-buttons { display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; }
         .filter-btn { padding: 5px 12px; border: 1px solid var(--primary); border-radius: 20px; color: var(--primary); background: transparent; cursor: pointer; font-size: 0.85rem; }
         .filter-btn.active { background: var(--primary); color: white; }
@@ -74,13 +74,40 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 3px;
+            /* 預設不再這裡限制高度，由 JS 控制顯示數量 */
         }
         .portfolio-item {
             position: relative;
             padding-bottom: 100%;
             overflow: hidden;
             background: #eee;
+            /* 預設顯示淡入動畫 */
+            animation: fadeIn 0.5s ease;
         }
+        
+        /* ✨ 新增：隱藏項目的樣式 ✨ */
+        .hidden-item {
+            display: none;
+        }
+
+        /* ✨ 新增：查看更多按鈕 ✨ */
+        .load-more-btn {
+            display: block;
+            margin: 15px auto 0 auto;
+            padding: 8px 25px;
+            background: #f0f0f0;
+            color: #888;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .load-more-btn:hover {
+            background: #e0e0e0;
+            color: #555;
+        }
+
         .portfolio-item img {
             position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
@@ -89,59 +116,21 @@
         }
         .portfolio-item:hover img { filter: brightness(1.1); }
         
-        /* ✨ 修改點：半透明橢圓標籤在上方 ✨ */
+        /* 橢圓標籤 */
         .portfolio-tag {
-            position: absolute; 
-            top: 8px; /* 距離頂部 */
-            left: 50%; 
-            transform: translateX(-50%); /* 水平置中 */
-            width: auto;
-            
-            background: rgba(0,0,0,0.5); /* 半透明黑 */
-            color: white;
-            font-size: 0.7rem; 
-            padding: 3px 10px; /* 橢圓內距 */
-            border-radius: 20px; /* 橢圓形 */
-            
-            text-align: center;
-            backdrop-filter: blur(2px); /* 輕微模糊背景 */
-            pointer-events: none; /* 讓點擊穿透 */
+            position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+            width: auto; background: rgba(0,0,0,0.5); color: white;
+            font-size: 0.7rem; padding: 3px 10px; border-radius: 20px;
+            text-align: center; backdrop-filter: blur(2px); pointer-events: none;
             white-space: nowrap;
         }
 
-        /* --- 4. 顧客好評 (純對話框) --- */
-        .chat-container {
-            display: flex; flex-direction: column; gap: 15px;
-            padding: 10px;
-        }
-        .chat-row {
-            display: flex; align-items: flex-start; gap: 10px;
-        }
-        .chat-avatar {
-            width: 35px; height: 35px;
-            background: #eee; border-radius: 50%;
-            flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center;
-            overflow: hidden;
-        }
-        .chat-bubble {
-            background: #fff;
-            padding: 10px 15px;
-            border-radius: 0 15px 15px 15px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-            font-size: 0.9rem;
-            color: #444;
-            max-width: 85%;
-            line-height: 1.5;
-            position: relative;
-        }
-        /* 氣泡小角角 */
-        .chat-bubble::before {
-            content: ''; position: absolute; top: 0; left: -8px;
-            width: 0; height: 0; border-style: solid;
-            border-width: 0 10px 10px 0;
-            border-color: transparent #fff transparent transparent;
-        }
+        /* --- 4. 顧客好評 --- */
+        .chat-container { display: flex; flex-direction: column; gap: 15px; padding: 10px; }
+        .chat-row { display: flex; align-items: flex-start; gap: 10px; }
+        .chat-avatar { width: 35px; height: 35px; background: #eee; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .chat-bubble { background: #fff; padding: 10px 15px; border-radius: 0 15px 15px 15px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); font-size: 0.9rem; color: #444; max-width: 85%; line-height: 1.5; position: relative; }
+        .chat-bubble::before { content: ''; position: absolute; top: 0; left: -8px; width: 0; height: 0; border-style: solid; border-width: 0 10px 10px 0; border-color: transparent #fff transparent transparent; }
 
         /* --- 懸浮按鈕 --- */
         .floating-cta { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 85%; max-width: 350px; background: var(--text); color: white; padding: 15px; border-radius: 50px; text-align: center; text-decoration: none; font-weight: bold; z-index: 950; display: flex; justify-content: center; gap: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
@@ -155,7 +144,8 @@
         .carousel-slide { min-width: 100%; height: 100%; scroll-snap-align: center; position: relative; }
         .carousel-slide img { width: 100%; height: 100%; object-fit: cover; }
         .modal-body { padding: 20px; }
-        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
         /* 查詢結果 */
         .collapsible-content { transition: all 0.4s; max-height: 0; overflow: hidden; opacity: 0; }
         .collapsible-content.expanded { max-height: 1000px; opacity: 1; }
@@ -203,7 +193,7 @@
             <p style="text-align:center; font-size:0.8rem; color:#aaa; margin-top:10px;">點擊項目查看詳情</p>
         </section>
 
-        <!-- 3. 留色作品 -->
+        <!-- 3. 留色作品 (折疊版) -->
         <section id="portfolio">
             <div class="section-header"><h2>留色作品集</h2></div>
             
@@ -217,6 +207,11 @@
             <div id="portfolio-grid" class="portfolio-grid">
                 <!-- JS 載入 -->
             </div>
+            
+            <!-- 查看更多按鈕 -->
+            <button id="portfolioToggleBtn" class="load-more-btn" onclick="togglePortfolio()" style="display:none;">
+                查看更多作品 ▼
+            </button>
         </section>
 
         <!-- 4. 顧客好評 -->
@@ -244,7 +239,7 @@
     </div>
 
     <script>
-        // ▼▼▼ 設定區：請確認這 4 個 CSV 網址都是正確的 ▼▼▼
+        // ▼▼▼ 設定區 ▼▼▼
         const SERVICES_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1138837231&single=true&output=csv';
         const REVIEWS_CSV = '您的_Reviews_CSV_網址'; 
         const PORTFOLIO_CSV = '您的_Portfolio_CSV_網址'; 
@@ -252,6 +247,9 @@
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx6grwl5DidK6DScAaZLM8udp-Pjn_FrB33bv6ES0JkwAiiIx-xxJHicxANVGH7caSpEg/exec"; 
         
         let allPortfolioData = [];
+        let currentPortfolioData = []; // 當前篩選後的資料
+        let isPortfolioExpanded = false; // 是否展開狀態
+        const PORTFOLIO_LIMIT = 6; // 預設顯示幾張 (2行)
 
         document.addEventListener("DOMContentLoaded", function() {
             loadServices(); loadReviews(); loadPortfolio(); loadSettings();
@@ -307,7 +305,7 @@
             }
         }
 
-        // --- 載入作品 (3欄 + 頂部橢圓標籤) ---
+        // --- 載入作品 (含收合邏輯) ---
         function loadPortfolio() {
             fetch(PORTFOLIO_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt); allPortfolioData = [];
@@ -316,26 +314,88 @@
                     const c = rows[i]; if(!c[0]) continue;
                     allPortfolioData.push({ img: c[0], desc: c[1]||'', cat: (c[2]||'').trim().toLowerCase() });
                 }
-                renderPortfolio(allPortfolioData);
+                currentPortfolioData = allPortfolioData; // 初始為全部
+                renderPortfolio();
             });
         }
+        
         function filterPortfolio(cat, btn) {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             if(btn) btn.classList.add('active');
-            renderPortfolio(cat === 'all' ? allPortfolioData : allPortfolioData.filter(i => i.cat === cat));
+            
+            // 篩選資料
+            currentPortfolioData = (cat === 'all') ? allPortfolioData : allPortfolioData.filter(i => i.cat === cat);
+            
+            // 重置展開狀態
+            isPortfolioExpanded = false; 
+            updateToggleButton();
+            
+            renderPortfolio();
         }
-        function renderPortfolio(data) {
-            const grid = document.getElementById('portfolio-grid'); grid.innerHTML = '';
-            if(data.length === 0) { grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#ccc">暫無作品</p>'; return; }
-            data.forEach(item => {
-                const div = document.createElement('div'); div.className = 'portfolio-item';
-                // 這裡的 desc 會顯示在上方橢圓標籤內
+
+        function renderPortfolio() {
+            const grid = document.getElementById('portfolio-grid'); 
+            grid.innerHTML = '';
+            
+            if(currentPortfolioData.length === 0) { 
+                grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#ccc">暫無作品</p>'; 
+                document.getElementById('portfolioToggleBtn').style.display = 'none';
+                return; 
+            }
+            
+            // 決定要顯示幾張
+            // 如果 isPortfolioExpanded 為 true，顯示全部；否則只顯示前 6 張
+            const limit = isPortfolioExpanded ? currentPortfolioData.length : PORTFOLIO_LIMIT;
+            
+            // 渲染項目
+            currentPortfolioData.forEach((item, index) => {
+                const div = document.createElement('div'); 
+                div.className = 'portfolio-item';
+                
+                // 如果索引超過限制，加上隱藏樣式
+                if (index >= limit) {
+                    div.classList.add('hidden-item');
+                }
+                
                 div.innerHTML = `<img src="${item.img}" loading="lazy">${item.desc ? `<div class="portfolio-tag">${item.desc}</div>` : ''}`;
                 grid.appendChild(div);
             });
+            
+            updateToggleButton();
+        }
+        
+        function updateToggleButton() {
+            const btn = document.getElementById('portfolioToggleBtn');
+            // 如果資料總數小於等於 6 張，根本不需要按鈕
+            if (currentPortfolioData.length <= PORTFOLIO_LIMIT) {
+                btn.style.display = 'none';
+            } else {
+                btn.style.display = 'block';
+                btn.textContent = isPortfolioExpanded ? '收起作品 ▲' : '查看更多作品 ▼';
+            }
+        }
+        
+        function togglePortfolio() {
+            isPortfolioExpanded = !isPortfolioExpanded; // 切換狀態
+            
+            const grid = document.getElementById('portfolio-grid');
+            const items = grid.getElementsByClassName('portfolio-item');
+            
+            // 重新控制顯示/隱藏
+            const limit = isPortfolioExpanded ? currentPortfolioData.length : PORTFOLIO_LIMIT;
+            
+            for (let i = 0; i < items.length; i++) {
+                if (i < limit) {
+                    items[i].classList.remove('hidden-item');
+                } else {
+                    items[i].classList.add('hidden-item');
+                }
+            }
+            
+            updateToggleButton();
         }
 
-        // --- 載入好評 (純對話框) ---
+        // --- 載入好評 ---
         function loadReviews() {
             fetch(REVIEWS_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt);
@@ -344,10 +404,8 @@
                 let start = (rows[0][0].toLowerCase().includes('name')) ? 1 : 0;
                 for(let i=start; i<rows.length; i++){
                     const c = rows[i]; if(c.length<3 || !c[0]) continue;
-                    const content = c[2]; // 只取內容
-                    const div = document.createElement('div');
-                    div.className = 'chat-row';
-                    // 預設 SVG 頭像
+                    const content = c[2]; 
+                    const div = document.createElement('div'); div.className = 'chat-row';
                     div.innerHTML = `<div class="chat-avatar"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><div class="chat-bubble">${content}</div>`;
                     list.appendChild(div);
                 }
