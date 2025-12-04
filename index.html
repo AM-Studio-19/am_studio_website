@@ -18,7 +18,6 @@
             --secondary: #E6C2C2; /* 玫瑰粉 */
             --text: #5A483F;      /* 深咖字 */
             --accent: #FFFFFF;    /* 純白 */
-            --chat-bg: #FFFFFF;   /* 對話框背景 */
         }
 
         body {
@@ -56,7 +55,7 @@
         /* --- 1. 補色查詢 --- */
         .search-box { background: #fff; border: 2px dashed var(--secondary); padding: 25px; border-radius: 15px; text-align: center; }
         .search-input { width: 100%; padding: 12px; border: 2px solid var(--secondary); border-radius: 10px; background-color: #fafafa; outline: none; text-align: center; }
-        .btn { display: block; width: 100%; padding: 12px 0; background-color: var(--secondary); color: #fff; border-radius: 50px; font-weight: bold; margin-top: 10px; cursor: pointer; border: none; font-size: 1rem;}
+        .btn { display: block; width: 100%; padding: 12px 0; background-color: var(--secondary); color: #fff; border-radius: 50px; font-weight: bold; margin-top: 10px; cursor: pointer; border: none; font-size: 1rem; }
 
         /* --- 2. 服務項目 --- */
         .service-list-text { display: grid; gap: 15px; }
@@ -66,19 +65,19 @@
             display: flex; justify-content: space-between; align-items: center; cursor: pointer;
         }
 
-        /* --- 3. 留色作品 (IG 風格：3欄緊湊) --- */
+        /* --- 3. 留色作品 (3欄 + 橢圓標籤) --- */
         .filter-buttons { display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; }
         .filter-btn { padding: 5px 12px; border: 1px solid var(--primary); border-radius: 20px; color: var(--primary); background: transparent; cursor: pointer; font-size: 0.85rem; }
         .filter-btn.active { background: var(--primary); color: white; }
 
         .portfolio-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 改成 3 欄 */
-            gap: 3px; /* 極小的間距，像 IG */
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3px;
         }
         .portfolio-item {
             position: relative;
-            padding-bottom: 100%; /* 正方形 */
+            padding-bottom: 100%;
             overflow: hidden;
             background: #eee;
         }
@@ -90,15 +89,27 @@
         }
         .portfolio-item:hover img { filter: brightness(1.1); }
         
-        /* 標籤改為極簡小白點或文字，避免遮擋圖片 */
+        /* ✨ 修改點：半透明橢圓標籤在上方 ✨ */
         .portfolio-tag {
-            position: absolute; bottom: 0; left: 0; width: 100%;
-            background: rgba(0,0,0,0.4); color: white;
-            font-size: 0.6rem; padding: 2px; text-align: center;
-            opacity: 0.8;
+            position: absolute; 
+            top: 8px; /* 距離頂部 */
+            left: 50%; 
+            transform: translateX(-50%); /* 水平置中 */
+            width: auto;
+            
+            background: rgba(0,0,0,0.5); /* 半透明黑 */
+            color: white;
+            font-size: 0.7rem; 
+            padding: 3px 10px; /* 橢圓內距 */
+            border-radius: 20px; /* 橢圓形 */
+            
+            text-align: center;
+            backdrop-filter: blur(2px); /* 輕微模糊背景 */
+            pointer-events: none; /* 讓點擊穿透 */
+            white-space: nowrap;
         }
 
-        /* --- 4. 顧客好評 (LINE 對話框風格) --- */
+        /* --- 4. 顧客好評 (純對話框) --- */
         .chat-container {
             display: flex; flex-direction: column; gap: 15px;
             padding: 10px;
@@ -107,7 +118,7 @@
             display: flex; align-items: flex-start; gap: 10px;
         }
         .chat-avatar {
-            width: 40px; height: 40px;
+            width: 35px; height: 35px;
             background: #eee; border-radius: 50%;
             flex-shrink: 0;
             display: flex; align-items: center; justify-content: center;
@@ -115,21 +126,19 @@
         }
         .chat-bubble {
             background: #fff;
-            padding: 12px 16px;
-            border-radius: 0 15px 15px 15px; /* 左上角尖角 */
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            font-size: 0.95rem;
+            padding: 10px 15px;
+            border-radius: 0 15px 15px 15px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            font-size: 0.9rem;
             color: #444;
             max-width: 85%;
             line-height: 1.5;
             position: relative;
         }
-        /* 裝飾：讓氣泡有點立體感 */
+        /* 氣泡小角角 */
         .chat-bubble::before {
-            content: '';
-            position: absolute; top: 0; left: -8px;
-            width: 0; height: 0;
-            border-style: solid;
+            content: ''; position: absolute; top: 0; left: -8px;
+            width: 0; height: 0; border-style: solid;
             border-width: 0 10px 10px 0;
             border-color: transparent #fff transparent transparent;
         }
@@ -147,7 +156,7 @@
         .carousel-slide img { width: 100%; height: 100%; object-fit: cover; }
         .modal-body { padding: 20px; }
         
-        /* 查詢樣式 */
+        /* 查詢結果 */
         .collapsible-content { transition: all 0.4s; max-height: 0; overflow: hidden; opacity: 0; }
         .collapsible-content.expanded { max-height: 1000px; opacity: 1; }
         .result-enter { animation: slideIn 0.5s ease-out forwards; opacity: 0; transform: translateY(20px); }
@@ -194,7 +203,7 @@
             <p style="text-align:center; font-size:0.8rem; color:#aaa; margin-top:10px;">點擊項目查看詳情</p>
         </section>
 
-        <!-- 3. 留色作品 (IG 風格) -->
+        <!-- 3. 留色作品 -->
         <section id="portfolio">
             <div class="section-header"><h2>留色作品集</h2></div>
             
@@ -210,19 +219,17 @@
             </div>
         </section>
 
-        <!-- 4. 顧客好評 (對話框風格) -->
+        <!-- 4. 顧客好評 -->
         <section id="reviews">
             <div class="section-header"><h2>顧客好評</h2></div>
-            <div id="review-list" class="chat-container">
-                <!-- JS 載入 -->
-            </div>
+            <div id="review-list" class="chat-container"></div>
         </section>
 
     </div>
 
     <a id="floatBookingBtn" href="#" class="floating-cta"><span>📅 立即預約諮詢</span></a>
 
-    <!-- 服務詳情彈窗 -->
+    <!-- 彈窗 -->
     <div id="serviceModal" class="modal-overlay" onclick="closeModal(event)">
         <div class="modal-content">
             <div class="modal-close-btn" onclick="closeModal(event)">&times;</div>
@@ -237,7 +244,7 @@
     </div>
 
     <script>
-        // ▼▼▼ 設定區 ▼▼▼
+        // ▼▼▼ 設定區：請確認這 4 個 CSV 網址都是正確的 ▼▼▼
         const SERVICES_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1138837231&single=true&output=csv';
         const REVIEWS_CSV = '您的_Reviews_CSV_網址'; 
         const PORTFOLIO_CSV = '您的_Portfolio_CSV_網址'; 
@@ -300,7 +307,7 @@
             }
         }
 
-        // --- 載入作品 (IG 風格: 3欄) ---
+        // --- 載入作品 (3欄 + 頂部橢圓標籤) ---
         function loadPortfolio() {
             fetch(PORTFOLIO_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt); allPortfolioData = [];
@@ -322,35 +329,26 @@
             if(data.length === 0) { grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#ccc">暫無作品</p>'; return; }
             data.forEach(item => {
                 const div = document.createElement('div'); div.className = 'portfolio-item';
+                // 這裡的 desc 會顯示在上方橢圓標籤內
                 div.innerHTML = `<img src="${item.img}" loading="lazy">${item.desc ? `<div class="portfolio-tag">${item.desc}</div>` : ''}`;
                 grid.appendChild(div);
             });
         }
 
-        // --- 載入好評 (LINE 對話框風格) ---
+        // --- 載入好評 (純對話框) ---
         function loadReviews() {
             fetch(REVIEWS_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt);
                 const list = document.getElementById('review-list');
                 list.innerHTML = '';
                 let start = (rows[0][0].toLowerCase().includes('name')) ? 1 : 0;
-                
                 for(let i=start; i<rows.length; i++){
                     const c = rows[i]; if(c.length<3 || !c[0]) continue;
-                    // c[0]=Name, c[1]=Stars, c[2]=Content. 我們只用 Content
-                    const content = c[2]; 
-                    
+                    const content = c[2]; // 只取內容
                     const div = document.createElement('div');
                     div.className = 'chat-row';
-                    // 預設一個灰色人頭像 (SVG)
-                    div.innerHTML = `
-                        <div class="chat-avatar">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                        </div>
-                        <div class="chat-bubble">
-                            ${content}
-                        </div>
-                    `;
+                    // 預設 SVG 頭像
+                    div.innerHTML = `<div class="chat-avatar"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><div class="chat-bubble">${content}</div>`;
                     list.appendChild(div);
                 }
             }).catch(()=> document.getElementById('review-list').innerHTML='<p style="text-align:center;color:#ccc">尚無評論</p>');
