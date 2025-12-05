@@ -14,14 +14,12 @@
     <style>
         /* --- 核心變數 --- */
         :root {
-            --primary: #D6BFA8;   /* 奶茶棕 */
-            --primary-dark: #C4A488;
-            --secondary: #E6C2C2; /* 玫瑰粉 */
-            --text: #5A483F;      /* 深咖字 */
+            --primary: #D6BFA8;   
+            --secondary: #E6C2C2; 
+            --text: #5A483F;      
             --text-light: #8D7B72;
             --bg-color: #F9F8F6;  
             --card-shadow: 0 10px 30px -10px rgba(214, 191, 168, 0.4);
-            --nav-height: 70px;   /* 底部導航高度 */
         }
 
         body {
@@ -32,61 +30,35 @@
             color: var(--text);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0; padding: 0;
-            padding-bottom: calc(var(--nav-height) + 40px); /* 避開底部導航 */
+            padding-bottom: 120px;
             -webkit-font-smoothing: antialiased;
             scroll-behavior: smooth;
         }
 
-        /* --- 1. 底部導覽列 (App Style) --- */
-        .bottom-nav {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            height: var(--nav-height);
-            background: rgba(255, 255, 255, 0.95);
+        /* 導覽列 */
+        .nav-bar {
+            position: sticky; top: 0; 
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
-            display: flex; justify-content: space-around; align-items: center;
-            z-index: 1000; padding-bottom: env(safe-area-inset-bottom);
+            z-index: 900; 
+            padding: 12px 5px;
+            box-shadow: 0 1px 0px rgba(0,0,0,0.05); 
+            display: flex; justify-content: space-around; overflow-x: auto;
         }
-        .nav-btn {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            color: #ccc; text-decoration: none; font-size: 0.7rem; gap: 4px;
-            width: 25%; height: 100%; transition: 0.3s;
+        .nav-item {
+            color: var(--text-light); text-decoration: none; font-weight: 600;
+            padding: 6px 14px; border-radius: 20px; font-size: 0.9rem; 
+            white-space: nowrap; transition: all 0.3s;
         }
-        .nav-btn svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2; fill: none; transition: 0.3s; }
-        .nav-btn.active { color: var(--text); }
-        .nav-btn.active svg { stroke: var(--primary-dark); fill: rgba(214, 191, 168, 0.2); }
+        .nav-item.active, .nav-item:hover {
+            color: var(--text); background-color: rgba(214, 191, 168, 0.2);
+        }
 
-        /* --- 2. 頂部 Hero & 形象卡 --- */
-        .hero-section {
-            background: var(--primary); color: white; 
-            padding: 30px 20px 60px 20px; /* 下方留空間給形象卡 */
-            text-align: center; border-radius: 0 0 30px 30px; 
-            position: relative;
-        }
-        
-        /* 紋綉師簡介卡 (浮動在 Hero 上) */
-        .profile-card {
-            background: #fff; border-radius: 20px; padding: 20px;
-            width: 90%; max-width: 500px; margin: -40px auto 20px auto; /* 負邊距往上提 */
-            box-shadow: 0 15px 30px -5px rgba(0,0,0,0.1);
-            display: flex; align-items: center; gap: 15px;
-            position: relative; z-index: 10;
-        }
-        .profile-img {
-            width: 70px; height: 70px; border-radius: 50%; object-fit: cover;
-            border: 3px solid var(--bg-color); flex-shrink: 0; background: #eee;
-        }
-        .profile-info h3 { margin: 0; font-size: 1.1rem; color: var(--text); font-weight: 700; }
-        .profile-info p { margin: 4px 0 0 0; font-size: 0.8rem; color: #888; line-height: 1.4; }
-        .tags-row { display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap; }
-        .tag-pill { font-size: 0.65rem; background: #F2F0EB; color: #8D7B72; padding: 2px 8px; border-radius: 4px; }
-
-        .container { max-width: 600px; margin: 0 auto; padding: 0 20px; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
         
         .section-header { 
             text-align: center; margin: 40px 0 20px 0; 
             display: flex; align-items: center; justify-content: center; gap: 15px;
-            cursor: pointer; user-select: none;
         }
         .section-header h2 {
             font-size: 1.25rem; font-weight: 700; color: var(--text); margin: 0;
@@ -95,10 +67,8 @@
         .section-header::before, .section-header::after {
             content: ''; display: block; width: 30px; height: 1px; background: var(--primary); opacity: 0.5;
         }
-        .header-arrow { transition: transform 0.3s ease; font-size: 0.8rem; opacity: 0.6; }
-        .section-header.collapsed .header-arrow { transform: rotate(-90deg); }
 
-        /* --- 3. 補色查詢 UI --- */
+        /* --- 1. 補色查詢 UI --- */
         .search-container {
             background: #fff; border-radius: 24px; padding: 30px 25px;
             box-shadow: var(--card-shadow); text-align: center; margin-top: 10px;
@@ -139,7 +109,7 @@
         .info-value { display: block; font-size: 1rem; font-weight: 700; color: var(--text); }
         .info-value.highlight { color: #C17E7E; }
 
-        /* --- 4. 服務項目 --- */
+        /* --- 2. 服務項目 --- */
         .service-list-text { display: flex; flex-direction: column; gap: 12px; }
         .service-card {
             background: rgba(255,255,255,0.8); backdrop-filter: blur(5px);
@@ -148,44 +118,59 @@
             cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
 
-        /* --- 5. 留色作品 --- */
-        .section-collapsible { transition: max-height 0.4s ease, opacity 0.4s ease; overflow: hidden; opacity: 1; max-height: 2000px; }
-        .section-collapsible.collapsed { max-height: 0; opacity: 0; }
-
+        /* --- 3. 留色作品 (橫向滑動版) --- */
         .filter-scroller { display: flex; gap: 10px; overflow-x: auto; justify-content: center; margin-bottom: 20px; padding-bottom: 5px;}
         .filter-chip { padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; background: rgba(255,255,255,0.6); color: var(--text-light); white-space: nowrap; transition: 0.3s; }
         .filter-chip.active { background: var(--text); color: white; }
 
-        .portfolio-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .case-card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.04); animation: fadeIn 0.6s ease; }
-        .case-img-box { position: relative; width: 100%; padding-bottom: 110%; background: #f0f0f0; }
-        .case-img-box img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
-        .case-info { padding: 10px 12px 14px 12px; }
-        .case-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
-        .case-tag { font-size: 0.65rem; padding: 2px 8px; border-radius: 6px; background: #F2F0EB; color: #7A6C63; font-weight: 600; }
-        .case-desc { font-size: 0.8rem; color: #888; }
+        /* ✨ 重點修改：橫向卷軸容器 ✨ */
+        .portfolio-horizontal {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto; /* 允許橫向滑動 */
+            padding: 10px 5px; /* 留一點空間給陰影 */
+            scroll-snap-type: x mandatory; /* 滑動時會有吸附感 */
+            -webkit-overflow-scrolling: touch; /* 讓 iOS 滑動更順暢 */
+            /* 隱藏捲軸 */
+            scrollbar-width: none; 
+        }
+        .portfolio-horizontal::-webkit-scrollbar { display: none; }
 
-        /* --- 6. 顧客好評 --- */
+        .case-card { 
+            /* ✨ 固定寬度，讓它可以橫向排列 ✨ */
+            flex: 0 0 160px; /* 每個卡片寬度固定 160px */
+            scroll-snap-align: start; /* 吸附效果 */
+            
+            background: #fff; border-radius: 16px; overflow: hidden; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04); 
+            animation: fadeIn 0.6s ease;
+            display: flex; flex-direction: column;
+        }
+        .case-img-box { 
+            position: relative; width: 100%; 
+            height: 180px; /* 固定圖片高度 */
+            background: #f0f0f0; 
+        }
+        .case-img-box img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+        
+        .case-info { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;}
+        .case-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 4px; }
+        .case-tag { font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; background: #F2F0EB; color: #7A6C63; font-weight: 600; }
+        .case-desc { font-size: 0.75rem; color: #888; line-height: 1.3; }
+
+        /* --- 4. 顧客好評 --- */
         .chat-container { display: flex; flex-direction: column; gap: 18px; }
         .chat-row { display: flex; align-items: flex-start; gap: 12px; }
         .chat-avatar { width: 38px; height: 38px; background: #E8E3DF; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
         .chat-bubble { background: #fff; padding: 12px 16px; border-radius: 2px 18px 18px 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); font-size: 0.95rem; color: #555; line-height: 1.5; }
 
-        /* --- 7. 懸浮預約按鈕 (調整位置) --- */
-        .floating-cta { 
-            position: fixed; bottom: 85px; /* 提高高度，不擋住導航 */
-            left: 50%; transform: translateX(-50%); width: 85%; max-width: 350px; 
-            background: var(--text); color: white; padding: 14px; border-radius: 50px; 
-            text-align: center; text-decoration: none; font-weight: 700; font-size: 1rem; 
-            box-shadow: 0 10px 25px rgba(90, 72, 63, 0.4); z-index: 950; 
-            display: flex; align-items: center; justify-content: center; gap: 8px; 
-        }
+        /* --- 懸浮按鈕 --- */
+        .floating-cta { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 85%; max-width: 350px; background: var(--text); color: white; padding: 14px; border-radius: 50px; text-align: center; text-decoration: none; font-weight: 700; font-size: 1rem; box-shadow: 0 10px 25px rgba(90, 72, 63, 0.4); z-index: 950; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
-        /* --- 骨架屏載入動畫 (Skeleton) --- */
+        /* --- 骨架屏 --- */
         .skeleton {
             background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: skeleton-loading 1.5s infinite;
+            background-size: 200% 100%; animation: skeleton-loading 1.5s infinite;
             border-radius: 8px; color: transparent !important;
         }
         @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
@@ -211,25 +196,26 @@
 <body>
 
     <!-- Hero -->
-    <div class="hero-section">
+    <div style="background: var(--primary); color: white; padding: 40px 20px 60px 20px; text-align: center; border-radius: 0 0 30px 30px; position: relative;">
         <h1 style="margin:0; font-size:1.6rem; font-weight:700; letter-spacing:1px;">AM Beauty Studio</h1>
         <p style="margin:8px 0 0 0; opacity:0.9; font-size:0.9rem; font-weight:300;">打造妳的偽素顏小心機</p>
     </div>
 
-    <!-- 紋綉師形象卡 -->
-    <div class="profile-card">
-        <!-- 請將 src 換成您的照片 -->
-        <img src="https://i.postimg.cc/k5n2y3Kz/avatar-placeholder.png" class="profile-img" alt="紋綉師">
-        <div class="profile-info">
-            <h3>AM 紋綉師</h3>
-            <p>專注於自然毛流感與個人化眉型設計，致力於讓每位女孩都能擁有素顏自信。</p>
-            <div class="tags-row">
-                <span class="tag-pill">TNL二級檢定</span>
-                <span class="tag-pill">拋棄式耗材</span>
-                <span class="tag-pill">SGS認證色乳</span>
-            </div>
+    <!-- 紋綉師形象卡 (浮動) -->
+    <div style="background: #fff; border-radius: 20px; padding: 20px; width: 85%; max-width: 500px; margin: -40px auto 20px auto; box-shadow: 0 15px 30px -5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 15px; position: relative; z-index: 10;">
+        <img src="https://i.postimg.cc/k5n2y3Kz/avatar-placeholder.png" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid #F9F8F6; background:#eee;" alt="紋綉師">
+        <div>
+            <h3 style="margin:0; font-size:1.1rem; color:var(--text); font-weight: 700;">AM 紋綉師</h3>
+            <p style="margin:4px 0 0 0; font-size:0.8rem; color:#888; line-height: 1.4;">專注於自然毛流感與個人化眉型設計，致力於讓每位女孩都能擁有素顏自信。</p>
         </div>
     </div>
+
+    <nav class="nav-bar">
+        <a href="#search" class="nav-item">補色查詢</a>
+        <a href="#services" class="nav-item">服務項目</a>
+        <a href="#portfolio" class="nav-item">留色作品</a>
+        <a href="#reviews" class="nav-item">好評</a>
+    </nav>
 
     <div class="container">
 
@@ -262,32 +248,28 @@
         <section id="services">
             <div class="section-header"><h2>服務項目</h2></div>
             <div id="service-text-list" class="service-list-text">
-                <!-- 骨架屏預設顯示 -->
-                <div class="service-card skeleton" style="height:80px;"></div>
                 <div class="service-card skeleton" style="height:80px;"></div>
                 <div class="service-card skeleton" style="height:80px;"></div>
             </div>
         </section>
 
-        <!-- 3. 留色作品 (可收合) -->
+        <!-- 3. 留色作品 (橫向滑動) -->
         <section id="portfolio">
-            <div class="section-header" onclick="toggleSection('portfolio-content', this)">
-                <h2>留色作品集 <span class="header-arrow">▼</span></h2>
-            </div>
+            <div class="section-header"><h2>留色作品集</h2></div>
             
-            <div id="portfolio-content" class="section-collapsible">
-                <div class="filter-scroller">
-                    <div class="filter-chip active" onclick="filterPortfolio('all', this)">全部案例</div>
-                    <div class="filter-chip" onclick="filterPortfolio('brow', this)">霧眉</div>
-                    <div class="filter-chip" onclick="filterPortfolio('lip', this)">霧唇</div>
-                    <div class="filter-chip" onclick="filterPortfolio('dark', this)">烏唇轉色</div>
-                </div>
+            <div class="filter-scroller">
+                <div class="filter-chip active" onclick="filterPortfolio('all', this)">全部案例</div>
+                <div class="filter-chip" onclick="filterPortfolio('brow', this)">霧眉</div>
+                <div class="filter-chip" onclick="filterPortfolio('lip', this)">霧唇</div>
+                <div class="filter-chip" onclick="filterPortfolio('dark', this)">烏唇轉色</div>
+            </div>
 
-                <div id="portfolio-grid" class="portfolio-grid"></div>
-                
-                <button id="portfolioToggleBtn" onclick="togglePortfolioRows()" style="display:none; margin:20px auto 0 auto; padding:10px 25px; background:none; border:1px solid #ddd; border-radius:30px; color:#888; cursor:pointer;">
-                    查看更多作品 ▼
-                </button>
+            <!-- ✨ 這裡改成了水平滑動容器 ✨ -->
+            <div id="portfolio-horizontal" class="portfolio-horizontal">
+                <!-- 預設顯示骨架 -->
+                <div class="case-card skeleton" style="width:160px; height:220px; flex-shrink:0;"></div>
+                <div class="case-card skeleton" style="width:160px; height:220px; flex-shrink:0;"></div>
+                <div class="case-card skeleton" style="width:160px; height:220px; flex-shrink:0;"></div>
             </div>
         </section>
 
@@ -296,7 +278,6 @@
             <div class="section-header"><h2>顧客好評</h2></div>
             <div id="review-list" class="chat-container">
                 <div class="chat-bubble skeleton" style="height:60px; width:80%;"></div>
-                <div class="chat-bubble skeleton" style="height:60px; width:70%;"></div>
             </div>
         </section>
 
@@ -306,26 +287,6 @@
     <a id="floatBookingBtn" href="#" class="floating-cta">
         <span>📅 立即預約諮詢</span>
     </a>
-
-    <!-- 底部導覽列 -->
-    <div class="bottom-nav">
-        <a href="#search" class="nav-btn active" onclick="setActiveNav(this)">
-            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            首頁
-        </a>
-        <a href="#services" class="nav-btn" onclick="setActiveNav(this)">
-            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
-            服務
-        </a>
-        <a href="#portfolio" class="nav-btn" onclick="setActiveNav(this)">
-            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-            作品
-        </a>
-        <a href="#reviews" class="nav-btn" onclick="setActiveNav(this)">
-            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-            好評
-        </a>
-    </div>
 
     <!-- 彈窗 -->
     <div id="serviceModal" class="modal-overlay" onclick="closeModal(event)">
@@ -342,7 +303,7 @@
     </div>
 
     <script>
-        // ▼▼▼ 設定區 (已修正) ▼▼▼
+        // ▼▼▼ 設定區 (網址皆正確) ▼▼▼
         const SERVICES_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1138837231&single=true&output=csv';
         const REVIEWS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=174294022&single=true&output=csv'; 
         const PORTFOLIO_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1127370948&single=true&output=csv'; 
@@ -350,26 +311,10 @@
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx6grwl5DidK6DScAaZLM8udp-Pjn_FrB33bv6ES0JkwAiiIx-xxJHicxANVGH7caSpEg/exec"; 
         
         let allPortfolioData = [];
-        let currentPortfolioData = [];
-        let isPortfolioRowsExpanded = false;
-        const PORTFOLIO_LIMIT = 4;
 
         document.addEventListener("DOMContentLoaded", function() {
             loadServices(); loadReviews(); loadPortfolio(); loadSettings();
         });
-
-        // 導航切換
-        function setActiveNav(btn) {
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
-
-        // 區塊收合
-        function toggleSection(contentId, headerEl) {
-            const content = document.getElementById(contentId);
-            content.classList.toggle('collapsed');
-            headerEl.classList.toggle('collapsed');
-        }
 
         function parseCSV(str) {
             const arr = []; let quote = false; let col = 0, row = 0;
@@ -392,7 +337,7 @@
             fetch(SERVICES_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt);
                 const list = document.getElementById('service-text-list');
-                list.innerHTML = ''; // 清除骨架屏
+                list.innerHTML = '';
                 let start = (rows.length>0 && rows[0][0].toLowerCase().includes('name')) ? 1 : 0;
                 for(let i=start; i<rows.length; i++){
                     const c = rows[i]; if(c.length<2 || !c[0]) continue;
@@ -421,7 +366,7 @@
             }
         }
 
-        // --- 2. 載入作品 ---
+        // --- 2. 載入作品 (橫向滑動) ---
         function loadPortfolio() {
             fetch(PORTFOLIO_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt); allPortfolioData = [];
@@ -430,34 +375,38 @@
                     const c = rows[i]; if(!c[0]) continue;
                     allPortfolioData.push({ img: c[0], desc: c[1]||'', cat: (c[2]||'').trim().toLowerCase() });
                 }
-                currentPortfolioData = allPortfolioData;
-                renderPortfolio();
+                renderPortfolio(allPortfolioData);
             });
         }
+        
         function filterPortfolio(cat, btn) {
             document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
             if(btn) btn.classList.add('active');
-            currentPortfolioData = (cat === 'all') ? allPortfolioData : allPortfolioData.filter(i => i.cat === cat);
-            isPortfolioRowsExpanded = false; renderPortfolio();
+            renderPortfolio(cat === 'all' ? allPortfolioData : allPortfolioData.filter(i => i.cat === cat));
         }
-        function renderPortfolio() {
-            const grid = document.getElementById('portfolio-grid'); grid.innerHTML = '';
-            if(currentPortfolioData.length === 0) { grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#ccc">暫無作品</p>'; document.getElementById('portfolioToggleBtn').style.display='none'; return; }
-            const limit = isPortfolioRowsExpanded ? currentPortfolioData.length : PORTFOLIO_LIMIT;
-            currentPortfolioData.forEach((item, index) => {
-                if(index >= limit && !isPortfolioRowsExpanded) return;
+
+        function renderPortfolio(data) {
+            const container = document.getElementById('portfolio-horizontal'); 
+            container.innerHTML = '';
+            if(data.length === 0) { container.innerHTML = '<p style="text-align:center;color:#ccc;width:100%;">暫無作品</p>'; return; }
+            
+            data.forEach(item => {
                 const parts = item.desc.split('|');
                 const tag = parts.length > 1 ? parts[0].trim() : '';
                 const text = parts.length > 1 ? parts[1].trim() : parts[0].trim();
-                const div = document.createElement('div'); div.className = 'case-card';
-                div.innerHTML = `<div class="case-img-box"><img src="${item.img}" loading="lazy"></div><div class="case-info">${tag ? `<div class="case-tags"><span class="case-tag">${tag}</span></div>` : ''}<div class="case-desc">${text}</div></div>`;
-                grid.appendChild(div);
+                
+                const div = document.createElement('div'); 
+                div.className = 'case-card';
+                div.innerHTML = `
+                    <div class="case-img-box"><img src="${item.img}" loading="lazy"></div>
+                    <div class="case-info">
+                        ${tag ? `<div class="case-tags"><span class="case-tag">${tag}</span></div>` : ''}
+                        <div class="case-desc">${text}</div>
+                    </div>
+                `;
+                container.appendChild(div);
             });
-            const btn = document.getElementById('portfolioToggleBtn');
-            if(currentPortfolioData.length <= PORTFOLIO_LIMIT) btn.style.display = 'none';
-            else { btn.style.display = 'block'; btn.textContent = isPortfolioRowsExpanded ? '收起作品 ▲' : '查看更多作品 ▼'; }
         }
-        function togglePortfolioRows() { isPortfolioRowsExpanded = !isPortfolioRowsExpanded; renderPortfolio(); }
 
         // --- 3. 載入好評 ---
         function loadReviews() {
