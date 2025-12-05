@@ -21,6 +21,7 @@
             --text-light: #8D7B72;
             --bg-color: #F9F8F6;  
             --card-shadow: 0 10px 30px -10px rgba(214, 191, 168, 0.4);
+            --nav-height: 70px;   /* 底部導航高度 */
         }
 
         body {
@@ -31,33 +32,59 @@
             color: var(--text);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0; padding: 0;
-            padding-bottom: 120px;
+            padding-bottom: calc(var(--nav-height) + 40px); /* 避開底部導航 */
             -webkit-font-smoothing: antialiased;
+            scroll-behavior: smooth;
         }
 
-        /* 導覽列 */
-        .nav-bar {
-            position: sticky; top: 0; 
-            background: rgba(255, 255, 255, 0.9);
+        /* --- 1. 底部導覽列 (App Style) --- */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            height: var(--nav-height);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            z-index: 900; 
-            padding: 12px 5px;
-            box-shadow: 0 1px 0px rgba(0,0,0,0.05); 
-            display: flex; justify-content: space-around; overflow-x: auto;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+            display: flex; justify-content: space-around; align-items: center;
+            z-index: 1000; padding-bottom: env(safe-area-inset-bottom);
         }
-        .nav-item {
-            color: var(--text-light); text-decoration: none; font-weight: 600;
-            padding: 6px 14px; border-radius: 20px; font-size: 0.9rem; 
-            white-space: nowrap; transition: all 0.3s;
+        .nav-btn {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: #ccc; text-decoration: none; font-size: 0.7rem; gap: 4px;
+            width: 25%; height: 100%; transition: 0.3s;
         }
-        .nav-item.active, .nav-item:hover {
-            color: var(--text); background-color: rgba(214, 191, 168, 0.2);
-        }
+        .nav-btn svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2; fill: none; transition: 0.3s; }
+        .nav-btn.active { color: var(--text); }
+        .nav-btn.active svg { stroke: var(--primary-dark); fill: rgba(214, 191, 168, 0.2); }
 
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        /* --- 2. 頂部 Hero & 形象卡 --- */
+        .hero-section {
+            background: var(--primary); color: white; 
+            padding: 30px 20px 60px 20px; /* 下方留空間給形象卡 */
+            text-align: center; border-radius: 0 0 30px 30px; 
+            position: relative;
+        }
+        
+        /* 紋綉師簡介卡 (浮動在 Hero 上) */
+        .profile-card {
+            background: #fff; border-radius: 20px; padding: 20px;
+            width: 90%; max-width: 500px; margin: -40px auto 20px auto; /* 負邊距往上提 */
+            box-shadow: 0 15px 30px -5px rgba(0,0,0,0.1);
+            display: flex; align-items: center; gap: 15px;
+            position: relative; z-index: 10;
+        }
+        .profile-img {
+            width: 70px; height: 70px; border-radius: 50%; object-fit: cover;
+            border: 3px solid var(--bg-color); flex-shrink: 0; background: #eee;
+        }
+        .profile-info h3 { margin: 0; font-size: 1.1rem; color: var(--text); font-weight: 700; }
+        .profile-info p { margin: 4px 0 0 0; font-size: 0.8rem; color: #888; line-height: 1.4; }
+        .tags-row { display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap; }
+        .tag-pill { font-size: 0.65rem; background: #F2F0EB; color: #8D7B72; padding: 2px 8px; border-radius: 4px; }
+
+        .container { max-width: 600px; margin: 0 auto; padding: 0 20px; }
         
         .section-header { 
-            text-align: center; margin: 40px 0 25px 0; 
+            text-align: center; margin: 40px 0 20px 0; 
             display: flex; align-items: center; justify-content: center; gap: 15px;
             cursor: pointer; user-select: none;
         }
@@ -71,7 +98,7 @@
         .header-arrow { transition: transform 0.3s ease; font-size: 0.8rem; opacity: 0.6; }
         .section-header.collapsed .header-arrow { transform: rotate(-90deg); }
 
-        /* --- 1. 補色查詢 UI --- */
+        /* --- 3. 補色查詢 UI --- */
         .search-container {
             background: #fff; border-radius: 24px; padding: 30px 25px;
             box-shadow: var(--card-shadow); text-align: center; margin-top: 10px;
@@ -106,14 +133,13 @@
         }
         .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .result-name { font-size: 1.2rem; font-weight: 700; color: var(--text); }
-        
         .info-badges { display: flex; gap: 10px; margin-bottom: 15px; }
         .info-badge { flex: 1; background: #F9F8F6; padding: 10px; border-radius: 12px; text-align: center; border: 1px solid #eee; }
         .info-label { display: block; font-size: 0.75rem; color: #999; margin-bottom: 4px; }
         .info-value { display: block; font-size: 1rem; font-weight: 700; color: var(--text); }
         .info-value.highlight { color: #C17E7E; }
 
-        /* --- 2. 服務項目 --- */
+        /* --- 4. 服務項目 --- */
         .service-list-text { display: flex; flex-direction: column; gap: 12px; }
         .service-card {
             background: rgba(255,255,255,0.8); backdrop-filter: blur(5px);
@@ -122,7 +148,7 @@
             cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
 
-        /* --- 3. 留色作品 --- */
+        /* --- 5. 留色作品 --- */
         .section-collapsible { transition: max-height 0.4s ease, opacity 0.4s ease; overflow: hidden; opacity: 1; max-height: 2000px; }
         .section-collapsible.collapsed { max-height: 0; opacity: 0; }
 
@@ -139,16 +165,32 @@
         .case-tag { font-size: 0.65rem; padding: 2px 8px; border-radius: 6px; background: #F2F0EB; color: #7A6C63; font-weight: 600; }
         .case-desc { font-size: 0.8rem; color: #888; }
 
-        /* --- 4. 顧客好評 --- */
+        /* --- 6. 顧客好評 --- */
         .chat-container { display: flex; flex-direction: column; gap: 18px; }
         .chat-row { display: flex; align-items: flex-start; gap: 12px; }
         .chat-avatar { width: 38px; height: 38px; background: #E8E3DF; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
         .chat-bubble { background: #fff; padding: 12px 16px; border-radius: 2px 18px 18px 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); font-size: 0.95rem; color: #555; line-height: 1.5; }
 
-        /* --- 懸浮按鈕 --- */
-        .floating-cta { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 85%; max-width: 350px; background: var(--text); color: white; padding: 16px; border-radius: 50px; text-align: center; text-decoration: none; font-weight: 700; font-size: 1rem; box-shadow: 0 10px 25px rgba(90, 72, 63, 0.4); z-index: 950; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        /* --- 7. 懸浮預約按鈕 (調整位置) --- */
+        .floating-cta { 
+            position: fixed; bottom: 85px; /* 提高高度，不擋住導航 */
+            left: 50%; transform: translateX(-50%); width: 85%; max-width: 350px; 
+            background: var(--text); color: white; padding: 14px; border-radius: 50px; 
+            text-align: center; text-decoration: none; font-weight: 700; font-size: 1rem; 
+            box-shadow: 0 10px 25px rgba(90, 72, 63, 0.4); z-index: 950; 
+            display: flex; align-items: center; justify-content: center; gap: 8px; 
+        }
 
-        /* --- 彈窗 --- */
+        /* --- 骨架屏載入動畫 (Skeleton) --- */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 8px; color: transparent !important;
+        }
+        @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        /* 彈窗 */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 2000; align-items: center; justify-content: center; }
         .modal-overlay.show { display: flex; animation: fadeIn 0.3s; }
         .modal-content { background: #fff; width: 90%; max-width: 450px; max-height: 85vh; overflow-y: auto; border-radius: 24px; position: relative; }
@@ -168,18 +210,26 @@
 </head>
 <body>
 
-    <!-- 頁首 -->
-    <div style="background: var(--primary); color: white; padding: 40px 20px 30px 20px; text-align: center; border-radius: 0 0 30px 30px; box-shadow: 0 10px 20px -10px rgba(214, 191, 168, 0.5);">
+    <!-- Hero -->
+    <div class="hero-section">
         <h1 style="margin:0; font-size:1.6rem; font-weight:700; letter-spacing:1px;">AM Beauty Studio</h1>
         <p style="margin:8px 0 0 0; opacity:0.9; font-size:0.9rem; font-weight:300;">打造妳的偽素顏小心機</p>
     </div>
 
-    <nav class="nav-bar">
-        <a href="#search" class="nav-item">補色查詢</a>
-        <a href="#services" class="nav-item">服務項目</a>
-        <a href="#portfolio" class="nav-item">留色作品</a>
-        <a href="#reviews" class="nav-item">好評</a>
-    </nav>
+    <!-- 紋綉師形象卡 -->
+    <div class="profile-card">
+        <!-- 請將 src 換成您的照片 -->
+        <img src="https://i.postimg.cc/k5n2y3Kz/avatar-placeholder.png" class="profile-img" alt="紋綉師">
+        <div class="profile-info">
+            <h3>AM 紋綉師</h3>
+            <p>專注於自然毛流感與個人化眉型設計，致力於讓每位女孩都能擁有素顏自信。</p>
+            <div class="tags-row">
+                <span class="tag-pill">TNL二級檢定</span>
+                <span class="tag-pill">拋棄式耗材</span>
+                <span class="tag-pill">SGS認證色乳</span>
+            </div>
+        </div>
+    </div>
 
     <div class="container">
 
@@ -212,11 +262,14 @@
         <section id="services">
             <div class="section-header"><h2>服務項目</h2></div>
             <div id="service-text-list" class="service-list-text">
-                <p style="text-align:center; color:#ccc;">正在載入...</p>
+                <!-- 骨架屏預設顯示 -->
+                <div class="service-card skeleton" style="height:80px;"></div>
+                <div class="service-card skeleton" style="height:80px;"></div>
+                <div class="service-card skeleton" style="height:80px;"></div>
             </div>
         </section>
 
-        <!-- 3. 留色作品 -->
+        <!-- 3. 留色作品 (可收合) -->
         <section id="portfolio">
             <div class="section-header" onclick="toggleSection('portfolio-content', this)">
                 <h2>留色作品集 <span class="header-arrow">▼</span></h2>
@@ -241,14 +294,38 @@
         <!-- 4. 顧客好評 -->
         <section id="reviews">
             <div class="section-header"><h2>顧客好評</h2></div>
-            <div id="review-list" class="chat-container"></div>
+            <div id="review-list" class="chat-container">
+                <div class="chat-bubble skeleton" style="height:60px; width:80%;"></div>
+                <div class="chat-bubble skeleton" style="height:60px; width:70%;"></div>
+            </div>
         </section>
 
     </div>
 
+    <!-- 懸浮預約按鈕 -->
     <a id="floatBookingBtn" href="#" class="floating-cta">
         <span>📅 立即預約諮詢</span>
     </a>
+
+    <!-- 底部導覽列 -->
+    <div class="bottom-nav">
+        <a href="#search" class="nav-btn active" onclick="setActiveNav(this)">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            首頁
+        </a>
+        <a href="#services" class="nav-btn" onclick="setActiveNav(this)">
+            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+            服務
+        </a>
+        <a href="#portfolio" class="nav-btn" onclick="setActiveNav(this)">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            作品
+        </a>
+        <a href="#reviews" class="nav-btn" onclick="setActiveNav(this)">
+            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            好評
+        </a>
+    </div>
 
     <!-- 彈窗 -->
     <div id="serviceModal" class="modal-overlay" onclick="closeModal(event)">
@@ -265,7 +342,7 @@
     </div>
 
     <script>
-        // ▼▼▼ 設定區 (已修正為 CSV 正確連結) ▼▼▼
+        // ▼▼▼ 設定區 (已修正) ▼▼▼
         const SERVICES_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1138837231&single=true&output=csv';
         const REVIEWS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=174294022&single=true&output=csv'; 
         const PORTFOLIO_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1127370948&single=true&output=csv'; 
@@ -281,6 +358,13 @@
             loadServices(); loadReviews(); loadPortfolio(); loadSettings();
         });
 
+        // 導航切換
+        function setActiveNav(btn) {
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        // 區塊收合
         function toggleSection(contentId, headerEl) {
             const content = document.getElementById(contentId);
             content.classList.toggle('collapsed');
@@ -308,7 +392,7 @@
             fetch(SERVICES_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt);
                 const list = document.getElementById('service-text-list');
-                list.innerHTML = '';
+                list.innerHTML = ''; // 清除骨架屏
                 let start = (rows.length>0 && rows[0][0].toLowerCase().includes('name')) ? 1 : 0;
                 for(let i=start; i<rows.length; i++){
                     const c = rows[i]; if(c.length<2 || !c[0]) continue;
@@ -380,14 +464,14 @@
             fetch(REVIEWS_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt);
                 const list = document.getElementById('review-list');
-                list.innerHTML = '';
+                list.innerHTML = ''; // 清除骨架
                 let start = (rows.length>0 && rows[0][0].toLowerCase().includes('name')) ? 1 : 0;
                 for(let i=start; i<rows.length; i++){
-                    const c = rows[i]; if(c.length<3 || !c[0]) continue; // 寬容檢查
-                    const content = c[2] || c[0]; // 如果C欄沒東西，試著抓A欄
+                    const c = rows[i]; if(c.length<3 || !c[0]) continue;
+                    const content = c[2] || c[0]; 
                     list.innerHTML += `<div class="chat-row"><div class="chat-avatar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><div class="chat-bubble">${content}</div></div>`;
                 }
-            });
+            }).catch(()=> document.getElementById('review-list').innerHTML='<p style="text-align:center;color:#ccc">尚無評論</p>');
         }
 
         // --- 設定與查詢 ---
@@ -414,7 +498,6 @@
         function maskPhoneNumber(p) { if(!p)return''; let s=String(p).replace(/'/g,'').trim(); return s.length<8?s:s.substring(0,4)+'***'+s.substring(s.length-3); }
         function toggleCollapse(btn, id) { const el=document.getElementById(id); el.classList.toggle('expanded'); btn.querySelector('.btn-text').textContent=el.classList.contains('expanded')?'收起':'查看完整價目表'; }
         
-        // 優化版價格標示
         function getPriceCardHtml(info, useOrange) { 
             if (!info) return ''; 
             let p = info.price===0?'免費':(info.price?`NT$ ${info.price}`:'洽詢'); 
