@@ -450,49 +450,34 @@
         function maskPhoneNumber(p) { if(!p)return''; let s=String(p).replace(/'/g,'').trim(); return s.length<8?s:s.substring(0,4)+'***'+s.substring(s.length-3); }
         function toggleCollapse(btn, id) { const el=document.getElementById(id); el.classList.toggle('expanded'); btn.querySelector('.btn-text').textContent=el.classList.contains('expanded')?'收起':'查看完整價目表'; }
         
+        // --- 優化版：價格卡片 (日期更明顯) ---
         function getPriceCardHtml(info, useOrange) { 
             if (!info) return ''; 
-            let p = info.price===0?'免費':(info.price?`NT$ ${info.price}`:'洽詢'); 
-            let bg = info.price===0?'bg-green-600':(useOrange?'bg-orange-500':'bg-pink-500'); 
-            return `<div class="mt-2 p-3 rounded-xl bg-gray-50 flex justify-between items-center"><div class="text-xs text-gray-500"><h3>今日價格</h3><p>${(info.dateRange||'').replace(/【.*?】/g,'')}</p></div><span class="px-3 py-1 text-white text-sm font-bold rounded-lg ${bg}">${p}</span></div>`; 
-        }
-        
-        function createCard(r, i) { 
-            const cid=`d-${i}`; const ranges=(r.touchUpRanges||[]).map(t=>`<div class="flex justify-between py-2 border-b border-gray-100 text-sm"><span>${t.dateRange}</span><span class="font-bold text-gray-700">${t.price===0?'免費':'$'+t.price}</span></div>`).join(''); 
-            return `
-            <div class="result-card">
-                <div class="result-header">
-                    <div>
-                        <div class="result-name">${r.name}</div>
-                        <span class="text-gray-400 text-sm">(${maskPhoneNumber(r.phone)})</span>
-                    </div>
-                </div>
-                
-                <!-- ✨ 新增：明顯的上次紀錄區塊 ✨ -->
-                <div class="info-badges">
-                    <div class="info-badge">
-                        <span class="info-label">上次日期</span>
-                        <span class="info-value">${r.lastDate||'-'}</span>
-                    </div>
-                    <div class="info-badge">
-                        <span class="info-label">上次項目</span>
-                        <span class="info-value highlight">${r.service}</span>
-                    </div>
-                </div>
+            
+            let p = info.price === 0 ? '免費' : (info.price ? `NT$ ${info.price}` : '洽詢'); 
+            
+            // 根據價格/身分決定顏色
+            let bg = info.price === 0 ? 'bg-green-600' : (useOrange ? 'bg-orange-500' : 'bg-pink-500'); 
+            let theme = info.price === 0 ? 'bg-green-50 border-green-200' : (useOrange ? 'bg-orange-50 border-orange-200' : 'bg-pink-50 border-pink-200'); 
+            
+            // 清理日期文字中的括號
+            let dateText = (info.dateRange || '').replace(/【.*?】/g, '');
 
-                ${r.specialReminder?`<div class="bg-yellow-50 text-yellow-800 p-2.5 rounded-lg text-xs mb-3 font-medium">💡 ${r.specialReminder}</div>`:''} 
-                ${getPriceCardHtml(r.currentPriceInfo, r.eyebrowDiscountDate && !checkIsExpired(r.eyebrowDiscountDate))} 
-                
-                <div class="mt-4">
-                    <button onclick="toggleCollapse(this,'${cid}')" class="w-full py-2 bg-gray-50 text-gray-500 text-xs font-bold rounded-lg transition hover:bg-gray-100">
-                        <span class="btn-text">查看完整價目表</span>
-                    </button>
-                    <div id="${cid}" class="collapsible-content bg-gray-50 px-3 mt-1 rounded-b-lg">
-                        <div class="py-2">${ranges}</div>
-                    </div>
+            return `
+            <div class="mt-3 p-3 rounded-xl border ${theme} flex justify-between items-center shadow-sm">
+                <div>
+                    <!-- 標題：稍微淡一點 -->
+                    <h3 class="text-xs font-bold text-gray-400 mb-1">目前補色價格</h3>
+                    
+                    <!-- 日期：放大、變深、加粗 -->
+                    <p class="text-sm font-bold text-gray-800 tracking-wide">
+                        ${dateText}
+                    </p>
                 </div>
+                
+                <!-- 價格標籤 -->
+                <span class="px-3 py-1 text-white text-lg font-bold rounded-lg ${bg} shadow-sm">
+                    ${p}
+                </span>
             </div>`; 
         }
-    </script>
-</body>
-</html>
