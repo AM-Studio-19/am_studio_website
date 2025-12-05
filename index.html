@@ -38,8 +38,8 @@
         /* 導覽列 */
         .nav-bar {
             position: sticky; top: 0; 
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
             z-index: 900; 
             padding: 12px 5px;
             box-shadow: 0 1px 0px rgba(0,0,0,0.05); 
@@ -59,17 +59,15 @@
         .section-header { 
             text-align: center; margin: 40px 0 25px 0; 
             display: flex; align-items: center; justify-content: center; gap: 15px;
-            cursor: pointer; user-select: none; /* 讓標題可點擊 */
+            cursor: pointer; user-select: none;
         }
         .section-header h2 {
             font-size: 1.25rem; font-weight: 700; color: var(--text); margin: 0;
             letter-spacing: 1px; display: flex; align-items: center; gap: 8px;
         }
-        /* 裝飾線 */
         .section-header::before, .section-header::after {
             content: ''; display: block; width: 30px; height: 1px; background: var(--primary); opacity: 0.5;
         }
-        /* 箭頭動畫 */
         .header-arrow { transition: transform 0.3s ease; font-size: 0.8rem; opacity: 0.6; }
         .section-header.collapsed .header-arrow { transform: rotate(-90deg); }
 
@@ -77,6 +75,11 @@
         .search-container {
             background: #fff; border-radius: 24px; padding: 30px 25px;
             box-shadow: var(--card-shadow); text-align: center; margin-top: 10px;
+        }
+        .search-icon-box {
+            width: 60px; height: 60px; background: #FFF5F5;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 15px auto; color: var(--secondary);
         }
         .input-group { position: relative; margin-top: 20px; }
         .search-input {
@@ -95,25 +98,17 @@
         }
         .btn-primary:active { transform: scale(0.98); }
 
-        /* --- 查詢結果卡片 (資訊強調版) --- */
+        /* 查詢結果卡片 */
         .result-card {
             background: white; border-radius: 20px; padding: 20px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.06); margin-bottom: 20px;
             border: 1px solid rgba(0,0,0,0.02); animation: slideUp 0.5s ease;
         }
-        .result-header {
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;
-        }
+        .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .result-name { font-size: 1.2rem; font-weight: 700; color: var(--text); }
         
-        /* ✨ 新增：強調資訊方塊 ✨ */
-        .info-badges {
-            display: flex; gap: 10px; margin-bottom: 15px;
-        }
-        .info-badge {
-            flex: 1; background: #F9F8F6; padding: 10px; border-radius: 12px;
-            text-align: center; border: 1px solid #eee;
-        }
+        .info-badges { display: flex; gap: 10px; margin-bottom: 15px; }
+        .info-badge { flex: 1; background: #F9F8F6; padding: 10px; border-radius: 12px; text-align: center; border: 1px solid #eee; }
         .info-label { display: block; font-size: 0.75rem; color: #999; margin-bottom: 4px; }
         .info-value { display: block; font-size: 1rem; font-weight: 700; color: var(--text); }
         .info-value.highlight { color: #C17E7E; }
@@ -124,31 +119,19 @@
             background: rgba(255,255,255,0.8); backdrop-filter: blur(5px);
             padding: 18px 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.6);
             display: flex; justify-content: space-between; align-items: center;
-            cursor: pointer; transition: 0.2s;
+            cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
 
-        /* --- 3. 留色作品 (可收合區塊) --- */
-        .section-collapsible {
-            transition: max-height 0.4s ease, opacity 0.4s ease;
-            overflow: hidden; opacity: 1; max-height: 2000px; /* 足夠大的高度 */
-        }
-        .section-collapsible.collapsed {
-            max-height: 0; opacity: 0; margin: 0; padding: 0;
-        }
+        /* --- 3. 留色作品 --- */
+        .section-collapsible { transition: max-height 0.4s ease, opacity 0.4s ease; overflow: hidden; opacity: 1; max-height: 2000px; }
+        .section-collapsible.collapsed { max-height: 0; opacity: 0; }
 
         .filter-scroller { display: flex; gap: 10px; overflow-x: auto; justify-content: center; margin-bottom: 20px; padding-bottom: 5px;}
-        .filter-chip {
-            padding: 6px 16px; border-radius: 20px; font-size: 0.85rem;
-            background: rgba(255,255,255,0.6); color: var(--text-light); white-space: nowrap; transition: 0.3s;
-        }
+        .filter-chip { padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; background: rgba(255,255,255,0.6); color: var(--text-light); white-space: nowrap; transition: 0.3s; }
         .filter-chip.active { background: var(--text); color: white; }
 
         .portfolio-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .case-card {
-            background: #fff; border-radius: 16px; overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-            animation: fadeIn 0.6s ease;
-        }
+        .case-card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.04); animation: fadeIn 0.6s ease; }
         .case-img-box { position: relative; width: 100%; padding-bottom: 110%; background: #f0f0f0; }
         .case-img-box img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
         .case-info { padding: 10px 12px 14px 12px; }
@@ -165,7 +148,7 @@
         /* --- 懸浮按鈕 --- */
         .floating-cta { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 85%; max-width: 350px; background: var(--text); color: white; padding: 16px; border-radius: 50px; text-align: center; text-decoration: none; font-weight: 700; font-size: 1rem; box-shadow: 0 10px 25px rgba(90, 72, 63, 0.4); z-index: 950; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
-        /* --- 彈窗與輪播 --- */
+        /* --- 彈窗 --- */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 2000; align-items: center; justify-content: center; }
         .modal-overlay.show { display: flex; animation: fadeIn 0.3s; }
         .modal-content { background: #fff; width: 90%; max-width: 450px; max-height: 85vh; overflow-y: auto; border-radius: 24px; position: relative; }
@@ -175,7 +158,6 @@
         .carousel-slide img { width: 100%; height: 100%; object-fit: cover; }
         .modal-body { padding: 25px; }
 
-        /* 其他動畫與輔助 */
         .collapsible-content { transition: all 0.4s; max-height: 0; overflow: hidden; opacity: 0; }
         .collapsible-content.expanded { max-height: 1000px; opacity: 1; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -201,7 +183,7 @@
 
     <div class="container">
 
-        <!-- 1. 補色查詢 (App UI) -->
+        <!-- 1. 補色查詢 -->
         <section id="search">
             <div class="search-container">
                 <div class="search-icon-box">
@@ -234,14 +216,12 @@
             </div>
         </section>
 
-        <!-- 3. 留色作品 (可收合) -->
+        <!-- 3. 留色作品 -->
         <section id="portfolio">
-            <!-- 標題變成可點擊的開關 -->
             <div class="section-header" onclick="toggleSection('portfolio-content', this)">
                 <h2>留色作品集 <span class="header-arrow">▼</span></h2>
             </div>
             
-            <!-- 可收合的內容容器 -->
             <div id="portfolio-content" class="section-collapsible">
                 <div class="filter-scroller">
                     <div class="filter-chip active" onclick="filterPortfolio('all', this)">全部案例</div>
@@ -250,9 +230,7 @@
                     <div class="filter-chip" onclick="filterPortfolio('dark', this)">烏唇轉色</div>
                 </div>
 
-                <div id="portfolio-grid" class="portfolio-grid">
-                    <!-- JS 動態生成 -->
-                </div>
+                <div id="portfolio-grid" class="portfolio-grid"></div>
                 
                 <button id="portfolioToggleBtn" onclick="togglePortfolioRows()" style="display:none; margin:20px auto 0 auto; padding:10px 25px; background:none; border:1px solid #ddd; border-radius:30px; color:#888; cursor:pointer;">
                     查看更多作品 ▼
@@ -287,7 +265,7 @@
     </div>
 
     <script>
-        // ▼▼▼ 設定區 (網址維持正確) ▼▼▼
+        // ▼▼▼ 設定區 (已修正為 CSV 正確連結) ▼▼▼
         const SERVICES_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1138837231&single=true&output=csv';
         const REVIEWS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=174294022&single=true&output=csv'; 
         const PORTFOLIO_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1127370948&single=true&output=csv'; 
@@ -297,13 +275,12 @@
         let allPortfolioData = [];
         let currentPortfolioData = [];
         let isPortfolioRowsExpanded = false;
-        const PORTFOLIO_LIMIT = 4; // 預設顯示 4 張
+        const PORTFOLIO_LIMIT = 4;
 
         document.addEventListener("DOMContentLoaded", function() {
             loadServices(); loadReviews(); loadPortfolio(); loadSettings();
         });
 
-        // 通用：區塊收合功能
         function toggleSection(contentId, headerEl) {
             const content = document.getElementById(contentId);
             content.classList.toggle('collapsed');
@@ -332,7 +309,7 @@
                 const rows = parseCSV(txt);
                 const list = document.getElementById('service-text-list');
                 list.innerHTML = '';
-                let start = (rows[0][0].toLowerCase().includes('name')) ? 1 : 0;
+                let start = (rows.length>0 && rows[0][0].toLowerCase().includes('name')) ? 1 : 0;
                 for(let i=start; i<rows.length; i++){
                     const c = rows[i]; if(c.length<2 || !c[0]) continue;
                     const div = document.createElement('div');
@@ -360,11 +337,11 @@
             }
         }
 
-        // --- 2. 載入作品 (含區塊收合) ---
+        // --- 2. 載入作品 ---
         function loadPortfolio() {
             fetch(PORTFOLIO_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt); allPortfolioData = [];
-                let start = (rows[0][0].toLowerCase().includes('image')) ? 1 : 0;
+                let start = (rows.length>0 && rows[0][0].toLowerCase().includes('image')) ? 1 : 0;
                 for(let i=start; i<rows.length; i++){
                     const c = rows[i]; if(!c[0]) continue;
                     allPortfolioData.push({ img: c[0], desc: c[1]||'', cat: (c[2]||'').trim().toLowerCase() });
@@ -373,43 +350,29 @@
                 renderPortfolio();
             });
         }
-        
         function filterPortfolio(cat, btn) {
             document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
             if(btn) btn.classList.add('active');
             currentPortfolioData = (cat === 'all') ? allPortfolioData : allPortfolioData.filter(i => i.cat === cat);
             isPortfolioRowsExpanded = false; renderPortfolio();
         }
-
         function renderPortfolio() {
             const grid = document.getElementById('portfolio-grid'); grid.innerHTML = '';
             if(currentPortfolioData.length === 0) { grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#ccc">暫無作品</p>'; document.getElementById('portfolioToggleBtn').style.display='none'; return; }
-            
             const limit = isPortfolioRowsExpanded ? currentPortfolioData.length : PORTFOLIO_LIMIT;
-            
             currentPortfolioData.forEach((item, index) => {
                 if(index >= limit && !isPortfolioRowsExpanded) return;
-                
                 const parts = item.desc.split('|');
                 const tag = parts.length > 1 ? parts[0].trim() : '';
                 const text = parts.length > 1 ? parts[1].trim() : parts[0].trim();
-                
                 const div = document.createElement('div'); div.className = 'case-card';
-                div.innerHTML = `
-                    <div class="case-img-box"><img src="${item.img}" loading="lazy"></div>
-                    <div class="case-info">
-                        ${tag ? `<div class="case-tags"><span class="case-tag">${tag}</span></div>` : ''}
-                        <div class="case-desc">${text}</div>
-                    </div>
-                `;
+                div.innerHTML = `<div class="case-img-box"><img src="${item.img}" loading="lazy"></div><div class="case-info">${tag ? `<div class="case-tags"><span class="case-tag">${tag}</span></div>` : ''}<div class="case-desc">${text}</div></div>`;
                 grid.appendChild(div);
             });
-            
             const btn = document.getElementById('portfolioToggleBtn');
             if(currentPortfolioData.length <= PORTFOLIO_LIMIT) btn.style.display = 'none';
             else { btn.style.display = 'block'; btn.textContent = isPortfolioRowsExpanded ? '收起作品 ▲' : '查看更多作品 ▼'; }
         }
-        
         function togglePortfolioRows() { isPortfolioRowsExpanded = !isPortfolioRowsExpanded; renderPortfolio(); }
 
         // --- 3. 載入好評 ---
@@ -418,10 +381,11 @@
                 const rows = parseCSV(txt);
                 const list = document.getElementById('review-list');
                 list.innerHTML = '';
-                let start = (rows[0][0].toLowerCase().includes('name')) ? 1 : 0;
+                let start = (rows.length>0 && rows[0][0].toLowerCase().includes('name')) ? 1 : 0;
                 for(let i=start; i<rows.length; i++){
-                    const c = rows[i]; if(c.length<3 || !c[0]) continue;
-                    list.innerHTML += `<div class="chat-row"><div class="chat-avatar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><div class="chat-bubble">${c[2]}</div></div>`;
+                    const c = rows[i]; if(c.length<3 || !c[0]) continue; // 寬容檢查
+                    const content = c[2] || c[0]; // 如果C欄沒東西，試著抓A欄
+                    list.innerHTML += `<div class="chat-row"><div class="chat-avatar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><div class="chat-bubble">${content}</div></div>`;
                 }
             });
         }
@@ -450,34 +414,45 @@
         function maskPhoneNumber(p) { if(!p)return''; let s=String(p).replace(/'/g,'').trim(); return s.length<8?s:s.substring(0,4)+'***'+s.substring(s.length-3); }
         function toggleCollapse(btn, id) { const el=document.getElementById(id); el.classList.toggle('expanded'); btn.querySelector('.btn-text').textContent=el.classList.contains('expanded')?'收起':'查看完整價目表'; }
         
-        // --- 優化版：價格卡片 (日期更明顯) ---
+        // 優化版價格標示
         function getPriceCardHtml(info, useOrange) { 
             if (!info) return ''; 
-            
-            let p = info.price === 0 ? '免費' : (info.price ? `NT$ ${info.price}` : '洽詢'); 
-            
-            // 根據價格/身分決定顏色
-            let bg = info.price === 0 ? 'bg-green-600' : (useOrange ? 'bg-orange-500' : 'bg-pink-500'); 
-            let theme = info.price === 0 ? 'bg-green-50 border-green-200' : (useOrange ? 'bg-orange-50 border-orange-200' : 'bg-pink-50 border-pink-200'); 
-            
-            // 清理日期文字中的括號
+            let p = info.price===0?'免費':(info.price?`NT$ ${info.price}`:'洽詢'); 
+            let bg = info.price===0?'bg-green-600':(useOrange?'bg-orange-500':'bg-pink-500'); 
+            let theme = info.price===0?'bg-green-50 border-green-200':(useOrange?'bg-orange-50 border-orange-200':'bg-pink-50 border-pink-200'); 
             let dateText = (info.dateRange || '').replace(/【.*?】/g, '');
-
             return `
             <div class="mt-3 p-3 rounded-xl border ${theme} flex justify-between items-center shadow-sm">
                 <div>
-                    <!-- 標題：稍微淡一點 -->
                     <h3 class="text-xs font-bold text-gray-400 mb-1">目前補色價格</h3>
-                    
-                    <!-- 日期：放大、變深、加粗 -->
-                    <p class="text-sm font-bold text-gray-800 tracking-wide">
-                        ${dateText}
-                    </p>
+                    <p class="text-sm font-bold text-gray-800 tracking-wide">${dateText}</p>
                 </div>
-                
-                <!-- 價格標籤 -->
-                <span class="px-3 py-1 text-white text-lg font-bold rounded-lg ${bg} shadow-sm">
-                    ${p}
-                </span>
+                <span class="px-3 py-1 text-white text-lg font-bold rounded-lg ${bg} shadow-sm">${p}</span>
             </div>`; 
         }
+        
+        function createCard(r, i) { 
+            const cid=`d-${i}`; const ranges=(r.touchUpRanges||[]).map(t=>`<div class="flex justify-between py-2 border-b border-gray-100 text-sm"><span>${t.dateRange}</span><span class="font-bold text-gray-700">${t.price===0?'免費':'$'+t.price}</span></div>`).join(''); 
+            return `
+            <div class="result-card">
+                <div class="result-header">
+                    <div><div class="result-name">${r.name}</div><span class="text-gray-400 text-sm">(${maskPhoneNumber(r.phone)})</span></div>
+                </div>
+                
+                <div class="info-badges">
+                    <div class="info-badge"><span class="info-label">上次日期</span><span class="info-value">${r.lastDate||'-'}</span></div>
+                    <div class="info-badge"><span class="info-label">上次項目</span><span class="info-value highlight">${r.service}</span></div>
+                </div>
+
+                ${r.specialReminder?`<div class="bg-yellow-50 text-yellow-800 p-2.5 rounded-lg text-xs mb-3 font-medium">💡 ${r.specialReminder}</div>`:''} 
+                ${getPriceCardHtml(r.currentPriceInfo, r.eyebrowDiscountDate && !checkIsExpired(r.eyebrowDiscountDate))} 
+                
+                <div class="mt-4">
+                    <button onclick="toggleCollapse(this,'${cid}')" class="w-full py-2 bg-gray-50 text-gray-500 text-xs font-bold rounded-lg transition hover:bg-gray-100"><span class="btn-text">查看完整價目表</span></button>
+                    <div id="${cid}" class="collapsible-content bg-gray-50 px-3 mt-1 rounded-b-lg"><div class="py-2">${ranges}</div></div>
+                </div>
+            </div>`; 
+        }
+    </script>
+</body>
+</html>
