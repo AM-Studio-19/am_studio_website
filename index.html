@@ -602,13 +602,14 @@
             const cid=`d-${i}`; const ranges=(r.touchUpRanges||[]).map(t=>`<div class="flex justify-between py-2 border-b border-gray-100 text-sm"><span>${t.dateRange}</span><span class="font-bold text-gray-700">${t.price===0?'免費':'$'+t.price}</span></div>`).join(''); 
             return `<div class="result-card"><div class="result-header"><div><div class="result-name">${r.name}</div><span class="text-gray-400 text-sm">(${maskPhoneNumber(r.phone)})</span></div></div><div class="info-badges"><div class="info-badge"><span class="info-label">上次日期</span><span class="info-value">${r.lastDate||'-'}</span></div><div class="info-badge"><span class="info-label">上次項目</span><span class="info-value highlight">${r.service}</span></div></div>${r.specialReminder?`<div class="bg-yellow-50 text-yellow-800 p-2.5 rounded-lg text-xs mb-3 font-medium">💡 ${r.specialReminder}</div>`:''} ${getPriceCardHtml(r.currentPriceInfo, r.eyebrowDiscountDate && !checkIsExpired(r.eyebrowDiscountDate))} <div class="mt-4"><button onclick="toggleCollapse(this,'${cid}')" class="w-full py-2 bg-gray-50 text-gray-500 text-xs font-bold rounded-lg transition hover:bg-gray-100"><span class="btn-text">查看完整價目表</span></button><div id="${cid}" class="collapsible-content bg-gray-50 px-3 mt-1 rounded-b-lg"><div class="py-2">${ranges}</div></div></div></div>`; 
         }
-    </script>
-    // --- 輔助功能：滑動後隱藏箭頭 ---
+         // --- 輔助功能：滑動後隱藏箭頭 ---
         function hideHint(elementId) {
             const el = document.getElementById(elementId);
             if(el) {
                 el.classList.add('hint-hidden');
             }
+    </script>
+   
         }
 </body>
 </html>
