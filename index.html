@@ -161,7 +161,7 @@
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .hidden { display: none; }
 
-        /* ✨ 隱藏的後台設定按鈕 ✨ */
+        /* ✨ 隱藏的管理員按鈕 ✨ */
         .admin-trigger {
             position: fixed; bottom: 100px; right: 10px;
             width: 40px; height: 40px; background: rgba(0,0,0,0.1);
@@ -195,7 +195,7 @@
         <div class="hero-subtitle">打造妳的偽素顏小心機</div>
     </div>
 
-    <!-- 紋綉師形象卡 -->
+    <!-- 紋綉師形象卡 (動態載入) -->
     <div class="profile-card">
         <div id="profile-img-container" class="skeleton" style="width:70px; height:70px; border-radius:50%;"></div>
         <div class="profile-info" style="flex:1;">
@@ -256,7 +256,7 @@
             </div>
         </section>
 
-        <!-- 3. 留色作品 -->
+        <!-- 3. 留色作品 (可收合 + 橫向滑動) -->
         <section id="portfolio">
             <div class="section-header" onclick="toggleSection('portfolio-content', this)">
                 <h2>留色作品集 <span class="header-arrow">▼</span></h2>
@@ -275,7 +275,7 @@
             </div>
         </section>
 
-        <!-- 4. 顧客好評 -->
+        <!-- 4. 顧客好評 (橫向) -->
         <section id="reviews">
             <div class="section-header"><h2>顧客好評</h2></div>
             <div id="review-list" class="reviews-horizontal">
@@ -305,7 +305,7 @@
     <!-- ✨ 隱藏的管理員按鈕 ✨ -->
     <div class="admin-trigger" onclick="openAdminPanel()">⚙️</div>
 
-    <!-- ✨ 管理員控制台 ✨ -->
+    <!-- ✨ 管理員控制台 (已更新連結) ✨ -->
     <div id="adminPanel" class="admin-menu" onclick="closeAdminPanel(event)">
         <div class="admin-panel">
             <h2 style="margin-bottom:20px;">🔧 管理員控制台</h2>
@@ -314,8 +314,8 @@
                 📸 1. 上傳圖片 (取得網址)
             </a>
             
-            <!-- 👇 請把這個網址換成您 Google 試算表的「編輯網址」 👇 -->
-            <a href="https://docs.google.com/spreadsheets/d/1Xxxxxxx_您的編輯網址_xxxxxx/edit" target="_blank" class="admin-btn" style="background:#0F9D58; border-color:#0F9D58;">
+            <!-- 👇 已更新為您的新試算表連結 👇 -->
+            <a href="https://docs.google.com/spreadsheets/d/1DA69pXR5j6kx9WpQDzV3BLx6EGawTo-TBZdYcDRYdhE/edit" target="_blank" class="admin-btn" style="background:#0F9D58; border-color:#0F9D58;">
                 📝 2. 編輯 Google 表格
             </a>
             
@@ -330,7 +330,8 @@
     </div>
 
     <script>
-        // ▼▼▼ 設定區 ▼▼▼
+        // ▼▼▼ 設定區 (請確認這些資料連結對應新表格) ▼▼▼
+        // 如果您的資料都搬到新表格 1DA69... 了，請記得去新表格發布並取得新的 csv 連結，替換下方網址
         const SERVICES_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1138837231&single=true&output=csv';
         const REVIEWS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=174294022&single=true&output=csv'; 
         const PORTFOLIO_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1127370948&single=true&output=csv'; 
@@ -347,7 +348,7 @@
         // --- 管理員功能 ---
         function openAdminPanel() {
             const pwd = prompt("請輸入管理員密碼：");
-            if(pwd === "1234") { // ✨ 請在這裡設定您的密碼 ✨
+            if(pwd === "1234") { 
                 document.getElementById('adminPanel').style.display = 'flex';
             } else if(pwd !== null) {
                 alert("密碼錯誤");
@@ -466,8 +467,20 @@
                 for(let i=start; i<rows.length; i++){
                     const c = rows[i]; 
                     if(c.length<3 || !c[0]) continue; 
-                    const content = c[2] || c[0]; 
-                    list.innerHTML += `<div class="review-card-item"><div class="review-header"><div class="review-avatar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><span class="review-name">${c[0]||'顧客'}</span></div><div class="review-content">${content}</div></div>`;
+                    const name = c[0] || '顧客';
+                    const content = c[2] || ''; 
+                    const div = document.createElement('div');
+                    div.className = 'review-card-item';
+                    div.innerHTML = `
+                        <div class="review-header">
+                            <div class="review-avatar">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            </div>
+                            <span class="review-name">${name}</span>
+                        </div>
+                        <div class="review-content">${content}</div>
+                    `;
+                    list.appendChild(div);
                 }
             }).catch(()=> document.getElementById('review-list').innerHTML='<p style="text-align:center;color:#ccc">尚無評論</p>');
         }
