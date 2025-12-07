@@ -12,6 +12,44 @@
     </script>
 
     <style>
+        /* --- 新增：橫向滑動指示器 --- */
+        .horizontal-wrapper {
+            position: relative; /* 為了讓箭頭定位 */
+        }
+        
+        .scroll-hint-arrow {
+            position: absolute;
+            top: 50%;
+            right: 5px;
+            transform: translateY(-50%);
+            width: 36px; height: 36px;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--primary);
+            font-size: 1.2rem;
+            font-weight: bold;
+            z-index: 10;
+            pointer-events: none; /* 關鍵：讓手指可以直接穿透箭頭去滑動 */
+            animation: bounce-right 1.5s infinite;
+            transition: opacity 0.3s;
+        }
+        
+        /* 呼吸燈跳動動畫 */
+        @keyframes bounce-right {
+            0%, 100% { transform: translateY(-50%) translateX(0); opacity: 0.9; }
+            50% { transform: translateY(-50%) translateX(5px); opacity: 1; }
+        }
+
+        /* 當此 class 被加入時，隱藏箭頭 */
+        .hint-hidden { opacity: 0; }
+
+        /* 輔助文字 */
+        .swipe-hint-text {
+            text-align: center; font-size: 0.75rem; color: #aaa;
+            margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 5px;
+        }
         /* --- 核心變數 --- */
         :root {
             --primary: #D6BFA8;   /* 奶茶棕 */
@@ -256,11 +294,12 @@
             </div>
         </section>
 
-        <!-- 3. 留色作品 (可收合 + 橫向滑動) -->
+    <!-- 3. 留色作品 (可收合 + 橫向滑動 + 箭頭) -->
         <section id="portfolio">
             <div class="section-header" onclick="toggleSection('portfolio-content', this)">
                 <h2>留色作品集 <span class="header-arrow">▼</span></h2>
             </div>
+            
             <div id="portfolio-content" class="section-collapsible">
                 <div class="filter-scroller">
                     <div class="filter-chip active" onclick="filterPortfolio('all', this)">全部案例</div>
@@ -268,19 +307,40 @@
                     <div class="filter-chip" onclick="filterPortfolio('lip', this)">霧唇</div>
                     <div class="filter-chip" onclick="filterPortfolio('dark', this)">烏唇轉色</div>
                 </div>
-                <div id="portfolio-horizontal" class="portfolio-horizontal">
-                    <div class="case-card skeleton" style="width:160px; height:220px; flex-shrink:0;"></div>
-                    <div class="case-card skeleton" style="width:160px; height:220px; flex-shrink:0;"></div>
+
+                <!-- ✨ 新增：提示文字 ✨ -->
+                <div class="swipe-hint-text">
+                    <span>← 左右滑動查看更多 →</span>
+                </div>
+
+                <!-- ✨ 新增：外框 Wrapper + 箭頭 ✨ -->
+                <div class="horizontal-wrapper">
+                    <div id="portfolio-horizontal" class="portfolio-horizontal" onscroll="hideHint('hint-portfolio')">
+                        <div class="case-card skeleton" style="width:160px; height:220px; flex-shrink:0;"></div>
+                        <div class="case-card skeleton" style="width:160px; height:220px; flex-shrink:0;"></div>
+                    </div>
+                    <!-- 浮動箭頭 (ID 用來控制隱藏) -->
+                    <div id="hint-portfolio" class="scroll-hint-arrow">❯</div>
                 </div>
             </div>
         </section>
 
-        <!-- 4. 顧客好評 (橫向) -->
+        <!-- 4. 顧客好評 (橫向 + 箭頭) -->
         <section id="reviews">
             <div class="section-header"><h2>顧客好評</h2></div>
-            <div id="review-list" class="reviews-horizontal">
-                <div class="review-card-item skeleton" style="height:150px;"></div>
-                <div class="review-card-item skeleton" style="height:150px;"></div>
+            
+            <div class="swipe-hint-text">
+                <span>← 左右滑動查看更多 →</span>
+            </div>
+
+            <!-- ✨ 新增：外框 Wrapper + 箭頭 ✨ -->
+            <div class="horizontal-wrapper">
+                <div id="review-list" class="reviews-horizontal" onscroll="hideHint('hint-review')">
+                    <div class="review-card-item skeleton" style="height:150px;"></div>
+                    <div class="review-card-item skeleton" style="height:150px;"></div>
+                </div>
+                <!-- 浮動箭頭 -->
+                <div id="hint-review" class="scroll-hint-arrow">❯</div>
             </div>
         </section>
 
@@ -543,5 +603,12 @@
             return `<div class="result-card"><div class="result-header"><div><div class="result-name">${r.name}</div><span class="text-gray-400 text-sm">(${maskPhoneNumber(r.phone)})</span></div></div><div class="info-badges"><div class="info-badge"><span class="info-label">上次日期</span><span class="info-value">${r.lastDate||'-'}</span></div><div class="info-badge"><span class="info-label">上次項目</span><span class="info-value highlight">${r.service}</span></div></div>${r.specialReminder?`<div class="bg-yellow-50 text-yellow-800 p-2.5 rounded-lg text-xs mb-3 font-medium">💡 ${r.specialReminder}</div>`:''} ${getPriceCardHtml(r.currentPriceInfo, r.eyebrowDiscountDate && !checkIsExpired(r.eyebrowDiscountDate))} <div class="mt-4"><button onclick="toggleCollapse(this,'${cid}')" class="w-full py-2 bg-gray-50 text-gray-500 text-xs font-bold rounded-lg transition hover:bg-gray-100"><span class="btn-text">查看完整價目表</span></button><div id="${cid}" class="collapsible-content bg-gray-50 px-3 mt-1 rounded-b-lg"><div class="py-2">${ranges}</div></div></div></div>`; 
         }
     </script>
+    // --- 輔助功能：滑動後隱藏箭頭 ---
+        function hideHint(elementId) {
+            const el = document.getElementById(elementId);
+            if(el) {
+                el.classList.add('hint-hidden');
+            }
+        }
 </body>
 </html>
