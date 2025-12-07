@@ -56,7 +56,7 @@
         .nav-btn.active { color: var(--text); }
         .nav-btn.active svg { stroke: var(--primary-dark); fill: rgba(214, 191, 168, 0.2); }
 
-        /* --- Hero & Profile --- */
+        /* --- Hero --- */
         .hero-section {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white; padding: 50px 20px 80px 20px; text-align: center; 
@@ -71,6 +71,7 @@
         .hero-title { margin: 0; font-size: 1.8rem; font-weight: 800; letter-spacing: 2px; text-shadow: 0 2px 4px rgba(0,0,0,0.1); position: relative; z-index: 1; }
         .hero-subtitle { display: inline-block; margin: 10px 0 0 0; background: rgba(255,255,255,0.2); padding: 4px 15px; border-radius: 20px; font-size: 0.9rem; backdrop-filter: blur(4px); position: relative; z-index: 1; }
         
+        /* --- Profile --- */
         .profile-card {
             background: #fff; border-radius: 20px; padding: 20px; width: 85%; max-width: 500px; 
             margin: -50px auto 20px auto; box-shadow: 0 15px 30px -5px rgba(0,0,0,0.1);
@@ -112,7 +113,7 @@
         .service-list-text { display: flex; flex-direction: column; gap: 12px; }
         .service-card { background: rgba(255,255,255,0.8); backdrop-filter: blur(5px); padding: 18px 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.6); display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
 
-        /* --- 3. 留色作品 (橫向) --- */
+        /* --- 3. 留色作品 --- */
         .section-collapsible { transition: max-height 0.4s ease, opacity 0.4s ease; overflow: hidden; opacity: 1; max-height: 2000px; }
         .section-collapsible.collapsed { max-height: 0; opacity: 0; }
         .filter-scroller { display: flex; gap: 10px; overflow-x: auto; justify-content: center; margin-bottom: 20px; padding-bottom: 5px;}
@@ -128,37 +129,14 @@
         .case-tag { font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; background: #F2F0EB; color: #7A6C63; font-weight: 600; }
         .case-desc { font-size: 0.75rem; color: #888; line-height: 1.3; }
 
-        /* --- 4. 顧客好評 (✨ 橫向滑動優化版 ✨) --- */
-        .reviews-horizontal {
-            display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px;
-            scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none;
-        }
+        /* --- 4. 顧客好評 --- */
+        .reviews-horizontal { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
         .reviews-horizontal::-webkit-scrollbar { display: none; }
-
-        .review-card-item {
-            flex: 0 0 280px; /* 固定寬度，讓它變成橫向卡片 */
-            scroll-snap-align: center;
-            background: #fff; padding: 20px; border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border: 1px solid rgba(0,0,0,0.02);
-            display: flex; flex-direction: column; gap: 10px;
-        }
-        
-        /* 評論頭部：頭像+名字 */
+        .review-card-item { flex: 0 0 280px; scroll-snap-align: center; background: #fff; padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.02); display: flex; flex-direction: column; gap: 10px; }
         .review-header { display: flex; align-items: center; gap: 10px; }
-        .review-avatar { 
-            width: 40px; height: 40px; border-radius: 50%; background: #F2F0EB; 
-            display: flex; align-items: center; justify-content: center; color: var(--primary);
-        }
+        .review-avatar { width: 40px; height: 40px; border-radius: 50%; background: #F2F0EB; display: flex; align-items: center; justify-content: center; color: var(--primary); }
         .review-name { font-weight: 700; color: var(--text); font-size: 0.95rem; }
-        
-        /* 評論內容 */
-        .review-content { 
-            font-size: 0.9rem; color: #666; line-height: 1.6; 
-            background: #F9F8F6; padding: 12px; border-radius: 12px;
-            /* 限制最多顯示 4 行，超過省略 */
-            display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
-        }
+        .review-content { font-size: 0.9rem; color: #666; line-height: 1.6; background: #F9F8F6; padding: 12px; border-radius: 12px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 
         /* --- 懸浮按鈕 --- */
         .floating-cta { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); width: 85%; max-width: 350px; background: var(--text); color: white; padding: 14px; border-radius: 50px; text-align: center; text-decoration: none; font-weight: 700; font-size: 1rem; box-shadow: 0 10px 25px rgba(90, 72, 63, 0.4); z-index: 950; display: flex; align-items: center; justify-content: center; gap: 8px; }
@@ -183,6 +161,30 @@
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .hidden { display: none; }
 
+        /* ✨ 隱藏的後台設定按鈕 ✨ */
+        .admin-trigger {
+            position: fixed; bottom: 100px; right: 10px;
+            width: 40px; height: 40px; background: rgba(0,0,0,0.1);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.8); z-index: 800; cursor: pointer;
+            backdrop-filter: blur(5px); font-size: 1.2rem;
+        }
+        /* 後台選單 */
+        .admin-menu {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 9000; align-items: center; justify-content: center;
+        }
+        .admin-panel {
+            background: #222; width: 85%; max-width: 350px; border-radius: 20px;
+            padding: 30px; text-align: center; color: white; border: 1px solid #444;
+        }
+        .admin-btn {
+            display: block; width: 100%; padding: 15px; margin-bottom: 15px;
+            background: #333; color: white; border-radius: 12px; font-weight: bold;
+            text-decoration: none; border: 1px solid #555;
+        }
+        .admin-btn:hover { background: #444; }
+
     </style>
 </head>
 <body>
@@ -195,15 +197,11 @@
 
     <!-- 紋綉師形象卡 -->
     <div class="profile-card">
-        <img src="https://i.postimg.cc/k5n2y3Kz/avatar-placeholder.png" class="profile-img" alt="紋綉師">
-        <div class="profile-info">
-            <h3>AM 紋綉師</h3>
-            <p>專注於自然毛流感與個人化眉型設計，致力於讓每位女孩都能擁有素顏自信。</p>
-            <div class="tags-row">
-                <span class="tag-pill">TNL二級檢定</span>
-                <span class="tag-pill">拋棄式耗材</span>
-                <span class="tag-pill">SGS認證色乳</span>
-            </div>
+        <div id="profile-img-container" class="skeleton" style="width:70px; height:70px; border-radius:50%;"></div>
+        <div class="profile-info" style="flex:1;">
+            <h3 id="profile-name" class="skeleton" style="width:50%; height:20px; margin-bottom:5px;"></h3>
+            <p id="profile-desc" class="skeleton" style="width:90%; height:40px;"></p>
+            <div id="profile-tags" class="tags-row"></div>
         </div>
     </div>
 
@@ -237,18 +235,13 @@
                 </div>
                 <h3 style="margin:0; font-size:1.3rem; color:var(--text);">舊客補色查詢</h3>
                 <p style="font-size:0.9rem; color:#999; margin:8px 0 0 0;">輸入姓名或電話查詢專屬優惠</p>
-                
                 <div class="input-group">
                     <div class="input-icon">🔍</div>
                     <input type="text" id="queryInput" class="search-input" 
                            placeholder="例如：林小美 或 0912..." 
                            onkeydown="if(event.key === 'Enter') searchRecord()">
                 </div>
-                
-                <button onclick="searchRecord()" id="searchButton" class="btn-primary">
-                    立即查詢
-                </button>
-
+                <button onclick="searchRecord()" id="searchButton" class="btn-primary">立即查詢</button>
                 <div id="messageArea" class="hidden mt-4 p-3 rounded-xl text-sm font-bold"></div>
                 <div id="resultsArea" class="mt-6 text-left"></div>
             </div>
@@ -263,12 +256,11 @@
             </div>
         </section>
 
-        <!-- 3. 留色作品 (橫向滑動) -->
+        <!-- 3. 留色作品 -->
         <section id="portfolio">
             <div class="section-header" onclick="toggleSection('portfolio-content', this)">
                 <h2>留色作品集 <span class="header-arrow">▼</span></h2>
             </div>
-            
             <div id="portfolio-content" class="section-collapsible">
                 <div class="filter-scroller">
                     <div class="filter-chip active" onclick="filterPortfolio('all', this)">全部案例</div>
@@ -276,7 +268,6 @@
                     <div class="filter-chip" onclick="filterPortfolio('lip', this)">霧唇</div>
                     <div class="filter-chip" onclick="filterPortfolio('dark', this)">烏唇轉色</div>
                 </div>
-
                 <div id="portfolio-horizontal" class="portfolio-horizontal">
                     <div class="case-card skeleton" style="width:160px; height:220px; flex-shrink:0;"></div>
                     <div class="case-card skeleton" style="width:160px; height:220px; flex-shrink:0;"></div>
@@ -284,12 +275,10 @@
             </div>
         </section>
 
-        <!-- 4. 顧客好評 (✨ 已修正為橫向滑動 ✨) -->
+        <!-- 4. 顧客好評 -->
         <section id="reviews">
             <div class="section-header"><h2>顧客好評</h2></div>
-            <!-- 容器改為 reviews-horizontal -->
             <div id="review-list" class="reviews-horizontal">
-                <!-- 預設骨架 -->
                 <div class="review-card-item skeleton" style="height:150px;"></div>
                 <div class="review-card-item skeleton" style="height:150px;"></div>
             </div>
@@ -297,10 +286,7 @@
 
     </div>
 
-    <!-- 懸浮預約按鈕 -->
-    <a id="floatBookingBtn" href="#" class="floating-cta">
-        <span>📅 立即預約諮詢</span>
-    </a>
+    <a id="floatBookingBtn" href="#" class="floating-cta"><span>📅 立即預約諮詢</span></a>
 
     <!-- 彈窗 -->
     <div id="serviceModal" class="modal-overlay" onclick="closeModal(event)">
@@ -316,8 +302,35 @@
         </div>
     </div>
 
+    <!-- ✨ 隱藏的管理員按鈕 ✨ -->
+    <div class="admin-trigger" onclick="openAdminPanel()">⚙️</div>
+
+    <!-- ✨ 管理員控制台 ✨ -->
+    <div id="adminPanel" class="admin-menu" onclick="closeAdminPanel(event)">
+        <div class="admin-panel">
+            <h2 style="margin-bottom:20px;">🔧 管理員控制台</h2>
+            
+            <a href="https://postimages.org/" target="_blank" class="admin-btn">
+                📸 1. 上傳圖片 (取得網址)
+            </a>
+            
+            <!-- 👇 請把這個網址換成您 Google 試算表的「編輯網址」 👇 -->
+            <a href="https://docs.google.com/spreadsheets/d/1Xxxxxxx_您的編輯網址_xxxxxx/edit" target="_blank" class="admin-btn" style="background:#0F9D58; border-color:#0F9D58;">
+                📝 2. 編輯 Google 表格
+            </a>
+            
+            <button onclick="location.reload()" class="admin-btn" style="background:#4285F4; border-color:#4285F4;">
+                🔄 3. 重新整理網頁
+            </button>
+
+            <p style="font-size:0.8rem; color:#888; margin-top:20px;">
+                修改表格後，請稍等 1-3 分鐘<br>Google 快取更新後按重整即可
+            </p>
+        </div>
+    </div>
+
     <script>
-        // ▼▼▼ 設定區 (網址皆正確) ▼▼▼
+        // ▼▼▼ 設定區 ▼▼▼
         const SERVICES_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1138837231&single=true&output=csv';
         const REVIEWS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=174294022&single=true&output=csv'; 
         const PORTFOLIO_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1127370948&single=true&output=csv'; 
@@ -330,6 +343,21 @@
         document.addEventListener("DOMContentLoaded", function() {
             loadServices(); loadReviews(); loadPortfolio(); loadSettings();
         });
+
+        // --- 管理員功能 ---
+        function openAdminPanel() {
+            const pwd = prompt("請輸入管理員密碼：");
+            if(pwd === "1234") { // ✨ 請在這裡設定您的密碼 ✨
+                document.getElementById('adminPanel').style.display = 'flex';
+            } else if(pwd !== null) {
+                alert("密碼錯誤");
+            }
+        }
+        function closeAdminPanel(e) {
+            if(e.target.id === 'adminPanel') {
+                e.target.style.display = 'none';
+            }
+        }
 
         // 導航切換
         function setActiveNav(btn) {
@@ -428,45 +456,51 @@
             });
         }
 
-        // --- 3. 載入好評 (✨ 橫向滑動) ---
+        // --- 3. 載入好評 ---
         function loadReviews() {
             fetch(REVIEWS_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt);
                 const list = document.getElementById('review-list');
                 list.innerHTML = ''; 
                 let start = (rows.length>0 && rows[0][0].toLowerCase().includes('name')) ? 1 : 0;
-                
                 for(let i=start; i<rows.length; i++){
                     const c = rows[i]; 
-                    if(c.length<3 || !c[0]) continue; // 寬容檢查
-                    const name = c[0] || '顧客';
-                    const content = c[2] || ''; 
-                    
-                    const div = document.createElement('div');
-                    div.className = 'review-card-item';
-                    div.innerHTML = `
-                        <div class="review-header">
-                            <div class="review-avatar">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                            </div>
-                            <span class="review-name">${name}</span>
-                        </div>
-                        <div class="review-content">${content}</div>
-                    `;
-                    list.appendChild(div);
+                    if(c.length<3 || !c[0]) continue; 
+                    const content = c[2] || c[0]; 
+                    list.innerHTML += `<div class="review-card-item"><div class="review-header"><div class="review-avatar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><span class="review-name">${c[0]||'顧客'}</span></div><div class="review-content">${content}</div></div>`;
                 }
             }).catch(()=> document.getElementById('review-list').innerHTML='<p style="text-align:center;color:#ccc">尚無評論</p>');
         }
 
-        // --- 設定與查詢 ---
+        // --- 設定與 Profile 載入 ---
         function loadSettings() {
             fetch(SETTINGS_CSV).then(r=>r.text()).then(csv => {
                 csv.split('\n').forEach(row => {
                     const [id, content] = row.split(',');
-                    if(id && id.trim() === 'link_booking') document.getElementById('floatBookingBtn').href = content.trim();
+                    if(id && content) {
+                        const key = id.trim();
+                        const val = content.trim();
+                        if(key === 'link_booking') document.getElementById('floatBookingBtn').href = val;
+                        if(key === 'profile_name') {
+                            const el = document.getElementById('profile-name'); el.textContent = val; el.classList.remove('skeleton'); el.style.width = 'auto';
+                        }
+                        if(key === 'profile_desc') {
+                            const el = document.getElementById('profile-desc'); el.textContent = val; el.classList.remove('skeleton'); el.style.width = 'auto';
+                        }
+                        if(key === 'profile_img') {
+                            const container = document.getElementById('profile-img-container');
+                            container.innerHTML = `<img src="${val}" class="profile-img" alt="紋綉師">`;
+                            container.classList.remove('skeleton'); container.style.background = 'transparent';
+                        }
+                        if(key === 'profile_tags') {
+                            const container = document.getElementById('profile-tags'); container.innerHTML = '';
+                            val.split(';').forEach(tag => { if(tag.trim()) container.innerHTML += `<span class="tag-pill">${tag.trim()}</span>`; });
+                        }
+                    }
                 });
             });
         }
+
         function searchRecord() {
             const q=document.getElementById('queryInput').value.trim();
             if(!q) return displayMessage('error','請輸入資料');
@@ -488,37 +522,12 @@
             let bg = info.price===0?'bg-green-600':(useOrange?'bg-orange-500':'bg-pink-500'); 
             let theme = info.price===0?'bg-green-50 border-green-200':(useOrange?'bg-orange-50 border-orange-200':'bg-pink-50 border-pink-200'); 
             let dateText = (info.dateRange || '').replace(/【.*?】/g, '');
-            return `
-            <div class="mt-3 p-3 rounded-xl border ${theme} flex justify-between items-center shadow-sm">
-                <div>
-                    <h3 class="text-xs font-bold text-gray-400 mb-1">目前補色價格</h3>
-                    <p class="text-sm font-bold text-gray-800 tracking-wide">${dateText}</p>
-                </div>
-                <span class="px-3 py-1 text-white text-lg font-bold rounded-lg ${bg} shadow-sm">${p}</span>
-            </div>`; 
+            return `<div class="mt-3 p-3 rounded-xl border ${theme} flex justify-between items-center shadow-sm"><div><h3 class="text-xs font-bold text-gray-400 mb-1">目前補色價格</h3><p class="text-sm font-bold text-gray-800 tracking-wide">${dateText}</p></div><span class="px-3 py-1 text-white text-lg font-bold rounded-lg ${bg} shadow-sm">${p}</span></div>`; 
         }
         
         function createCard(r, i) { 
             const cid=`d-${i}`; const ranges=(r.touchUpRanges||[]).map(t=>`<div class="flex justify-between py-2 border-b border-gray-100 text-sm"><span>${t.dateRange}</span><span class="font-bold text-gray-700">${t.price===0?'免費':'$'+t.price}</span></div>`).join(''); 
-            return `
-            <div class="result-card">
-                <div class="result-header">
-                    <div><div class="result-name">${r.name}</div><span class="text-gray-400 text-sm">(${maskPhoneNumber(r.phone)})</span></div>
-                </div>
-                
-                <div class="info-badges">
-                    <div class="info-badge"><span class="info-label">上次日期</span><span class="info-value">${r.lastDate||'-'}</span></div>
-                    <div class="info-badge"><span class="info-label">上次項目</span><span class="info-value highlight">${r.service}</span></div>
-                </div>
-
-                ${r.specialReminder?`<div class="bg-yellow-50 text-yellow-800 p-2.5 rounded-lg text-xs mb-3 font-medium">💡 ${r.specialReminder}</div>`:''} 
-                ${getPriceCardHtml(r.currentPriceInfo, r.eyebrowDiscountDate && !checkIsExpired(r.eyebrowDiscountDate))} 
-                
-                <div class="mt-4">
-                    <button onclick="toggleCollapse(this,'${cid}')" class="w-full py-2 bg-gray-50 text-gray-500 text-xs font-bold rounded-lg transition hover:bg-gray-100"><span class="btn-text">查看完整價目表</span></button>
-                    <div id="${cid}" class="collapsible-content bg-gray-50 px-3 mt-1 rounded-b-lg"><div class="py-2">${ranges}</div></div>
-                </div>
-            </div>`; 
+            return `<div class="result-card"><div class="result-header"><div><div class="result-name">${r.name}</div><span class="text-gray-400 text-sm">(${maskPhoneNumber(r.phone)})</span></div></div><div class="info-badges"><div class="info-badge"><span class="info-label">上次日期</span><span class="info-value">${r.lastDate||'-'}</span></div><div class="info-badge"><span class="info-label">上次項目</span><span class="info-value highlight">${r.service}</span></div></div>${r.specialReminder?`<div class="bg-yellow-50 text-yellow-800 p-2.5 rounded-lg text-xs mb-3 font-medium">💡 ${r.specialReminder}</div>`:''} ${getPriceCardHtml(r.currentPriceInfo, r.eyebrowDiscountDate && !checkIsExpired(r.eyebrowDiscountDate))} <div class="mt-4"><button onclick="toggleCollapse(this,'${cid}')" class="w-full py-2 bg-gray-50 text-gray-500 text-xs font-bold rounded-lg transition hover:bg-gray-100"><span class="btn-text">查看完整價目表</span></button><div id="${cid}" class="collapsible-content bg-gray-50 px-3 mt-1 rounded-b-lg"><div class="py-2">${ranges}</div></div></div></div>`; 
         }
     </script>
 </body>
