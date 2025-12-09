@@ -24,6 +24,9 @@
             --nav-height: 70px;
         }
 
+        /* 全域設定 */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
         body {
             background-color: var(--bg-color);
             background-image: url('bg.jpg');
@@ -35,6 +38,7 @@
             padding-bottom: calc(var(--nav-height) + 40px);
             -webkit-font-smoothing: antialiased;
             scroll-behavior: smooth;
+            overflow-x: hidden; width: 100%;
         }
 
         /* --- 導覽列 --- */
@@ -73,7 +77,7 @@
         
         /* --- Profile --- */
         .profile-card {
-            background: #fff; border-radius: 20px; padding: 20px; width: 85%; max-width: 500px; 
+            background: #fff; border-radius: 20px; padding: 20px; width: 90%; max-width: 500px; 
             margin: -50px auto 20px auto; box-shadow: 0 15px 30px -5px rgba(0,0,0,0.1);
             display: flex; align-items: center; gap: 15px; position: relative; z-index: 10;
         }
@@ -83,7 +87,7 @@
         .tags-row { display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap; }
         .tag-pill { font-size: 0.65rem; background: #F2F0EB; color: #8D7B72; padding: 2px 8px; border-radius: 4px; }
 
-        .container { max-width: 600px; margin: 0 auto; padding: 0 20px; }
+        .container { max-width: 600px; margin: 0 auto; padding: 0 20px; overflow: hidden; }
         .section-header { text-align: center; margin: 40px 0 20px 0; display: flex; align-items: center; justify-content: center; gap: 15px; cursor: pointer; user-select: none; }
         .section-header h2 { font-size: 1.25rem; font-weight: 700; color: var(--text); margin: 0; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
         .section-header::before, .section-header::after { content: ''; display: block; width: 30px; height: 1px; background: var(--primary); opacity: 0.5; }
@@ -91,7 +95,7 @@
         .section-header.collapsed .header-arrow { transform: rotate(-90deg); }
 
         /* --- 1. 補色查詢 --- */
-        .search-container { background: #fff; border-radius: 24px; padding: 30px 25px; box-shadow: var(--card-shadow); text-align: center; margin-top: 10px; }
+        .search-container { background: #fff; border-radius: 24px; padding: 30px 25px; box-shadow: var(--card-shadow); text-align: center; margin-top: 10px; width: 100%; }
         .search-icon-box { width: 60px; height: 60px; background: #FFF5F5; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto; color: var(--secondary); }
         .input-group { position: relative; margin-top: 20px; }
         .search-input { width: 100%; padding: 16px 20px 16px 45px; font-size: 1rem; border: 1px solid #eee; border-radius: 16px; background-color: #FAFAFA; outline: none; transition: 0.3s; color: var(--text); box-sizing: border-box; }
@@ -100,29 +104,42 @@
         .btn-primary { display: block; width: 100%; padding: 16px 0; background: linear-gradient(135deg, #E6C2C2 0%, #Dcb0b0 100%); color: #fff; border-radius: 16px; font-weight: 700; font-size: 1.05rem; margin-top: 15px; cursor: pointer; border: none; box-shadow: 0 4px 15px rgba(230, 194, 194, 0.4); transition: 0.3s; }
         .btn-primary:active { transform: scale(0.98); }
 
-        .result-card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); margin-bottom: 20px; border: 1px solid rgba(0,0,0,0.02); animation: slideUp 0.5s ease; }
+        /* 查詢結果卡片 */
+        .result-card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); margin-bottom: 20px; border: 1px solid rgba(0,0,0,0.02); animation: slideUp 0.5s ease; width: 100%; }
         .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .result-name { font-size: 1.2rem; font-weight: 700; color: var(--text); }
+        
         .info-badges { display: flex; gap: 10px; margin-bottom: 15px; }
         .info-badge { flex: 1; background: #F9F8F6; padding: 10px; border-radius: 12px; text-align: center; border: 1px solid #eee; }
         .info-label { display: block; font-size: 0.75rem; color: #999; margin-bottom: 4px; }
         .info-value { display: block; font-size: 1rem; font-weight: 700; color: var(--text); }
         .info-value.highlight { color: #C17E7E; }
 
+        /* 價格區塊 */
+        .price-box { margin-top: 10px; padding: 12px; rounded-xl; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+
         /* --- 2. 服務項目 --- */
-        .service-list-text { display: flex; flex-direction: column; gap: 12px; }
+        .service-list-text { display: flex; flex-direction: column; gap: 12px; width: 100%; }
         .service-card { background: rgba(255,255,255,0.8); backdrop-filter: blur(5px); padding: 18px 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.6); display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
 
         /* --- 3. 留色作品 --- */
-        .section-collapsible { transition: max-height 0.4s ease, opacity 0.4s ease; overflow: hidden; opacity: 1; max-height: 2000px; }
+        .section-collapsible { transition: max-height 0.4s ease, opacity 0.4s ease; overflow: hidden; opacity: 1; max-height: 2000px; width: 100%; }
         .section-collapsible.collapsed { max-height: 0; opacity: 0; }
-        .filter-scroller { display: flex; gap: 10px; overflow-x: auto; justify-content: center; margin-bottom: 20px; padding-bottom: 5px;}
-        .filter-chip { padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; background: rgba(255,255,255,0.6); color: var(--text-light); white-space: nowrap; transition: 0.3s; }
+        .filter-scroller { display: flex; gap: 10px; overflow-x: auto; justify-content: flex-start; margin-bottom: 20px; padding-bottom: 5px; scrollbar-width: none; }
+        .filter-scroller::-webkit-scrollbar { display: none; }
+        .filter-chip { padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; background: rgba(255,255,255,0.6); color: var(--text-light); white-space: nowrap; transition: 0.3s; flex-shrink: 0; }
         .filter-chip.active { background: var(--text); color: white; }
-        .portfolio-horizontal { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+        
+        .portfolio-horizontal { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; width: 100%; }
         .portfolio-horizontal::-webkit-scrollbar { display: none; }
-        .case-card { flex: 0 0 160px; scroll-snap-align: start; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.04); animation: fadeIn 0.6s ease; display: flex; flex-direction: column; }
-        .case-img-box { position: relative; width: 100%; height: 180px; background: #f0f0f0; }
+        
+        .case-card { 
+            flex: 0 0 160px; scroll-snap-align: start; 
+            background: #fff; border-radius: 16px; overflow: hidden; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04); animation: fadeIn 0.6s ease; 
+            display: flex; flex-direction: column;
+        }
+        .case-img-box { position: relative; width: 100%; height: 220px; background: #f0f0f0; }
         .case-img-box img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
         .case-info { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;}
         .case-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 4px; }
@@ -130,7 +147,7 @@
         .case-desc { font-size: 0.75rem; color: #888; line-height: 1.3; }
 
         /* --- 4. 顧客好評 --- */
-        .reviews-horizontal { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+        .reviews-horizontal { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; width: 100%; }
         .reviews-horizontal::-webkit-scrollbar { display: none; }
         .review-card-item { flex: 0 0 280px; scroll-snap-align: center; background: #fff; padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.02); display: flex; flex-direction: column; gap: 10px; }
         .review-header { display: flex; align-items: center; gap: 10px; }
@@ -161,13 +178,6 @@
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .hidden { display: none; }
 
-        /* 後台按鈕 */
-        .admin-trigger { position: fixed; bottom: 100px; right: 10px; width: 40px; height: 40px; background: rgba(0,0,0,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.8); z-index: 800; cursor: pointer; backdrop-filter: blur(5px); font-size: 1.2rem; }
-        .admin-menu { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9000; align-items: center; justify-content: center; }
-        .admin-panel { background: #222; width: 85%; max-width: 350px; border-radius: 20px; padding: 30px; text-align: center; color: white; border: 1px solid #444; }
-        .admin-btn { display: block; width: 100%; padding: 15px; margin-bottom: 15px; background: #333; color: white; border-radius: 12px; font-weight: bold; text-decoration: none; border: 1px solid #555; }
-        .admin-btn:hover { background: #444; }
-
         /* Lightbox */
         .image-lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
         .image-lightbox.show { display: flex; opacity: 1; }
@@ -180,6 +190,13 @@
         @keyframes bounce-right { 0%, 100% { transform: translateY(-50%) translateX(0); opacity: 0.9; } 50% { transform: translateY(-50%) translateX(5px); opacity: 1; } }
         .hint-hidden { opacity: 0; }
         .swipe-hint-text { text-align: center; font-size: 0.75rem; color: #aaa; margin-bottom: 8px; }
+
+        /* 後台按鈕 */
+        .admin-trigger { position: fixed; bottom: 100px; right: 10px; width: 40px; height: 40px; background: rgba(0,0,0,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.8); z-index: 800; cursor: pointer; backdrop-filter: blur(5px); font-size: 1.2rem; }
+        .admin-menu { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9000; align-items: center; justify-content: center; }
+        .admin-panel { background: #222; width: 85%; max-width: 350px; border-radius: 20px; padding: 30px; text-align: center; color: white; border: 1px solid #444; }
+        .admin-btn { display: block; width: 100%; padding: 15px; margin-bottom: 15px; background: #333; color: white; border-radius: 12px; font-weight: bold; text-decoration: none; border: 1px solid #555; }
+        .admin-btn:hover { background: #444; }
 
     </style>
 </head>
@@ -295,7 +312,7 @@
 
     </div>
 
-    <!-- ✨ 預約按鈕 (已更新連結) ✨ -->
+    <!-- ✨ 預約按鈕 ✨ -->
     <a id="floatBookingBtn" href="https://liff.line.me/1661306685-kQp9pya4" class="floating-cta">
         <span>📅 立即預約諮詢</span>
     </a>
@@ -326,7 +343,6 @@
         <div class="admin-panel">
             <h2 style="margin-bottom:20px;">🔧 管理員控制台</h2>
             <a href="https://postimages.org/" target="_blank" class="admin-btn">📸 1. 上傳圖片</a>
-            <!-- 👇 新的 Google Sheet 編輯網址 👇 -->
             <a href="https://docs.google.com/spreadsheets/d/1DA69pXR5j6kx9WpQDzV3BLx6EGawTo-TBZdYcDRYdhE/edit" target="_blank" class="admin-btn" style="background:#0F9D58; border-color:#0F9D58;">📝 2. 編輯 Google 表格</a>
             <button onclick="location.reload()" class="admin-btn" style="background:#4285F4; border-color:#4285F4;">🔄 3. 重新整理網頁</button>
             <p style="font-size:0.8rem; color:#888; margin-top:20px;">修改表格後，請稍等 1-3 分鐘<br>Google 快取更新後按重整即可</p>
@@ -334,6 +350,7 @@
     </div>
 
     <script>
+        // ▼▼▼ 設定區 (請確認這些資料連結對應您的 Google 表格) ▼▼▼
         const SERVICES_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1138837231&single=true&output=csv';
         const REVIEWS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=174294022&single=true&output=csv'; 
         const PORTFOLIO_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1127370948&single=true&output=csv'; 
@@ -485,8 +502,9 @@
                     const [id, content] = row.split(',');
                     if(id && content) {
                         const key = id.trim(); const val = content.trim();
-                        // 優先使用 CSV 的設定，如果 CSV 有填寫 link_booking，會覆蓋掉 HTML 中的預設值
-                        if(key === 'link_booking') document.getElementById('floatBookingBtn').href = val;
+                        // 雖然這裡有讀取連結，但 HTML 裡已經寫死最新的 LIFF 連結，
+                        // 如果您希望完全以 CSV 為主，可以取消註解下面這行：
+                        // if(key === 'link_booking') document.getElementById('floatBookingBtn').href = val;
                         
                         if(key === 'profile_name') { document.getElementById('profile-name').textContent = val; document.getElementById('profile-name').classList.remove('skeleton'); document.getElementById('profile-name').style.width = 'auto'; }
                         if(key === 'profile_desc') { document.getElementById('profile-desc').textContent = val; document.getElementById('profile-desc').classList.remove('skeleton'); document.getElementById('profile-desc').style.width = 'auto'; }
@@ -503,7 +521,35 @@
             const btn=document.getElementById('searchButton'); const area=document.getElementById('resultsArea');
             btn.textContent='查詢中...'; btn.disabled=true; area.innerHTML='';
             fetch(`${GAS_API_URL}?q=${encodeURIComponent(q)}`).then(r=>r.json()).then(res=>{
-                if(res.data && res.data.length){ displayMessage('success',`找到 ${res.data.length} 筆`); area.innerHTML=res.data.map((r,i)=>createCard(r,i)).join(''); }
+                if(res.data && res.data.length){ 
+                    
+                    // ✨✨ 邏輯更新：只保留每個服務項目最新的那一筆 ✨✨
+                    
+                    // 1. 先將所有資料依照日期由新到舊排序
+                    const sortedData = res.data.sort((a, b) => new Date(b.lastDate) - new Date(a.lastDate));
+                    
+                    // 2. 過濾重複的服務項目
+                    const uniqueData = [];
+                    const seenServices = new Set(); // 用來記錄已存在的服務名稱
+
+                    sortedData.forEach(item => {
+                        const serviceName = item.service;
+                        // 如果這個服務還沒出現過，就加入（因為已經排過序，第一筆一定是日期最新的）
+                        if (!seenServices.has(serviceName)) {
+                            uniqueData.push(item);
+                            seenServices.add(serviceName);
+                        }
+                    });
+
+                    // 顯示結果
+                    if(uniqueData.length > 0) {
+                        displayMessage('success',`找到 ${uniqueData.length} 筆最新資料`); 
+                        area.innerHTML = uniqueData.map((r,i)=>createCard(r,i)).join('');
+                    } else {
+                        displayMessage('info','查無資料');
+                    }
+
+                }
                 else displayMessage('info','查無資料');
             }).finally(()=>{ btn.textContent='立即查詢'; btn.disabled=false; });
         }
@@ -513,12 +559,42 @@
         function toggleCollapse(btn, id) { const el=document.getElementById(id); el.classList.toggle('expanded'); btn.querySelector('.btn-text').textContent=el.classList.contains('expanded')?'收起':'查看完整價目表'; }
         
         function getPriceCardHtml(info, useOrange) { 
-            if (!info) return ''; let p = info.price===0?'免費':(info.price?`NT$ ${info.price}`:'洽詢'); let bg = info.price===0?'bg-green-600':(useOrange?'bg-orange-500':'bg-pink-500'); let theme = info.price===0?'bg-green-50 border-green-200':(useOrange?'bg-orange-50 border-orange-200':'bg-pink-50 border-pink-200'); let dateText = (info.dateRange || '').replace(/【.*?】/g, ''); return `<div class="mt-3 p-3 rounded-xl border ${theme} flex justify-between items-center shadow-sm"><div><h3 class="text-xs font-bold text-gray-400 mb-1">目前補色價格</h3><p class="text-sm font-bold text-gray-800 tracking-wide">${dateText}</p></div><span class="px-3 py-1 text-white text-lg font-bold rounded-lg ${bg} shadow-sm">${p}</span></div>`; 
+            if (!info) return ''; 
+            let p = info.price===0?'免費':(info.price?`NT$ ${info.price}`:'洽詢'); 
+            let bg = info.price===0?'bg-green-600':(useOrange?'bg-orange-500':'bg-pink-500'); 
+            let theme = info.price===0?'bg-green-50 border-green-200':(useOrange?'bg-orange-50 border-orange-200':'bg-pink-50 border-pink-200'); 
+            let dateText = (info.dateRange || '').replace(/【.*?】/g, '');
+            return `
+            <div class="mt-3 p-3 rounded-xl border ${theme} flex justify-between items-center shadow-sm">
+                <div>
+                    <h3 class="text-xs font-bold text-gray-400 mb-1">目前補色價格</h3>
+                    <p class="text-sm font-bold text-gray-800 tracking-wide">${dateText}</p>
+                </div>
+                <span class="px-3 py-1 text-white text-lg font-bold rounded-lg ${bg} shadow-sm">${p}</span>
+            </div>`; 
         }
         
         function createCard(r, i) { 
             const cid=`d-${i}`; const ranges=(r.touchUpRanges||[]).map(t=>`<div class="flex justify-between py-2 border-b border-gray-100 text-sm"><span>${t.dateRange}</span><span class="font-bold text-gray-700">${t.price===0?'免費':'$'+t.price}</span></div>`).join(''); 
-            return `<div class="result-card"><div class="result-header"><div><div class="result-name">${r.name}</div><span class="text-gray-400 text-sm">(${maskPhoneNumber(r.phone)})</span></div></div><div class="info-badges"><div class="info-badge"><span class="info-label">上次日期</span><span class="info-value">${r.lastDate||'-'}</span></div><div class="info-badge"><span class="info-label">上次項目</span><span class="info-value highlight">${r.service}</span></div></div>${r.specialReminder?`<div class="bg-yellow-50 text-yellow-800 p-2.5 rounded-lg text-xs mb-3 font-medium">💡 ${r.specialReminder}</div>`:''} ${getPriceCardHtml(r.currentPriceInfo, r.eyebrowDiscountDate && !checkIsExpired(r.eyebrowDiscountDate))} <div class="mt-4"><button onclick="toggleCollapse(this,'${cid}')" class="w-full py-2 bg-gray-50 text-gray-500 text-xs font-bold rounded-lg transition hover:bg-gray-100"><span class="btn-text">查看完整價目表</span></button><div id="${cid}" class="collapsible-content bg-gray-50 px-3 mt-1 rounded-b-lg"><div class="py-2">${ranges}</div></div></div></div>`; 
+            return `
+            <div class="result-card">
+                <div class="result-header">
+                    <div><div class="result-name">${r.name}</div><span class="text-gray-400 text-sm">(${maskPhoneNumber(r.phone)})</span></div>
+                </div>
+                
+                <div class="info-badges">
+                    <div class="info-badge"><span class="info-label">上次日期</span><span class="info-value">${r.lastDate||'-'}</span></div>
+                    <div class="info-badge"><span class="info-label">上次項目</span><span class="info-value highlight">${r.service}</span></div>
+                </div>
+
+                ${r.specialReminder?`<div class="bg-yellow-50 text-yellow-800 p-2.5 rounded-lg text-xs mb-3 font-medium">💡 ${r.specialReminder}</div>`:''} 
+                ${getPriceCardHtml(r.currentPriceInfo, r.eyebrowDiscountDate && !checkIsExpired(r.eyebrowDiscountDate))} 
+                
+                <div class="mt-4">
+                    <button onclick="toggleCollapse(this,'${cid}')" class="w-full py-2 bg-gray-50 text-gray-500 text-xs font-bold rounded-lg transition hover:bg-gray-100"><span class="btn-text">查看完整價目表</span></button>
+                    <div id="${cid}" class="collapsible-content bg-gray-50 px-3 mt-1 rounded-b-lg"><div class="py-2">${ranges}</div></div>
+                </div>
+            </div>`; 
         }
     </script>
 </body>
