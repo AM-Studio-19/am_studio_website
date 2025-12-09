@@ -502,8 +502,6 @@
                     const [id, content] = row.split(',');
                     if(id && content) {
                         const key = id.trim(); const val = content.trim();
-                        // 雖然這裡有讀取連結，但 HTML 裡已經寫死最新的 LIFF 連結，
-                        // 如果您希望完全以 CSV 為主，可以取消註解下面這行：
                         // if(key === 'link_booking') document.getElementById('floatBookingBtn').href = val;
                         
                         if(key === 'profile_name') { document.getElementById('profile-name').textContent = val; document.getElementById('profile-name').classList.remove('skeleton'); document.getElementById('profile-name').style.width = 'auto'; }
@@ -516,32 +514,34 @@
         }
 
         function searchRecord() {
-            const q=document.getElementById('queryInput').value.trim();
+            let q = document.getElementById('queryInput').value.trim();
             if(!q) return displayMessage('error','請輸入資料');
+            
+            // ✨ 1. 如果輸入是 09 開頭的手機號，自動去掉 0
+            if (/^0\d+/.test(q)) {
+                q = q.substring(1); // "0912" -> "912"
+            }
+
             const btn=document.getElementById('searchButton'); const area=document.getElementById('resultsArea');
             btn.textContent='查詢中...'; btn.disabled=true; area.innerHTML='';
             fetch(`${GAS_API_URL}?q=${encodeURIComponent(q)}`).then(r=>r.json()).then(res=>{
                 if(res.data && res.data.length){ 
                     
-                    // ✨✨ 邏輯更新：只保留每個服務項目最新的那一筆 ✨✨
-                    
-                    // 1. 先將所有資料依照日期由新到舊排序
+                    // ✨ 2. 邏輯更新：只保留 (姓名+服務) 組合中，日期最新的那筆 ✨
                     const sortedData = res.data.sort((a, b) => new Date(b.lastDate) - new Date(a.lastDate));
-                    
-                    // 2. 過濾重複的服務項目
                     const uniqueData = [];
-                    const seenServices = new Set(); // 用來記錄已存在的服務名稱
+                    const seenKey = new Set(); 
 
                     sortedData.forEach(item => {
-                        const serviceName = item.service;
-                        // 如果這個服務還沒出現過，就加入（因為已經排過序，第一筆一定是日期最新的）
-                        if (!seenServices.has(serviceName)) {
+                        // 組合鍵值：姓名 + 服務 (例如 "林宜萱_霧眉")
+                        const key = `${item.name}_${item.service}`;
+                        
+                        if (!seenKey.has(key)) {
                             uniqueData.push(item);
-                            seenServices.add(serviceName);
+                            seenKey.add(key);
                         }
                     });
 
-                    // 顯示結果
                     if(uniqueData.length > 0) {
                         displayMessage('success',`找到 ${uniqueData.length} 筆最新資料`); 
                         area.innerHTML = uniqueData.map((r,i)=>createCard(r,i)).join('');
