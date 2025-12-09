@@ -24,12 +24,6 @@
             --nav-height: 70px;
         }
 
-        /* ✨ 修正 1：全域設定，防止元件撐爆寬度 ✨ */
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent; /* 移除點擊時的藍色框 */
-        }
-
         body {
             background-color: var(--bg-color);
             background-image: url('bg.jpg');
@@ -39,11 +33,6 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0; padding: 0;
             padding-bottom: calc(var(--nav-height) + 40px);
-            
-            /* ✨ 修正 2：強制禁止網頁左右晃動 ✨ */
-            overflow-x: hidden; 
-            width: 100%;
-            
             -webkit-font-smoothing: antialiased;
             scroll-behavior: smooth;
         }
@@ -72,8 +61,7 @@
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white; padding: 50px 20px 80px 20px; text-align: center; 
             border-radius: 0 0 40px 40px; position: relative; z-index: 1;
-            box-shadow: 0 15px 30px -10px rgba(196, 164, 136, 0.6); 
-            width: 100%; overflow: hidden; /* 防止背景溢出 */
+            box-shadow: 0 15px 30px -10px rgba(196, 164, 136, 0.6); overflow: hidden;
         }
         .hero-section::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -83,23 +71,11 @@
         .hero-title { margin: 0; font-size: 1.8rem; font-weight: 800; letter-spacing: 2px; text-shadow: 0 2px 4px rgba(0,0,0,0.1); position: relative; z-index: 1; }
         .hero-subtitle { display: inline-block; margin: 10px 0 0 0; background: rgba(255,255,255,0.2); padding: 4px 15px; border-radius: 20px; font-size: 0.9rem; backdrop-filter: blur(4px); position: relative; z-index: 1; }
         
-        /* --- Profile (✨ 修正 3：更穩固的置中) --- */
+        /* --- Profile --- */
         .profile-card {
-            background: #fff; border-radius: 20px; padding: 20px; 
-            
-            /* 寬度設定 */
-            width: 90%; 
-            max-width: 500px; 
-            
-            /* 置中修正 */
-            margin-top: -50px;
-            margin-bottom: 20px;
-            margin-left: auto;
-            margin-right: auto;
-            
-            box-shadow: 0 15px 30px -5px rgba(0,0,0,0.1);
-            display: flex; align-items: center; gap: 15px; 
-            position: relative; z-index: 10;
+            background: #fff; border-radius: 20px; padding: 20px; width: 85%; max-width: 500px; 
+            margin: -50px auto 20px auto; box-shadow: 0 15px 30px -5px rgba(0,0,0,0.1);
+            display: flex; align-items: center; gap: 15px; position: relative; z-index: 10;
         }
         .profile-img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid var(--bg-color); flex-shrink: 0; background: #eee; }
         .profile-info h3 { margin: 0; font-size: 1.1rem; color: var(--text); font-weight: 700; }
@@ -107,14 +83,7 @@
         .tags-row { display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap; }
         .tag-pill { font-size: 0.65rem; background: #F2F0EB; color: #8D7B72; padding: 2px 8px; border-radius: 4px; }
 
-        .container { 
-            width: 100%; 
-            max-width: 600px; 
-            margin: 0 auto; 
-            padding: 0 20px; 
-            overflow: hidden; /* 防止內部元件撐開 */
-        }
-        
+        .container { max-width: 600px; margin: 0 auto; padding: 0 20px; }
         .section-header { text-align: center; margin: 40px 0 20px 0; display: flex; align-items: center; justify-content: center; gap: 15px; cursor: pointer; user-select: none; }
         .section-header h2 { font-size: 1.25rem; font-weight: 700; color: var(--text); margin: 0; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
         .section-header::before, .section-header::after { content: ''; display: block; width: 30px; height: 1px; background: var(--primary); opacity: 0.5; }
@@ -122,7 +91,7 @@
         .section-header.collapsed .header-arrow { transform: rotate(-90deg); }
 
         /* --- 1. 補色查詢 --- */
-        .search-container { background: #fff; border-radius: 24px; padding: 30px 25px; box-shadow: var(--card-shadow); text-align: center; margin-top: 10px; width: 100%; }
+        .search-container { background: #fff; border-radius: 24px; padding: 30px 25px; box-shadow: var(--card-shadow); text-align: center; margin-top: 10px; }
         .search-icon-box { width: 60px; height: 60px; background: #FFF5F5; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto; color: var(--secondary); }
         .input-group { position: relative; margin-top: 20px; }
         .search-input { width: 100%; padding: 16px 20px 16px 45px; font-size: 1rem; border: 1px solid #eee; border-radius: 16px; background-color: #FAFAFA; outline: none; transition: 0.3s; color: var(--text); box-sizing: border-box; }
@@ -131,7 +100,7 @@
         .btn-primary { display: block; width: 100%; padding: 16px 0; background: linear-gradient(135deg, #E6C2C2 0%, #Dcb0b0 100%); color: #fff; border-radius: 16px; font-weight: 700; font-size: 1.05rem; margin-top: 15px; cursor: pointer; border: none; box-shadow: 0 4px 15px rgba(230, 194, 194, 0.4); transition: 0.3s; }
         .btn-primary:active { transform: scale(0.98); }
 
-        .result-card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); margin-bottom: 20px; border: 1px solid rgba(0,0,0,0.02); animation: slideUp 0.5s ease; width: 100%; }
+        .result-card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); margin-bottom: 20px; border: 1px solid rgba(0,0,0,0.02); animation: slideUp 0.5s ease; }
         .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .result-name { font-size: 1.2rem; font-weight: 700; color: var(--text); }
         .info-badges { display: flex; gap: 10px; margin-bottom: 15px; }
@@ -141,18 +110,16 @@
         .info-value.highlight { color: #C17E7E; }
 
         /* --- 2. 服務項目 --- */
-        .service-list-text { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+        .service-list-text { display: flex; flex-direction: column; gap: 12px; }
         .service-card { background: rgba(255,255,255,0.8); backdrop-filter: blur(5px); padding: 18px 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.6); display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
 
         /* --- 3. 留色作品 --- */
-        .section-collapsible { transition: max-height 0.4s ease, opacity 0.4s ease; overflow: hidden; opacity: 1; max-height: 2000px; width: 100%; }
+        .section-collapsible { transition: max-height 0.4s ease, opacity 0.4s ease; overflow: hidden; opacity: 1; max-height: 2000px; }
         .section-collapsible.collapsed { max-height: 0; opacity: 0; }
-        .filter-scroller { display: flex; gap: 10px; overflow-x: auto; justify-content: flex-start; margin-bottom: 20px; padding-bottom: 5px; scrollbar-width: none; }
-        .filter-scroller::-webkit-scrollbar { display: none; }
-        .filter-chip { padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; background: rgba(255,255,255,0.6); color: var(--text-light); white-space: nowrap; transition: 0.3s; flex-shrink: 0; }
+        .filter-scroller { display: flex; gap: 10px; overflow-x: auto; justify-content: center; margin-bottom: 20px; padding-bottom: 5px;}
+        .filter-chip { padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; background: rgba(255,255,255,0.6); color: var(--text-light); white-space: nowrap; transition: 0.3s; }
         .filter-chip.active { background: var(--text); color: white; }
-        
-        .portfolio-horizontal { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; width: 100%; }
+        .portfolio-horizontal { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
         .portfolio-horizontal::-webkit-scrollbar { display: none; }
         .case-card { flex: 0 0 160px; scroll-snap-align: start; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.04); animation: fadeIn 0.6s ease; display: flex; flex-direction: column; }
         .case-img-box { position: relative; width: 100%; height: 180px; background: #f0f0f0; }
@@ -163,7 +130,7 @@
         .case-desc { font-size: 0.75rem; color: #888; line-height: 1.3; }
 
         /* --- 4. 顧客好評 --- */
-        .reviews-horizontal { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; width: 100%; }
+        .reviews-horizontal { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
         .reviews-horizontal::-webkit-scrollbar { display: none; }
         .review-card-item { flex: 0 0 280px; scroll-snap-align: center; background: #fff; padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.02); display: flex; flex-direction: column; gap: 10px; }
         .review-header { display: flex; align-items: center; gap: 10px; }
@@ -285,7 +252,7 @@
             </div>
         </section>
 
-        <!-- 3. 留色作品 -->
+        <!-- 3. 留色作品 (可收合 + 橫向 + 箭頭 + Lightbox) -->
         <section id="portfolio">
             <div class="section-header" onclick="toggleSection('portfolio-content', this)">
                 <h2>留色作品集 <span class="header-arrow">▼</span></h2>
@@ -311,7 +278,7 @@
             </div>
         </section>
 
-        <!-- 4. 顧客好評 -->
+        <!-- 4. 顧客好評 (橫向 + 箭頭) -->
         <section id="reviews">
             <div class="section-header"><h2>顧客好評</h2></div>
             
@@ -328,7 +295,10 @@
 
     </div>
 
-    <a id="floatBookingBtn" href="#" class="floating-cta"><span>📅 立即預約諮詢</span></a>
+    <!-- ✨ 預約按鈕 (已更新連結) ✨ -->
+    <a id="floatBookingBtn" href="https://liff.line.me/1661306685-kQp9pya4" class="floating-cta">
+        <span>📅 立即預約諮詢</span>
+    </a>
 
     <!-- 彈窗 -->
     <div id="serviceModal" class="modal-overlay" onclick="closeModal(event)">
@@ -350,12 +320,13 @@
         <img id="lightboxImg" class="lightbox-img" src="" alt="Full View">
     </div>
 
-    <!-- 管理員 -->
+    <!-- 管理員按鈕 -->
     <div class="admin-trigger" onclick="openAdminPanel()">⚙️</div>
     <div id="adminPanel" class="admin-menu" onclick="closeAdminPanel(event)">
         <div class="admin-panel">
             <h2 style="margin-bottom:20px;">🔧 管理員控制台</h2>
             <a href="https://postimages.org/" target="_blank" class="admin-btn">📸 1. 上傳圖片</a>
+            <!-- 👇 新的 Google Sheet 編輯網址 👇 -->
             <a href="https://docs.google.com/spreadsheets/d/1DA69pXR5j6kx9WpQDzV3BLx6EGawTo-TBZdYcDRYdhE/edit" target="_blank" class="admin-btn" style="background:#0F9D58; border-color:#0F9D58;">📝 2. 編輯 Google 表格</a>
             <button onclick="location.reload()" class="admin-btn" style="background:#4285F4; border-color:#4285F4;">🔄 3. 重新整理網頁</button>
             <p style="font-size:0.8rem; color:#888; margin-top:20px;">修改表格後，請稍等 1-3 分鐘<br>Google 快取更新後按重整即可</p>
@@ -366,7 +337,7 @@
         const SERVICES_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1138837231&single=true&output=csv';
         const REVIEWS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=174294022&single=true&output=csv'; 
         const PORTFOLIO_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1127370948&single=true&output=csv'; 
-        const SETTINGS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1317009759&single=true&output=csv'; 
+        const SETTINGS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQxxxxxxxx/pub?output=csv'; 
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx6grwl5DidK6DScAaZLM8udp-Pjn_FrB33bv6ES0JkwAiiIx-xxJHicxANVGH7caSpEg/exec"; 
         
         let allPortfolioData = [];
@@ -376,6 +347,7 @@
             loadServices(); loadReviews(); loadPortfolio(); loadSettings();
         });
 
+        // --- Lightbox 功能 ---
         function openLightbox(imgSrc) {
             document.getElementById('lightboxImg').src = imgSrc;
             document.getElementById('imageLightbox').classList.add('show');
@@ -384,6 +356,7 @@
             document.getElementById('imageLightbox').classList.remove('show');
         }
 
+        // 管理員
         function openAdminPanel() {
             const pwd = prompt("請輸入管理員密碼：");
             if(pwd === "1234") document.getElementById('adminPanel').style.display = 'flex';
@@ -421,6 +394,7 @@
             return arr;
         }
 
+        // --- 1. 服務 ---
         function loadServices() {
             fetch(SERVICES_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt);
@@ -454,6 +428,7 @@
             }
         }
 
+        // --- 2. 作品 ---
         function loadPortfolio() {
             fetch(PORTFOLIO_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt); allPortfolioData = [];
@@ -487,6 +462,7 @@
             });
         }
 
+        // --- 3. 好評 ---
         function loadReviews() {
             fetch(REVIEWS_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt);
@@ -502,13 +478,16 @@
             }).catch(()=> document.getElementById('review-list').innerHTML='<p style="text-align:center;color:#ccc">尚無評論</p>');
         }
 
+        // --- 設定與 Profile 載入 ---
         function loadSettings() {
             fetch(SETTINGS_CSV).then(r=>r.text()).then(csv => {
                 csv.split('\n').forEach(row => {
                     const [id, content] = row.split(',');
                     if(id && content) {
                         const key = id.trim(); const val = content.trim();
+                        // 優先使用 CSV 的設定，如果 CSV 有填寫 link_booking，會覆蓋掉 HTML 中的預設值
                         if(key === 'link_booking') document.getElementById('floatBookingBtn').href = val;
+                        
                         if(key === 'profile_name') { document.getElementById('profile-name').textContent = val; document.getElementById('profile-name').classList.remove('skeleton'); document.getElementById('profile-name').style.width = 'auto'; }
                         if(key === 'profile_desc') { document.getElementById('profile-desc').textContent = val; document.getElementById('profile-desc').classList.remove('skeleton'); document.getElementById('profile-desc').style.width = 'auto'; }
                         if(key === 'profile_img') { document.getElementById('profile-img-container').innerHTML = `<img src="${val}" class="profile-img" alt="紋綉師">`; document.getElementById('profile-img-container').classList.remove('skeleton'); document.getElementById('profile-img-container').style.background = 'transparent'; }
