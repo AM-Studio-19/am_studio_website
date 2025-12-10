@@ -41,7 +41,7 @@
             overflow-x: hidden; width: 100%;
         }
 
-        /* --- 導覽列 --- */
+        /* --- 導覽列 (5個按鈕版) --- */
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; width: 100%;
             height: var(--nav-height);
@@ -53,10 +53,11 @@
         }
         .nav-btn {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            color: #ccc; text-decoration: none; font-size: 0.7rem; gap: 4px;
-            width: 25%; height: 100%; transition: 0.3s;
+            color: #ccc; text-decoration: none; font-size: 0.65rem; gap: 4px;
+            width: 20%; /* 5個按鈕平分 */
+            height: 100%; transition: 0.3s;
         }
-        .nav-btn svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2; fill: none; transition: 0.3s; }
+        .nav-btn svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2; fill: none; transition: 0.3s; }
         .nav-btn.active { color: var(--text); }
         .nav-btn.active svg { stroke: var(--primary-dark); fill: rgba(214, 191, 168, 0.2); }
 
@@ -104,7 +105,6 @@
         .btn-primary { display: block; width: 100%; padding: 16px 0; background: linear-gradient(135deg, #E6C2C2 0%, #Dcb0b0 100%); color: #fff; border-radius: 16px; font-weight: 700; font-size: 1.05rem; margin-top: 15px; cursor: pointer; border: none; box-shadow: 0 4px 15px rgba(230, 194, 194, 0.4); transition: 0.3s; }
         .btn-primary:active { transform: scale(0.98); }
 
-        /* 查詢結果卡片 */
         .result-card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); margin-bottom: 20px; border: 1px solid rgba(0,0,0,0.02); animation: slideUp 0.5s ease; width: 100%; }
         .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .result-name { font-size: 1.2rem; font-weight: 700; color: var(--text); }
@@ -118,9 +118,40 @@
         /* 價格區塊 */
         .price-box { margin-top: 10px; padding: 12px; rounded-xl; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
 
-        /* --- 2. 服務項目 --- */
-        .service-list-text { display: flex; flex-direction: column; gap: 12px; width: 100%; }
-        .service-card { background: rgba(255,255,255,0.8); backdrop-filter: blur(5px); padding: 18px 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.6); display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        /* --- ✨ 新增：優惠活動 (橫向) --- */
+        .promo-horizontal { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; width: 100%; }
+        .promo-horizontal::-webkit-scrollbar { display: none; }
+        
+        .promo-card { 
+            flex: 0 0 260px; scroll-snap-align: center; 
+            background: #fff; border-radius: 20px; overflow: hidden; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); animation: fadeIn 0.6s ease; 
+            position: relative; height: 160px;
+        }
+        .promo-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+        .promo-overlay {
+            position: absolute; bottom: 0; left: 0; width: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 20px 15px 15px 15px; color: white;
+        }
+        .promo-title { font-size: 1.1rem; font-weight: 700; margin: 0; }
+        .promo-desc { font-size: 0.85rem; opacity: 0.9; margin: 2px 0 0 0; }
+
+        /* --- 2. 服務項目 (✨ 橫向圖卡) --- */
+        .service-horizontal { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; width: 100%; }
+        .service-horizontal::-webkit-scrollbar { display: none; }
+
+        .service-card-item {
+            flex: 0 0 200px; scroll-snap-align: start;
+            background: #fff; border-radius: 16px; overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04); animation: fadeIn 0.6s ease;
+            display: flex; flex-direction: column; cursor: pointer;
+        }
+        .service-img { width: 100%; height: 140px; object-fit: cover; background: #eee; }
+        .service-content { padding: 12px; }
+        .service-title { font-size: 1rem; font-weight: 700; color: var(--text); margin: 0; }
+        .service-price { color: #C17E7E; font-weight: 700; margin-top: 5px; }
+        .service-tag { font-size: 0.7rem; color: #999; margin-top: 2px; }
 
         /* --- 3. 留色作品 --- */
         .section-collapsible { transition: max-height 0.4s ease, opacity 0.4s ease; overflow: hidden; opacity: 1; max-height: 2000px; width: 100%; }
@@ -218,11 +249,15 @@
         </div>
     </div>
 
-    <!-- 底部導覽列 -->
+    <!-- 底部導覽列 (5個) -->
     <div class="bottom-nav">
         <a href="#search" class="nav-btn active" onclick="setActiveNav(this)">
             <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
             首頁
+        </a>
+        <a href="#promotions" class="nav-btn" onclick="setActiveNav(this)">
+            <svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+            優惠
         </a>
         <a href="#services" class="nav-btn" onclick="setActiveNav(this)">
             <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
@@ -247,11 +282,11 @@
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 </div>
                 <h3 style="margin:0; font-size:1.3rem; color:var(--text);">舊客補色查詢</h3>
-                <p style="font-size:0.9rem; color:#999; margin:8px 0 0 0;">輸入姓名或電話查詢</p>
+                <p style="font-size:0.9rem; color:#999; margin:8px 0 0 0;">輸入姓名或電話查詢專屬優惠</p>
                 <div class="input-group">
                     <div class="input-icon">🔍</div>
                     <input type="text" id="queryInput" class="search-input" 
-                           placeholder="例如：林小美 或 0912...建議先使用姓名查詢" 
+                           placeholder="例如：林小美 或 0912..." 
                            onkeydown="if(event.key === 'Enter') searchRecord()">
                 </div>
                 <button onclick="searchRecord()" id="searchButton" class="btn-primary">立即查詢</button>
@@ -260,16 +295,33 @@
             </div>
         </section>
 
-        <!-- 2. 服務項目 -->
-        <section id="services">
-            <div class="section-header"><h2>服務項目</h2></div>
-            <div id="service-text-list" class="service-list-text">
-                <div class="service-card skeleton" style="height:80px;"></div>
-                <div class="service-card skeleton" style="height:80px;"></div>
+        <!-- ✨ 新增：優惠活動 ✨ -->
+        <section id="promotions">
+            <div class="section-header"><h2>最新優惠</h2></div>
+            <div class="swipe-hint-text"><span>← 左右滑動查看優惠 →</span></div>
+            <div class="horizontal-wrapper">
+                <div id="promo-list" class="promo-horizontal" onscroll="hideHint('hint-promo')">
+                    <div class="promo-card skeleton"></div>
+                    <div class="promo-card skeleton"></div>
+                </div>
+                <div id="hint-promo" class="scroll-hint-arrow">❯</div>
             </div>
         </section>
 
-        <!-- 3. 留色作品 (可收合 + 橫向 + 箭頭 + Lightbox) -->
+        <!-- 2. 服務項目 (✨ 橫向圖卡) -->
+        <section id="services">
+            <div class="section-header"><h2>服務項目</h2></div>
+            <div class="swipe-hint-text"><span>← 左右滑動查看服務 →</span></div>
+            <div class="horizontal-wrapper">
+                <div id="service-list" class="service-horizontal" onscroll="hideHint('hint-service')">
+                    <div class="service-card-item skeleton" style="height:220px;"></div>
+                    <div class="service-card-item skeleton" style="height:220px;"></div>
+                </div>
+                <div id="hint-service" class="scroll-hint-arrow">❯</div>
+            </div>
+        </section>
+
+        <!-- 3. 留色作品 -->
         <section id="portfolio">
             <div class="section-header" onclick="toggleSection('portfolio-content', this)">
                 <h2>留色作品集 <span class="header-arrow">▼</span></h2>
@@ -295,7 +347,7 @@
             </div>
         </section>
 
-        <!-- 4. 顧客好評 (橫向 + 箭頭) -->
+        <!-- 4. 顧客好評 -->
         <section id="reviews">
             <div class="section-header"><h2>顧客好評</h2></div>
             
@@ -312,7 +364,7 @@
 
     </div>
 
-    <!-- ✨ 預約按鈕 ✨ -->
+    <!-- 預約按鈕 -->
     <a id="floatBookingBtn" href="https://liff.line.me/1661306685-kQp9pya4" class="floating-cta">
         <span>📅 立即預約諮詢</span>
     </a>
@@ -350,18 +402,20 @@
     </div>
 
     <script>
-        // ▼▼▼ 設定區 (請確認這些資料連結對應您的 Google 表格) ▼▼▼
+        // ▼▼▼ 設定區 ▼▼▼
         const SERVICES_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1138837231&single=true&output=csv';
         const REVIEWS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=174294022&single=true&output=csv'; 
         const PORTFOLIO_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1127370948&single=true&output=csv'; 
         const SETTINGS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQxxxxxxxx/pub?output=csv'; 
+        // ⚠️ 更新為您的連結 ⚠️
+        const PROMOTIONS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=458650816&single=true&output=csv'; 
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx6grwl5DidK6DScAaZLM8udp-Pjn_FrB33bv6ES0JkwAiiIx-xxJHicxANVGH7caSpEg/exec"; 
         
         let allPortfolioData = [];
         let currentPortfolioData = [];
 
         document.addEventListener("DOMContentLoaded", function() {
-            loadServices(); loadReviews(); loadPortfolio(); loadSettings();
+            loadServices(); loadReviews(); loadPortfolio(); loadSettings(); loadPromotions();
         });
 
         // --- Lightbox 功能 ---
@@ -384,7 +438,21 @@
         function setActiveNav(btn) {
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+            
+            const targetId = btn.getAttribute('href').substring(1);
+            const sections = ['search', 'services', 'promotions', 'portfolio', 'reviews'];
+            
+            // 這裡可以做簡單的滾動定位，或者您可以改寫成隱藏/顯示區塊
+            const targetEl = document.getElementById(targetId);
+            if(targetEl) {
+                // 如果您希望點擊按鈕直接滾動到該區塊
+                window.scrollTo({
+                    top: targetEl.offsetTop - 150, // 扣掉 header 高度
+                    behavior: 'smooth'
+                });
+            }
         }
+        
         function toggleSection(contentId, headerEl) {
             const content = document.getElementById(contentId);
             content.classList.toggle('collapsed');
@@ -411,18 +479,58 @@
             return arr;
         }
 
-        // --- 1. 服務 ---
+        // --- 1. 優惠活動 ---
+        function loadPromotions() {
+            if(PROMOTIONS_CSV.includes('請在此')) {
+                document.getElementById('promo-list').innerHTML = '<p style="padding:20px; color:#ccc; width:100%; text-align:center;">暫無優惠活動</p>';
+                return;
+            }
+
+            fetch(PROMOTIONS_CSV).then(r=>r.text()).then(txt=>{
+                const rows = parseCSV(txt);
+                const list = document.getElementById('promo-list');
+                list.innerHTML = '';
+                let start = (rows.length>0 && rows[0][0].toLowerCase().includes('title')) ? 1 : 0;
+                
+                for(let i=start; i<rows.length; i++){
+                    const c = rows[i]; if(c.length<2 || !c[0]) continue;
+                    // c[0]=Title, c[1]=Content, c[2]=Image, c[3]=Detail
+                    const div = document.createElement('div');
+                    div.className = 'promo-card';
+                    // 如果有詳細內容，點擊開啟彈窗，這裡共用 serviceModal
+                    div.onclick = () => openServiceModal(c[0], '優惠活動', c[3], c[2]);
+                    
+                    div.innerHTML = `
+                        <img src="${c[2] || 'https://via.placeholder.com/300x150?text=Promotion'}" alt="${c[0]}">
+                        <div class="promo-overlay">
+                            <h3 class="promo-title">${c[0]}</h3>
+                            <p class="promo-desc">${c[1]}</p>
+                        </div>
+                    `;
+                    list.appendChild(div);
+                }
+            }).catch(()=> document.getElementById('promo-list').innerHTML='<p style="padding:20px; color:#ccc;">暫無優惠</p>');
+        }
+
+        // --- 2. 服務 (圖卡版) ---
         function loadServices() {
             fetch(SERVICES_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt);
-                const list = document.getElementById('service-text-list');
+                const list = document.getElementById('service-list');
                 list.innerHTML = '';
                 let start = (rows.length>0 && rows[0][0].toLowerCase().includes('name')) ? 1 : 0;
                 for(let i=start; i<rows.length; i++){
                     const c = rows[i]; if(c.length<2 || !c[0]) continue;
                     const div = document.createElement('div');
-                    div.className = 'service-card';
-                    div.innerHTML = `<div><h3 style="margin:0;font-size:1.05rem;color:var(--text);">${c[0]}</h3><span style="font-size:0.8rem;color:#999;">${c[2]||'查看詳情'}</span></div><div style="font-weight:700;color:#C17E7E;">NT$ ${c[1]}</div>`;
+                    div.className = 'service-card-item';
+                    div.innerHTML = `
+                        <img class="service-img" src="${c[3] || 'https://via.placeholder.com/150'}" loading="lazy">
+                        <div class="service-content">
+                            <h3 class="service-title">${c[0]}</h3>
+                            <div class="service-tag">${c[2]||''}</div>
+                            <div class="service-price">NT$ ${c[1]}</div>
+                        </div>
+                    `;
                     div.onclick = () => openServiceModal(c[0], c[1], c[4], c[3]);
                     list.appendChild(div);
                 }
@@ -430,7 +538,7 @@
         }
         function openServiceModal(n, p, d, imgs) {
             document.getElementById('modalTitle').textContent = n;
-            document.getElementById('modalPrice').textContent = 'NT$ ' + p;
+            document.getElementById('modalPrice').textContent = (p==='優惠活動') ? p : 'NT$ ' + p;
             document.getElementById('modalDesc').textContent = d ? d.replace(/\|/g, '\n') : '暫無介紹';
             const c = document.getElementById('carouselContainer'); c.innerHTML = '';
             if(imgs) imgs.split(';').forEach(src=>{ if(src.trim()) c.innerHTML += `<div class="carousel-slide"><img src="${src.trim()}"></div>`; });
@@ -445,7 +553,7 @@
             }
         }
 
-        // --- 2. 作品 ---
+        // --- 3. 作品 ---
         function loadPortfolio() {
             fetch(PORTFOLIO_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt); allPortfolioData = [];
@@ -479,7 +587,7 @@
             });
         }
 
-        // --- 3. 好評 ---
+        // --- 4. 好評 ---
         function loadReviews() {
             fetch(REVIEWS_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt);
@@ -495,7 +603,7 @@
             }).catch(()=> document.getElementById('review-list').innerHTML='<p style="text-align:center;color:#ccc">尚無評論</p>');
         }
 
-        // --- 設定與 Profile 載入 ---
+        // --- 設定 ---
         function loadSettings() {
             fetch(SETTINGS_CSV).then(r=>r.text()).then(csv => {
                 csv.split('\n').forEach(row => {
@@ -503,7 +611,6 @@
                     if(id && content) {
                         const key = id.trim(); const val = content.trim();
                         // if(key === 'link_booking') document.getElementById('floatBookingBtn').href = val;
-                        
                         if(key === 'profile_name') { document.getElementById('profile-name').textContent = val; document.getElementById('profile-name').classList.remove('skeleton'); document.getElementById('profile-name').style.width = 'auto'; }
                         if(key === 'profile_desc') { document.getElementById('profile-desc').textContent = val; document.getElementById('profile-desc').classList.remove('skeleton'); document.getElementById('profile-desc').style.width = 'auto'; }
                         if(key === 'profile_img') { document.getElementById('profile-img-container').innerHTML = `<img src="${val}" class="profile-img" alt="紋綉師">`; document.getElementById('profile-img-container').classList.remove('skeleton'); document.getElementById('profile-img-container').style.background = 'transparent'; }
@@ -514,41 +621,23 @@
         }
 
         function searchRecord() {
-            let q = document.getElementById('queryInput').value.trim();
+            const q=document.getElementById('queryInput').value.trim();
             if(!q) return displayMessage('error','請輸入資料');
-            
-            // ✨ 1. 如果輸入是 09 開頭的手機號，自動去掉 0
-            if (/^0\d+/.test(q)) {
-                q = q.substring(1); // "0912" -> "912"
-            }
-
             const btn=document.getElementById('searchButton'); const area=document.getElementById('resultsArea');
             btn.textContent='查詢中...'; btn.disabled=true; area.innerHTML='';
             fetch(`${GAS_API_URL}?q=${encodeURIComponent(q)}`).then(r=>r.json()).then(res=>{
                 if(res.data && res.data.length){ 
-                    
-                    // ✨ 2. 邏輯更新：只保留 (姓名+服務) 組合中，日期最新的那筆 ✨
                     const sortedData = res.data.sort((a, b) => new Date(b.lastDate) - new Date(a.lastDate));
                     const uniqueData = [];
-                    const seenKey = new Set(); 
-
+                    const seenServices = new Set(); 
                     sortedData.forEach(item => {
-                        // 組合鍵值：姓名 + 服務 (例如 "林宜萱_霧眉")
                         const key = `${item.name}_${item.service}`;
-                        
-                        if (!seenKey.has(key)) {
-                            uniqueData.push(item);
-                            seenKey.add(key);
-                        }
+                        if (!seenServices.has(key)) { uniqueData.push(item); seenServices.add(key); }
                     });
-
                     if(uniqueData.length > 0) {
                         displayMessage('success',`找到 ${uniqueData.length} 筆最新資料`); 
                         area.innerHTML = uniqueData.map((r,i)=>createCard(r,i)).join('');
-                    } else {
-                        displayMessage('info','查無資料');
-                    }
-
+                    } else { displayMessage('info','查無資料'); }
                 }
                 else displayMessage('info','查無資料');
             }).finally(()=>{ btn.textContent='立即查詢'; btn.disabled=false; });
@@ -559,42 +648,12 @@
         function toggleCollapse(btn, id) { const el=document.getElementById(id); el.classList.toggle('expanded'); btn.querySelector('.btn-text').textContent=el.classList.contains('expanded')?'收起':'查看完整價目表'; }
         
         function getPriceCardHtml(info, useOrange) { 
-            if (!info) return ''; 
-            let p = info.price===0?'免費':(info.price?`NT$ ${info.price}`:'洽詢'); 
-            let bg = info.price===0?'bg-green-600':(useOrange?'bg-orange-500':'bg-pink-500'); 
-            let theme = info.price===0?'bg-green-50 border-green-200':(useOrange?'bg-orange-50 border-orange-200':'bg-pink-50 border-pink-200'); 
-            let dateText = (info.dateRange || '').replace(/【.*?】/g, '');
-            return `
-            <div class="mt-3 p-3 rounded-xl border ${theme} flex justify-between items-center shadow-sm">
-                <div>
-                    <h3 class="text-xs font-bold text-gray-400 mb-1">目前補色價格</h3>
-                    <p class="text-sm font-bold text-gray-800 tracking-wide">${dateText}</p>
-                </div>
-                <span class="px-3 py-1 text-white text-lg font-bold rounded-lg ${bg} shadow-sm">${p}</span>
-            </div>`; 
+            if (!info) return ''; let p = info.price===0?'免費':(info.price?`NT$ ${info.price}`:'洽詢'); let bg = info.price===0?'bg-green-600':(useOrange?'bg-orange-500':'bg-pink-500'); let theme = info.price===0?'bg-green-50 border-green-200':(useOrange?'bg-orange-50 border-orange-200':'bg-pink-50 border-pink-200'); let dateText = (info.dateRange || '').replace(/【.*?】/g, ''); return `<div class="mt-3 p-3 rounded-xl border ${theme} flex justify-between items-center shadow-sm"><div><h3 class="text-xs font-bold text-gray-400 mb-1">目前補色價格</h3><p class="text-sm font-bold text-gray-800 tracking-wide">${dateText}</p></div><span class="px-3 py-1 text-white text-lg font-bold rounded-lg ${bg} shadow-sm">${p}</span></div>`; 
         }
         
         function createCard(r, i) { 
             const cid=`d-${i}`; const ranges=(r.touchUpRanges||[]).map(t=>`<div class="flex justify-between py-2 border-b border-gray-100 text-sm"><span>${t.dateRange}</span><span class="font-bold text-gray-700">${t.price===0?'免費':'$'+t.price}</span></div>`).join(''); 
-            return `
-            <div class="result-card">
-                <div class="result-header">
-                    <div><div class="result-name">${r.name}</div><span class="text-gray-400 text-sm">(${maskPhoneNumber(r.phone)})</span></div>
-                </div>
-                
-                <div class="info-badges">
-                    <div class="info-badge"><span class="info-label">上次日期</span><span class="info-value">${r.lastDate||'-'}</span></div>
-                    <div class="info-badge"><span class="info-label">上次項目</span><span class="info-value highlight">${r.service}</span></div>
-                </div>
-
-                ${r.specialReminder?`<div class="bg-yellow-50 text-yellow-800 p-2.5 rounded-lg text-xs mb-3 font-medium">💡 ${r.specialReminder}</div>`:''} 
-                ${getPriceCardHtml(r.currentPriceInfo, r.eyebrowDiscountDate && !checkIsExpired(r.eyebrowDiscountDate))} 
-                
-                <div class="mt-4">
-                    <button onclick="toggleCollapse(this,'${cid}')" class="w-full py-2 bg-gray-50 text-gray-500 text-xs font-bold rounded-lg transition hover:bg-gray-100"><span class="btn-text">查看完整價目表</span></button>
-                    <div id="${cid}" class="collapsible-content bg-gray-50 px-3 mt-1 rounded-b-lg"><div class="py-2">${ranges}</div></div>
-                </div>
-            </div>`; 
+            return `<div class="result-card"><div class="result-header"><div><div class="result-name">${r.name}</div><span class="text-gray-400 text-sm">(${maskPhoneNumber(r.phone)})</span></div></div><div class="info-badges"><div class="info-badge"><span class="info-label">上次日期</span><span class="info-value">${r.lastDate||'-'}</span></div><div class="info-badge"><span class="info-label">上次項目</span><span class="info-value highlight">${r.service}</span></div></div>${r.specialReminder?`<div class="bg-yellow-50 text-yellow-800 p-2.5 rounded-lg text-xs mb-3 font-medium">💡 ${r.specialReminder}</div>`:''} ${getPriceCardHtml(r.currentPriceInfo, r.eyebrowDiscountDate && !checkIsExpired(r.eyebrowDiscountDate))} <div class="mt-4"><button onclick="toggleCollapse(this,'${cid}')" class="w-full py-2 bg-gray-50 text-gray-500 text-xs font-bold rounded-lg transition hover:bg-gray-100"><span class="btn-text">查看完整價目表</span></button><div id="${cid}" class="collapsible-content bg-gray-50 px-3 mt-1 rounded-b-lg"><div class="py-2">${ranges}</div></div></div></div>`; 
         }
     </script>
 </body>
