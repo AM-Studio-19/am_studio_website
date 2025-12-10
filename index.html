@@ -118,7 +118,7 @@
         /* 價格區塊 */
         .price-box { margin-top: 10px; padding: 12px; rounded-xl; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
 
-        /* --- ✨ 新增：優惠活動 (橫向) --- */
+        /* --- 優惠活動 (橫向) --- */
         .promo-horizontal { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; width: 100%; }
         .promo-horizontal::-webkit-scrollbar { display: none; }
         
@@ -137,7 +137,7 @@
         .promo-title { font-size: 1.1rem; font-weight: 700; margin: 0; }
         .promo-desc { font-size: 0.85rem; opacity: 0.9; margin: 2px 0 0 0; }
 
-        /* --- 2. 服務項目 (✨ 橫向圖卡) --- */
+        /* --- 2. 服務項目 (橫向圖卡) --- */
         .service-horizontal { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; width: 100%; }
         .service-horizontal::-webkit-scrollbar { display: none; }
 
@@ -283,6 +283,9 @@
                 </div>
                 <h3 style="margin:0; font-size:1.3rem; color:var(--text);">舊客補色查詢</h3>
                 <p style="font-size:0.9rem; color:#999; margin:8px 0 0 0;">輸入姓名或電話查詢專屬優惠</p>
+                <!-- 新增提示 -->
+                <p style="font-size:0.85rem; color:#C17E7E; font-weight:bold; margin:5px 0 15px 0;">💡 小提醒：建議優先使用「姓名」查詢，資料更準確喔！</p>
+                
                 <div class="input-group">
                     <div class="input-icon">🔍</div>
                     <input type="text" id="queryInput" class="search-input" 
@@ -597,8 +600,20 @@
                 for(let i=start; i<rows.length; i++){
                     const c = rows[i]; 
                     if(c.length<3 || !c[0]) continue; 
-                    const content = c[2] || c[0]; 
-                    list.innerHTML += `<div class="review-card-item"><div class="review-header"><div class="review-avatar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><span class="review-name">${c[0]||'顧客'}</span></div><div class="review-content">${content}</div></div>`;
+                    const name = c[0] || '顧客';
+                    const content = c[2] || ''; 
+                    const div = document.createElement('div');
+                    div.className = 'review-card-item';
+                    div.innerHTML = `
+                        <div class="review-header">
+                            <div class="review-avatar">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            </div>
+                            <span class="review-name">${name}</span>
+                        </div>
+                        <div class="review-content">${content}</div>
+                    `;
+                    list.appendChild(div);
                 }
             }).catch(()=> document.getElementById('review-list').innerHTML='<p style="text-align:center;color:#ccc">尚無評論</p>');
         }
@@ -621,8 +636,14 @@
         }
 
         function searchRecord() {
-            const q=document.getElementById('queryInput').value.trim();
+            let q = document.getElementById('queryInput').value.trim();
             if(!q) return displayMessage('error','請輸入資料');
+            
+            // 手機號去掉 0
+            if (/^0\d+/.test(q)) {
+                q = q.substring(1);
+            }
+
             const btn=document.getElementById('searchButton'); const area=document.getElementById('resultsArea');
             btn.textContent='查詢中...'; btn.disabled=true; area.innerHTML='';
             fetch(`${GAS_API_URL}?q=${encodeURIComponent(q)}`).then(r=>r.json()).then(res=>{
