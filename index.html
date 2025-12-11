@@ -282,14 +282,14 @@
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 </div>
                 <h3 style="margin:0; font-size:1.3rem; color:var(--text);">舊客補色查詢</h3>
-                <p style="font-size:0.9rem; color:#999; margin:8px 0 0 0;">輸入姓名或電話查詢專屬優惠</p>
+                <p style="font-size:0.9rem; color:#999; margin:8px 0 0 0;">輸入姓名或電話查詢補色價</p>
                 <!-- 新增提示 -->
                 <p style="font-size:0.85rem; color:#C17E7E; font-weight:bold; margin:5px 0 15px 0;">💡 小提醒：建議優先使用「姓名」查詢，資料更準確喔！</p>
                 
                 <div class="input-group">
                     <div class="input-icon">🔍</div>
                     <input type="text" id="queryInput" class="search-input" 
-                           placeholder="例如：林小美 或 0912..." 
+                           placeholder="例如：林小美 或 09123456780" 
                            onkeydown="if(event.key === 'Enter') searchRecord()">
                 </div>
                 <button onclick="searchRecord()" id="searchButton" class="btn-primary">立即查詢</button>
