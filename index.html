@@ -167,7 +167,7 @@
             flex: 0 0 160px; scroll-snap-align: start; 
             background: #fff; border-radius: 16px; overflow: hidden; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.04); animation: fadeIn 0.6s ease; 
-            display: flex; flex-direction: column; cursor: zoom-in;
+            display: flex; flex-direction: column;
         }
         .case-img-box { position: relative; width: 100%; height: 220px; background: #f0f0f0; }
         .case-img-box img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -208,26 +208,11 @@
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .hidden { display: none; }
 
-        /* Lightbox (已修正為不裁切) */
-        .image-lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 3000; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; flex-direction: column; }
+        /* Lightbox */
+        .image-lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
         .image-lightbox.show { display: flex; opacity: 1; }
-        
-        .lightbox-img-wrapper { 
-            position: relative; width: 100%; height: 80%; 
-            display: flex; align-items: center; justify-content: center; 
-        }
-        .lightbox-img { 
-            max-width: 100%; max-height: 100%; 
-            object-fit: contain; /* 關鍵：完整顯示不裁切 */
-            transition: transform 0.2s; 
-        }
-        
-        .lightbox-close { position: absolute; top: 20px; right: 20px; color: white; font-size: 2.5rem; cursor: pointer; z-index: 3005; opacity: 0.8; }
-        .lightbox-nav-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; cursor: pointer; z-index: 3005; user-select: none; }
-        .lightbox-prev { left: 15px; }
-        .lightbox-next { right: 15px; }
-        .lightbox-nav-btn:hover { background: rgba(255,255,255,0.4); }
-        .lightbox-counter { color: white; margin-top: 15px; font-size: 1rem; letter-spacing: 1px; }
+        .lightbox-img { max-width: 95%; max-height: 90%; border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5); object-fit: contain; }
+        .lightbox-close { position: absolute; top: 20px; right: 20px; color: white; font-size: 2rem; cursor: pointer; opacity: 0.8; }
 
         /* 滑動指示器 */
         .horizontal-wrapper { position: relative; width: 100%; }
@@ -263,7 +248,7 @@
         </div>
     </div>
 
-    <!-- 底部導覽列 (5個) -->
+    <!-- 底部導覽列 -->
     <div class="bottom-nav">
         <a href="#search" class="nav-btn active" onclick="setActiveNav(this)">
             <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
@@ -301,4 +286,382 @@
                 
                 <div class="input-group">
                     <div class="input-icon">🔍</div>
-                    <input type="text" id="queryInput" class="search-inp
+                    <input type="text" id="queryInput" class="search-input" 
+                           placeholder="例如：林小美 或 0912..." 
+                           onkeydown="if(event.key === 'Enter') searchRecord()">
+                </div>
+                <button onclick="searchRecord()" id="searchButton" class="btn-primary">立即查詢</button>
+                <div id="messageArea" class="hidden mt-4 p-3 rounded-xl text-sm font-bold"></div>
+                <div id="resultsArea" class="mt-6 text-left"></div>
+            </div>
+        </section>
+
+        <!-- ✨ 新增：優惠活動 ✨ -->
+        <section id="promotions">
+            <div class="section-header"><h2>最新優惠</h2></div>
+            <div class="swipe-hint-text"><span>← 左右滑動查看優惠 →</span></div>
+            <div class="horizontal-wrapper">
+                <div id="promo-list" class="promo-horizontal" onscroll="hideHint('hint-promo')">
+                    <div class="promo-card skeleton"></div>
+                    <div class="promo-card skeleton"></div>
+                </div>
+                <div id="hint-promo" class="scroll-hint-arrow">❯</div>
+            </div>
+        </section>
+
+        <!-- 2. 服務項目 -->
+        <section id="services">
+            <div class="section-header"><h2>服務項目</h2></div>
+            <div class="swipe-hint-text"><span>← 左右滑動查看服務 →</span></div>
+            <div class="horizontal-wrapper">
+                <div id="service-list" class="service-horizontal" onscroll="hideHint('hint-service')">
+                    <div class="service-card-item skeleton" style="height:220px;"></div>
+                    <div class="service-card-item skeleton" style="height:220px;"></div>
+                </div>
+                <div id="hint-service" class="scroll-hint-arrow">❯</div>
+            </div>
+        </section>
+
+        <!-- 3. 留色作品 -->
+        <section id="portfolio">
+            <div class="section-header" onclick="toggleSection('portfolio-content', this)">
+                <h2>留色作品集 <span class="header-arrow">▼</span></h2>
+            </div>
+            
+            <div id="portfolio-content" class="section-collapsible">
+                <div class="filter-scroller">
+                    <div class="filter-chip active" onclick="filterPortfolio('all', this)">全部案例</div>
+                    <div class="filter-chip" onclick="filterPortfolio('brow', this)">霧眉</div>
+                    <div class="filter-chip" onclick="filterPortfolio('lip', this)">霧唇</div>
+                    <div class="filter-chip" onclick="filterPortfolio('dark', this)">烏唇轉色</div>
+                </div>
+
+                <div class="swipe-hint-text"><span>← 左右滑動查看更多 →</span></div>
+
+                <div class="horizontal-wrapper">
+                    <div id="portfolio-horizontal" class="portfolio-horizontal" onscroll="hideHint('hint-portfolio')">
+                        <div class="case-card skeleton" style="width:160px; height:220px; flex-shrink:0;"></div>
+                        <div class="case-card skeleton" style="width:160px; height:220px; flex-shrink:0;"></div>
+                    </div>
+                    <div id="hint-portfolio" class="scroll-hint-arrow">❯</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. 顧客好評 -->
+        <section id="reviews">
+            <div class="section-header"><h2>顧客好評</h2></div>
+            
+            <div class="swipe-hint-text"><span>← 左右滑動查看更多 →</span></div>
+
+            <div class="horizontal-wrapper">
+                <div id="review-list" class="reviews-horizontal" onscroll="hideHint('hint-review')">
+                    <div class="review-card-item skeleton" style="height:150px;"></div>
+                    <div class="review-card-item skeleton" style="height:150px;"></div>
+                </div>
+                <div id="hint-review" class="scroll-hint-arrow">❯</div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- 預約按鈕 -->
+    <a id="floatBookingBtn" href="https://liff.line.me/1661306685-kQp9pya4" class="floating-cta">
+        <span>📅 立即預約諮詢</span>
+    </a>
+
+    <!-- 彈窗 -->
+    <div id="serviceModal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content">
+            <div class="modal-close-btn" onclick="closeModal(event)">&times;</div>
+            <div id="carouselContainer" class="carousel-container"></div>
+            <div class="modal-body">
+                <h2 id="modalTitle" style="font-size:1.4rem; font-weight:bold; color:var(--text);"></h2>
+                <div id="modalPrice" style="color:#C17E7E; font-weight:bold; font-size:1.2rem; margin:5px 0;"></div>
+                <div id="modalDesc" style="margin-top:15px; color:#555; background:#F9F8F6; padding:15px; border-radius:12px; line-height:1.6; font-size:0.95rem; white-space:pre-wrap;"></div>
+                <button onclick="document.getElementById('floatBookingBtn').click()" class="btn-primary" style="margin-top:20px; background:var(--text); box-shadow:none;">預約此項目</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="imageLightbox" class="image-lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <img id="lightboxImg" class="lightbox-img" src="" alt="Full View">
+    </div>
+
+    <!-- 管理員按鈕 -->
+    <div class="admin-trigger" onclick="openAdminPanel()">⚙️</div>
+    <div id="adminPanel" class="admin-menu" onclick="closeAdminPanel(event)">
+        <div class="admin-panel">
+            <h2 style="margin-bottom:20px;">🔧 管理員控制台</h2>
+            <a href="https://postimages.org/" target="_blank" class="admin-btn">📸 1. 上傳圖片</a>
+            <a href="https://docs.google.com/spreadsheets/d/1DA69pXR5j6kx9WpQDzV3BLx6EGawTo-TBZdYcDRYdhE/edit" target="_blank" class="admin-btn" style="background:#0F9D58; border-color:#0F9D58;">📝 2. 編輯 Google 表格</a>
+            <button onclick="location.reload()" class="admin-btn" style="background:#4285F4; border-color:#4285F4;">🔄 3. 重新整理網頁</button>
+            <p style="font-size:0.8rem; color:#888; margin-top:20px;">修改表格後，請稍等 1-3 分鐘<br>Google 快取更新後按重整即可</p>
+        </div>
+    </div>
+
+    <script>
+        const SERVICES_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1138837231&single=true&output=csv';
+        const REVIEWS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=174294022&single=true&output=csv'; 
+        const PORTFOLIO_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1127370948&single=true&output=csv'; 
+        const SETTINGS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQxxxxxxxx/pub?output=csv'; 
+        const PROMOTIONS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=458650816&single=true&output=csv'; 
+        const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx6grwl5DidK6DScAaZLM8udp-Pjn_FrB33bv6ES0JkwAiiIx-xxJHicxANVGH7caSpEg/exec"; 
+        
+        let allPortfolioData = [];
+        let currentPortfolioData = [];
+
+        document.addEventListener("DOMContentLoaded", function() {
+            loadServices(); loadReviews(); loadPortfolio(); loadSettings(); loadPromotions();
+        });
+
+        // --- Lightbox 功能 ---
+        function openLightbox(imgSrc) {
+            document.getElementById('lightboxImg').src = imgSrc;
+            document.getElementById('imageLightbox').classList.add('show');
+        }
+        function closeLightbox() {
+            document.getElementById('imageLightbox').classList.remove('show');
+        }
+
+        // 管理員
+        function openAdminPanel() {
+            const pwd = prompt("請輸入管理員密碼：");
+            if(pwd === "1234") document.getElementById('adminPanel').style.display = 'flex';
+            else if(pwd !== null) alert("密碼錯誤");
+        }
+        function closeAdminPanel(e) { if(e.target.id === 'adminPanel') e.target.style.display = 'none'; }
+
+        function setActiveNav(btn) {
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const targetId = btn.getAttribute('href').substring(1);
+            const targetEl = document.getElementById(targetId);
+            if(targetEl) {
+                window.scrollTo({
+                    top: targetEl.offsetTop - 150, 
+                    behavior: 'smooth'
+                });
+            }
+        }
+        
+        function toggleSection(contentId, headerEl) {
+            const content = document.getElementById(contentId);
+            content.classList.toggle('collapsed');
+            headerEl.classList.toggle('collapsed');
+        }
+        function hideHint(elementId) {
+            const el = document.getElementById(elementId);
+            if(el) el.classList.add('hint-hidden');
+        }
+
+        // ✨ 升級版 CSV 解析器 (防止讀取失敗) ✨
+        function parseCSV(str) {
+            const arr = []; let quote = false; let col = 0, row = 0;
+            for (let c = 0; c < str.length; c++) {
+                let cc = str[c], nc = str[c+1];
+                arr[row] = arr[row] || []; arr[row][col] = arr[row][col] || '';
+                if (cc == '"' && quote && nc == '"') { arr[row][col] += '"'; ++c; continue; }
+                if (cc == '"') { quote = !quote; continue; }
+                if (cc == ',' && !quote) { ++col; continue; }
+                if (cc == '\r' && nc == '\n' && !quote) { ++row; col = 0; ++c; continue; }
+                if (cc == '\n' && !quote) { ++row; col = 0; continue; }
+                if (cc == '\r' && !quote) { ++row; col = 0; continue; }
+                arr[row][col] += cc;
+            }
+            return arr;
+        }
+
+        // --- 1. 優惠活動 ---
+        function loadPromotions() {
+            if(PROMOTIONS_CSV.includes('請在此')) {
+                document.getElementById('promo-list').innerHTML = '<p style="padding:20px; color:#ccc; width:100%; text-align:center;">暫無優惠活動</p>';
+                return;
+            }
+
+            fetch(PROMOTIONS_CSV).then(r=>r.text()).then(txt=>{
+                const rows = parseCSV(txt);
+                const list = document.getElementById('promo-list');
+                list.innerHTML = '';
+                let start = (rows.length>0 && rows[0][0].toLowerCase().includes('title')) ? 1 : 0;
+                
+                for(let i=start; i<rows.length; i++){
+                    const c = rows[i]; if(c.length<2 || !c[0]) continue;
+                    const div = document.createElement('div');
+                    div.className = 'promo-card';
+                    div.onclick = () => openServiceModal(c[0], '優惠活動', c[3], c[2]);
+                    
+                    div.innerHTML = `
+                        <img src="${c[2] || 'https://via.placeholder.com/300x150?text=Promotion'}" alt="${c[0]}">
+                        <div class="promo-overlay">
+                            <h3 class="promo-title">${c[0]}</h3>
+                            <p class="promo-desc">${c[1]}</p>
+                        </div>
+                    `;
+                    list.appendChild(div);
+                }
+            }).catch(()=> document.getElementById('promo-list').innerHTML='<p style="padding:20px; color:#ccc;">暫無優惠</p>');
+        }
+
+        // --- 2. 服務 (圖卡版) ---
+        function loadServices() {
+            fetch(SERVICES_CSV).then(r=>r.text()).then(txt=>{
+                const rows = parseCSV(txt);
+                const list = document.getElementById('service-list');
+                list.innerHTML = '';
+                let start = (rows.length>0 && rows[0][0].toLowerCase().includes('name')) ? 1 : 0;
+                for(let i=start; i<rows.length; i++){
+                    const c = rows[i]; if(c.length<2 || !c[0]) continue;
+                    const div = document.createElement('div');
+                    div.className = 'service-card-item';
+                    div.innerHTML = `
+                        <img class="service-img" src="${c[3] || 'https://via.placeholder.com/150'}" loading="lazy">
+                        <div class="service-content">
+                            <h3 class="service-title">${c[0]}</h3>
+                            <div class="service-tag">${c[2]||''}</div>
+                            <div class="service-price">NT$ ${c[1]}</div>
+                        </div>
+                    `;
+                    div.onclick = () => openServiceModal(c[0], c[1], c[4], c[3]);
+                    list.appendChild(div);
+                }
+            });
+        }
+        function openServiceModal(n, p, d, imgs) {
+            document.getElementById('modalTitle').textContent = n;
+            document.getElementById('modalPrice').textContent = (p==='優惠活動') ? p : 'NT$ ' + p;
+            document.getElementById('modalDesc').textContent = d ? d.replace(/\|/g, '\n') : '暫無介紹';
+            const c = document.getElementById('carouselContainer'); c.innerHTML = '';
+            if(imgs) imgs.split(';').forEach(src=>{ if(src.trim()) c.innerHTML += `<div class="carousel-slide"><img src="${src.trim()}"></div>`; });
+            c.style.display = imgs ? 'flex' : 'none';
+            document.getElementById('serviceModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeModal(e) { 
+            const m = document.getElementById('serviceModal'); 
+            if(e.target===m || e.target.classList.contains('modal-close-btn')) {
+                m.classList.remove('show'); document.body.style.overflow = '';
+            }
+        }
+
+        // --- 3. 作品 ---
+        function loadPortfolio() {
+            fetch(PORTFOLIO_CSV).then(r=>r.text()).then(txt=>{
+                const rows = parseCSV(txt); allPortfolioData = [];
+                let start = (rows.length>0 && rows[0][0].toLowerCase().includes('image')) ? 1 : 0;
+                for(let i=start; i<rows.length; i++){
+                    const c = rows[i]; if(!c[0]) continue;
+                    allPortfolioData.push({ img: c[0], desc: c[1]||'', cat: (c[2]||'').trim().toLowerCase() });
+                }
+                currentPortfolioData = allPortfolioData;
+                renderPortfolio();
+            });
+        }
+        function filterPortfolio(cat, btn) {
+            document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+            currentPortfolioData = (cat === 'all') ? allPortfolioData : allPortfolioData.filter(i => i.cat === cat);
+            renderPortfolio();
+        }
+        function renderPortfolio() {
+            const container = document.getElementById('portfolio-horizontal'); container.innerHTML = '';
+            if(currentPortfolioData.length === 0) { container.innerHTML = '<p style="text-align:center;color:#ccc;width:100%;">暫無作品</p>'; return; }
+            
+            currentPortfolioData.forEach(item => {
+                const parts = item.desc.split('|');
+                const tag = parts.length > 1 ? parts[0].trim() : '';
+                const text = parts.length > 1 ? parts[1].trim() : parts[0].trim();
+                const div = document.createElement('div'); div.className = 'case-card';
+                div.onclick = () => openLightbox(item.img);
+                div.innerHTML = `<div class="case-img-box"><img src="${item.img}" loading="lazy"></div><div class="case-info">${tag ? `<div class="case-tags"><span class="case-tag">${tag}</span></div>` : ''}<div class="case-desc">${text}</div></div>`;
+                container.appendChild(div);
+            });
+        }
+
+        // --- 4. 好評 ---
+        function loadReviews() {
+            fetch(REVIEWS_CSV).then(r=>r.text()).then(txt=>{
+                const rows = parseCSV(txt);
+                const list = document.getElementById('review-list');
+                list.innerHTML = ''; 
+                let start = (rows.length>0 && rows[0][0].toLowerCase().includes('name')) ? 1 : 0;
+                for(let i=start; i<rows.length; i++){
+                    const c = rows[i]; 
+                    if(c.length<3 || !c[0]) continue; 
+                    const name = c[0] || '顧客';
+                    const content = c[2] || ''; 
+                    const div = document.createElement('div');
+                    div.className = 'review-card-item';
+                    div.innerHTML = `
+                        <div class="review-header">
+                            <div class="review-avatar">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            </div>
+                            <span class="review-name">${name}</span>
+                        </div>
+                        <div class="review-content">${content}</div>
+                    `;
+                    list.appendChild(div);
+                }
+            }).catch(()=> document.getElementById('review-list').innerHTML='<p style="text-align:center;color:#ccc">尚無評論</p>');
+        }
+
+        // --- 設定 (升級版) ---
+        function loadSettings() {
+            fetch(SETTINGS_CSV).then(r=>r.text()).then(csv => {
+                const rows = parseCSV(csv); // ✨ 改用 parseCSV，防止內容有逗號讀取失敗
+                rows.forEach(row => {
+                    if(row.length >= 2) {
+                        const key = row[0].trim(); const val = row[1].trim();
+                        if(key === 'link_booking') document.getElementById('floatBookingBtn').href = val;
+                        if(key === 'profile_name') { document.getElementById('profile-name').textContent = val; document.getElementById('profile-name').classList.remove('skeleton'); document.getElementById('profile-name').style.width = 'auto'; }
+                        if(key === 'profile_desc') { document.getElementById('profile-desc').textContent = val; document.getElementById('profile-desc').classList.remove('skeleton'); document.getElementById('profile-desc').style.width = 'auto'; }
+                        if(key === 'profile_img') { document.getElementById('profile-img-container').innerHTML = `<img src="${val}" class="profile-img" alt="紋綉師">`; document.getElementById('profile-img-container').classList.remove('skeleton'); document.getElementById('profile-img-container').style.background = 'transparent'; }
+                        if(key === 'profile_tags') { const c = document.getElementById('profile-tags'); c.innerHTML = ''; val.split(';').forEach(tag => { if(tag.trim()) c.innerHTML += `<span class="tag-pill">${tag.trim()}</span>`; }); }
+                    }
+                });
+            });
+        }
+
+        function searchRecord() {
+            let q = document.getElementById('queryInput').value.trim();
+            if(!q) return displayMessage('error','請輸入資料');
+            if (/^0\d+/.test(q)) q = q.substring(1); 
+
+            const btn=document.getElementById('searchButton'); const area=document.getElementById('resultsArea');
+            btn.textContent='查詢中...'; btn.disabled=true; area.innerHTML='';
+            fetch(`${GAS_API_URL}?q=${encodeURIComponent(q)}`).then(r=>r.json()).then(res=>{
+                if(res.data && res.data.length){ 
+                    const sortedData = res.data.sort((a, b) => new Date(b.lastDate) - new Date(a.lastDate));
+                    const uniqueData = []; const seenServices = new Set(); 
+                    sortedData.forEach(item => {
+                        const key = `${item.name}_${item.service}`;
+                        if (!seenServices.has(key)) { uniqueData.push(item); seenServices.add(key); }
+                    });
+                    if(uniqueData.length > 0) {
+                        displayMessage('success',`找到 ${uniqueData.length} 筆最新資料`); 
+                        area.innerHTML = uniqueData.map((r,i)=>createCard(r,i)).join('');
+                    } else { displayMessage('info','查無資料'); }
+                }
+                else displayMessage('info','查無資料');
+            }).finally(()=>{ btn.textContent='立即查詢'; btn.disabled=false; });
+        }
+        function displayMessage(t, c) { const m=document.getElementById('messageArea'); m.textContent=c; m.className=`mt-4 p-3 rounded-xl text-sm font-bold ${t==='error'?'bg-red-50 text-red-600':'bg-green-50 text-green-600'}`; m.classList.remove('hidden'); }
+        function checkIsExpired(d) { if(!d)return false; return new Date() > new Date(d); }
+        function maskPhoneNumber(p) { if(!p)return''; let s=String(p).replace(/'/g,'').trim(); return s.length<8?s:s.substring(0,4)+'***'+s.substring(s.length-3); }
+        function toggleCollapse(btn, id) { const el=document.getElementById(id); el.classList.toggle('expanded'); btn.querySelector('.btn-text').textContent=el.classList.contains('expanded')?'收起':'查看完整價目表'; }
+        
+        function getPriceCardHtml(info, useOrange) { 
+            if (!info) return ''; let p = info.price===0?'免費':(info.price?`NT$ ${info.price}`:'洽詢'); let bg = info.price===0?'bg-green-600':(useOrange?'bg-orange-500':'bg-pink-500'); let theme = info.price===0?'bg-green-50 border-green-200':(useOrange?'bg-orange-50 border-orange-200':'bg-pink-50 border-pink-200'); let dateText = (info.dateRange || '').replace(/【.*?】/g, ''); return `<div class="mt-3 p-3 rounded-xl border ${theme} flex justify-between items-center shadow-sm"><div><h3 class="text-xs font-bold text-gray-400 mb-1">目前補色價格</h3><p class="text-sm font-bold text-gray-800 tracking-wide">${dateText}</p></div><span class="px-3 py-1 text-white text-lg font-bold rounded-lg ${bg} shadow-sm">${p}</span></div>`; 
+        }
+        
+        function createCard(r, i) { 
+            const cid=`d-${i}`; const ranges=(r.touchUpRanges||[]).map(t=>`<div class="flex justify-between py-2 border-b border-gray-100 text-sm"><span>${t.dateRange}</span><span class="font-bold text-gray-700">${t.price===0?'免費':'$'+t.price}</span></div>`).join(''); 
+            return `<div class="result-card"><div class="result-header"><div><div class="result-name">${r.name}</div><span class="text-gray-400 text-sm">(${maskPhoneNumber(r.phone)})</span></div></div><div class="info-badges"><div class="info-badge"><span class="info-label">上次日期</span><span class="info-value">${r.lastDate||'-'}</span></div><div class="info-badge"><span class="info-label">上次項目</span><span class="info-value highlight">${r.service}</span></div></div>${r.specialReminder?`<div class="bg-yellow-50 text-yellow-800 p-2.5 rounded-lg text-xs mb-3 font-medium">💡 ${r.specialReminder}</div>`:''} ${getPriceCardHtml(r.currentPriceInfo, r.eyebrowDiscountDate && !checkIsExpired(r.eyebrowDiscountDate))} <div class="mt-4"><button onclick="toggleCollapse(this,'${cid}')" class="w-full py-2 bg-gray-50 text-gray-500 text-xs font-bold rounded-lg transition hover:bg-gray-100"><span class="btn-text">查看完整價目表</span></button><div id="${cid}" class="collapsible-content bg-gray-50 px-3 mt-1 rounded-b-lg"><div class="py-2">${ranges}</div></div></div></div>`; 
+        }
+    </script>
+</body>
+</html>
