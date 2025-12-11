@@ -125,7 +125,7 @@
             flex: 0 0 260px; scroll-snap-align: center; 
             background: #fff; border-radius: 20px; overflow: hidden; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.05); animation: fadeIn 0.6s ease; 
-            position: relative; height: 160px;
+            position: relative; height: 160px; cursor: pointer;
         }
         .promo-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
         .promo-overlay {
@@ -167,7 +167,7 @@
             flex: 0 0 160px; scroll-snap-align: start; 
             background: #fff; border-radius: 16px; overflow: hidden; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.04); animation: fadeIn 0.6s ease; 
-            display: flex; flex-direction: column;
+            display: flex; flex-direction: column; cursor: zoom-in;
         }
         .case-img-box { position: relative; width: 100%; height: 220px; background: #f0f0f0; }
         .case-img-box img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -209,10 +209,35 @@
         .hidden { display: none; }
 
         /* Lightbox */
-        .image-lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
+        .image-lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 3000; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; flex-direction: column; }
         .image-lightbox.show { display: flex; opacity: 1; }
-        .lightbox-img { max-width: 95%; max-height: 90%; border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5); object-fit: contain; }
-        .lightbox-close { position: absolute; top: 20px; right: 20px; color: white; font-size: 2rem; cursor: pointer; opacity: 0.8; }
+        
+        .lightbox-img-wrapper { 
+            position: relative; width: 100%; height: 80%; 
+            display: flex; align-items: center; justify-content: center; 
+        }
+        .lightbox-img { 
+            max-width: 100%; max-height: 100%; 
+            object-fit: contain; /* 關鍵：完整顯示不裁切 */
+            transition: transform 0.2s; 
+        }
+        
+        .lightbox-close { position: absolute; top: 20px; right: 20px; color: white; font-size: 2.5rem; cursor: pointer; z-index: 3005; opacity: 0.8; }
+        
+        /* 左右按鈕 */
+        .lightbox-nav-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            width: 50px; height: 50px; background: rgba(255,255,255,0.2);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 1.5rem; cursor: pointer; z-index: 3005;
+            user-select: none;
+        }
+        .lightbox-prev { left: 15px; }
+        .lightbox-next { right: 15px; }
+        .lightbox-nav-btn:hover { background: rgba(255,255,255,0.4); }
+
+        /* 計數器 */
+        .lightbox-counter { color: white; margin-top: 15px; font-size: 1rem; letter-spacing: 1px; }
 
         /* 滑動指示器 */
         .horizontal-wrapper { position: relative; width: 100%; }
@@ -281,13 +306,13 @@
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 </div>
                 <h3 style="margin:0; font-size:1.3rem; color:var(--text);">舊客補色查詢</h3>
-                <p style="font-size:0.9rem; color:#999; margin:8px 0 0 0;">輸入姓名或電話查詢</p>
-                <p style="font-size:0.85rem; color:#C17E7E; font-weight:bold; margin:5px 0 15px 0;">💡 小提醒：建議優先使用「姓名」查詢呦！</p>
+                <p style="font-size:0.9rem; color:#999; margin:8px 0 0 0;">輸入姓名或電話查詢專屬優惠</p>
+                <p style="font-size:0.85rem; color:#C17E7E; font-weight:bold; margin:5px 0 15px 0;">💡 小提醒：建議優先使用「姓名」查詢，資料更準確喔！</p>
                 
                 <div class="input-group">
                     <div class="input-icon">🔍</div>
                     <input type="text" id="queryInput" class="search-input" 
-                           placeholder="例如：林小美 或 09123456789" 
+                           placeholder="例如：林小美 或 0912..." 
                            onkeydown="if(event.key === 'Enter') searchRecord()">
                 </div>
                 <button onclick="searchRecord()" id="searchButton" class="btn-primary">立即查詢</button>
@@ -296,7 +321,7 @@
             </div>
         </section>
 
-        <!-- ✨ 新增：優惠活動 ✨ -->
+        <!-- ✨ 優惠活動 ✨ -->
         <section id="promotions">
             <div class="section-header"><h2>最新優惠</h2></div>
             <div class="swipe-hint-text"><span>← 左右滑動查看優惠 →</span></div>
@@ -370,7 +395,7 @@
         <span>📅 立即預約諮詢</span>
     </a>
 
-    <!-- 彈窗 -->
+    <!-- 彈窗 (已移除預約按鈕) -->
     <div id="serviceModal" class="modal-overlay" onclick="closeModal(event)">
         <div class="modal-content">
             <div class="modal-close-btn" onclick="closeModal(event)">&times;</div>
@@ -379,15 +404,24 @@
                 <h2 id="modalTitle" style="font-size:1.4rem; font-weight:bold; color:var(--text);"></h2>
                 <div id="modalPrice" style="color:#C17E7E; font-weight:bold; font-size:1.2rem; margin:5px 0;"></div>
                 <div id="modalDesc" style="margin-top:15px; color:#555; background:#F9F8F6; padding:15px; border-radius:12px; line-height:1.6; font-size:0.95rem; white-space:pre-wrap;"></div>
-                <button onclick="document.getElementById('floatBookingBtn').click()" class="btn-primary" style="margin-top:20px; background:var(--text); box-shadow:none;">預約此項目</button>
             </div>
         </div>
     </div>
 
-    <!-- Lightbox -->
-    <div id="imageLightbox" class="image-lightbox" onclick="closeLightbox()">
+    <!-- Lightbox (支援滑動+計數) -->
+    <div id="imageLightbox" class="image-lightbox">
         <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
-        <img id="lightboxImg" class="lightbox-img" src="" alt="Full View">
+        
+        <div class="lightbox-img-wrapper" id="lbTouchArea">
+            <img id="lightboxImg" class="lightbox-img" src="" alt="Full View">
+        </div>
+
+        <!-- 導航按鈕 -->
+        <div class="lightbox-nav-btn lightbox-prev" onclick="changeLbImage(-1)">&#10094;</div>
+        <div class="lightbox-nav-btn lightbox-next" onclick="changeLbImage(1)">&#10095;</div>
+        
+        <!-- 計數器 -->
+        <div class="lightbox-counter" id="lbCounter">1 / 1</div>
     </div>
 
     <!-- 管理員按鈕 -->
@@ -406,24 +440,63 @@
         const SERVICES_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1138837231&single=true&output=csv';
         const REVIEWS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=174294022&single=true&output=csv'; 
         const PORTFOLIO_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1127370948&single=true&output=csv'; 
-        const SETTINGS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1317009759&single=true&output=csv'; 
+        const SETTINGS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQxxxxxxxx/pub?output=csv'; 
         const PROMOTIONS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=458650816&single=true&output=csv'; 
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx6grwl5DidK6DScAaZLM8udp-Pjn_FrB33bv6ES0JkwAiiIx-xxJHicxANVGH7caSpEg/exec"; 
         
         let allPortfolioData = [];
-        let currentPortfolioData = [];
+        let currentPortfolioData = []; // 用來追蹤目前篩選後的圖片列表 (給燈箱用)
 
         document.addEventListener("DOMContentLoaded", function() {
             loadServices(); loadReviews(); loadPortfolio(); loadSettings(); loadPromotions();
+            initLightboxEvents(); 
         });
 
-        // --- Lightbox 功能 ---
-        function openLightbox(imgSrc) {
-            document.getElementById('lightboxImg').src = imgSrc;
+        // --- Lightbox 邏輯 ---
+        let lbIndex = 0;
+        let lbImages = [];
+
+        function openLightbox(startImg) {
+            // 從 currentPortfolioData 提取所有圖片連結
+            lbImages = currentPortfolioData.map(item => item.img);
+            // 找到點擊的那張圖是第幾張
+            lbIndex = lbImages.findIndex(src => src === startImg);
+            if(lbIndex === -1) lbIndex = 0; // 防呆
+
+            updateLightbox();
             document.getElementById('imageLightbox').classList.add('show');
+            document.body.style.overflow = 'hidden';
         }
+
         function closeLightbox() {
             document.getElementById('imageLightbox').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function changeLbImage(dir) {
+            lbIndex += dir;
+            // 循環播放邏輯
+            if(lbIndex < 0) lbIndex = lbImages.length - 1;
+            if(lbIndex >= lbImages.length) lbIndex = 0;
+            updateLightbox();
+        }
+
+        function updateLightbox() {
+            document.getElementById('lightboxImg').src = lbImages[lbIndex];
+            document.getElementById('lbCounter').textContent = `${lbIndex + 1} / ${lbImages.length}`;
+        }
+
+        // 手機滑動支援 (Touch Events)
+        function initLightboxEvents() {
+            let startX = 0;
+            const lb = document.getElementById('lbTouchArea');
+            
+            lb.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, {passive: true});
+            lb.addEventListener('touchend', (e) => {
+                let endX = e.changedTouches[0].clientX;
+                if(startX - endX > 50) changeLbImage(1); // 左滑 -> 下一張
+                if(endX - startX > 50) changeLbImage(-1); // 右滑 -> 上一張
+            }, {passive: true});
         }
 
         // 管理員
@@ -458,7 +531,6 @@
             if(el) el.classList.add('hint-hidden');
         }
 
-        // ✨ 升級版 CSV 解析器 (防止讀取失敗) ✨
         function parseCSV(str) {
             const arr = []; let quote = false; let col = 0, row = 0;
             for (let c = 0; c < str.length; c++) {
@@ -475,7 +547,7 @@
             return arr;
         }
 
-        // --- 1. 優惠活動 ---
+        // 1. 優惠
         function loadPromotions() {
             if(PROMOTIONS_CSV.includes('請在此')) {
                 document.getElementById('promo-list').innerHTML = '<p style="padding:20px; color:#ccc; width:100%; text-align:center;">暫無優惠活動</p>';
@@ -490,9 +562,10 @@
                 
                 for(let i=start; i<rows.length; i++){
                     const c = rows[i]; if(c.length<2 || !c[0]) continue;
+                    // ✨ 修正：使用 c[1] (Content) 作為彈窗說明
                     const div = document.createElement('div');
                     div.className = 'promo-card';
-                    div.onclick = () => openServiceModal(c[0], '優惠活動', c[3], c[2]);
+                    div.onclick = () => openServiceModal(c[0], '優惠活動', c[1], c[2]);
                     
                     div.innerHTML = `
                         <img src="${c[2] || 'https://via.placeholder.com/300x150?text=Promotion'}" alt="${c[0]}">
@@ -506,7 +579,7 @@
             }).catch(()=> document.getElementById('promo-list').innerHTML='<p style="padding:20px; color:#ccc;">暫無優惠</p>');
         }
 
-        // --- 2. 服務 (圖卡版) ---
+        // 2. 服務
         function loadServices() {
             fetch(SERVICES_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt);
@@ -518,7 +591,7 @@
                     const div = document.createElement('div');
                     div.className = 'service-card-item';
                     div.innerHTML = `
-                        <img class="service-img" src="${c[3] || 'https://via.placeholder.com/150'}" loading="lazy">
+                        <img class="service-img" src="${c[3] ? c[3].trim() : 'https://via.placeholder.com/150'}" loading="lazy">
                         <div class="service-content">
                             <h3 class="service-title">${c[0]}</h3>
                             <div class="service-tag">${c[2]||''}</div>
@@ -535,7 +608,9 @@
             document.getElementById('modalPrice').textContent = (p==='優惠活動') ? p : 'NT$ ' + p;
             document.getElementById('modalDesc').textContent = d ? d.replace(/\|/g, '\n') : '暫無介紹';
             const c = document.getElementById('carouselContainer'); c.innerHTML = '';
-            if(imgs) imgs.split(';').forEach(src=>{ if(src.trim()) c.innerHTML += `<div class="carousel-slide"><img src="${src.trim()}"></div>`; });
+            if(imgs) imgs.split(';').forEach(src=>{ 
+                if(src.trim()) c.innerHTML += `<div class="carousel-slide"><img src="${src.trim()}"></div>`; 
+            });
             c.style.display = imgs ? 'flex' : 'none';
             document.getElementById('serviceModal').classList.add('show');
             document.body.style.overflow = 'hidden';
@@ -547,14 +622,14 @@
             }
         }
 
-        // --- 3. 作品 ---
+        // 3. 作品
         function loadPortfolio() {
             fetch(PORTFOLIO_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt); allPortfolioData = [];
                 let start = (rows.length>0 && rows[0][0].toLowerCase().includes('image')) ? 1 : 0;
                 for(let i=start; i<rows.length; i++){
                     const c = rows[i]; if(!c[0]) continue;
-                    allPortfolioData.push({ img: c[0], desc: c[1]||'', cat: (c[2]||'').trim().toLowerCase() });
+                    allPortfolioData.push({ img: c[0].trim(), desc: c[1]||'', cat: (c[2]||'').trim().toLowerCase() });
                 }
                 currentPortfolioData = allPortfolioData;
                 renderPortfolio();
@@ -581,12 +656,11 @@
             });
         }
 
-        // --- 4. 好評 ---
+        // 4. 好評
         function loadReviews() {
             fetch(REVIEWS_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt);
-                const list = document.getElementById('review-list');
-                list.innerHTML = ''; 
+                const list = document.getElementById('review-list'); list.innerHTML = ''; 
                 let start = (rows.length>0 && rows[0][0].toLowerCase().includes('name')) ? 1 : 0;
                 for(let i=start; i<rows.length; i++){
                     const c = rows[i]; 
@@ -609,14 +683,14 @@
             }).catch(()=> document.getElementById('review-list').innerHTML='<p style="text-align:center;color:#ccc">尚無評論</p>');
         }
 
-        // --- 設定 (升級版) ---
+        // 設定
         function loadSettings() {
             fetch(SETTINGS_CSV).then(r=>r.text()).then(csv => {
-                const rows = parseCSV(csv); // ✨ 改用 parseCSV，防止內容有逗號讀取失敗
+                const rows = parseCSV(csv);
                 rows.forEach(row => {
                     if(row.length >= 2) {
                         const key = row[0].trim(); const val = row[1].trim();
-                        if(key === 'link_booking') document.getElementById('floatBookingBtn').href = val;
+                        // if(key === 'link_booking') document.getElementById('floatBookingBtn').href = val;
                         if(key === 'profile_name') { document.getElementById('profile-name').textContent = val; document.getElementById('profile-name').classList.remove('skeleton'); document.getElementById('profile-name').style.width = 'auto'; }
                         if(key === 'profile_desc') { document.getElementById('profile-desc').textContent = val; document.getElementById('profile-desc').classList.remove('skeleton'); document.getElementById('profile-desc').style.width = 'auto'; }
                         if(key === 'profile_img') { document.getElementById('profile-img-container').innerHTML = `<img src="${val}" class="profile-img" alt="紋綉師">`; document.getElementById('profile-img-container').classList.remove('skeleton'); document.getElementById('profile-img-container').style.background = 'transparent'; }
