@@ -281,13 +281,13 @@
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 </div>
                 <h3 style="margin:0; font-size:1.3rem; color:var(--text);">舊客補色查詢</h3>
-                <p style="font-size:0.9rem; color:#999; margin:8px 0 0 0;">輸入姓名或電話查詢專屬優惠</p>
-                <p style="font-size:0.85rem; color:#C17E7E; font-weight:bold; margin:5px 0 15px 0;">💡 小提醒：建議優先使用「姓名」查詢，資料更準確喔！</p>
+                <p style="font-size:0.9rem; color:#999; margin:8px 0 0 0;">輸入姓名或電話查詢</p>
+                <p style="font-size:0.85rem; color:#C17E7E; font-weight:bold; margin:5px 0 15px 0;">💡 小提醒：建議優先使用「姓名」查詢呦！</p>
                 
                 <div class="input-group">
                     <div class="input-icon">🔍</div>
                     <input type="text" id="queryInput" class="search-input" 
-                           placeholder="例如：林小美 或 0912..." 
+                           placeholder="例如：林小美 或 09123456789" 
                            onkeydown="if(event.key === 'Enter') searchRecord()">
                 </div>
                 <button onclick="searchRecord()" id="searchButton" class="btn-primary">立即查詢</button>
@@ -406,7 +406,7 @@
         const SERVICES_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1138837231&single=true&output=csv';
         const REVIEWS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=174294022&single=true&output=csv'; 
         const PORTFOLIO_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1127370948&single=true&output=csv'; 
-        const SETTINGS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQxxxxxxxx/pub?output=csv'; 
+        const SETTINGS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1317009759&single=true&output=csv'; 
         const PROMOTIONS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=458650816&single=true&output=csv'; 
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx6grwl5DidK6DScAaZLM8udp-Pjn_FrB33bv6ES0JkwAiiIx-xxJHicxANVGH7caSpEg/exec"; 
         
