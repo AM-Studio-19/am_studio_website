@@ -21,7 +21,7 @@
             --text-light: #8D7B72;
             --bg-color: #F9F8F6;  
             --card-shadow: 0 10px 30px -10px rgba(214, 191, 168, 0.4);
-            --nav-height: 60px;
+            --nav-height: 70px;
         }
 
         /* 全域設定 */
@@ -35,13 +35,13 @@
             color: var(--text);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0; padding: 0;
-            padding-bottom: 20px;
+            padding-bottom: calc(var(--nav-height) + 40px);
             -webkit-font-smoothing: antialiased;
             scroll-behavior: smooth;
             overflow-x: hidden; width: 100%;
         }
 
-        /* --- 導覽列 (置頂 Sticky) --- */
+        /* --- 導覽列 --- */
         .top-nav {
             position: sticky; top: 0; width: 100%; height: 60px;
             background: rgba(255, 255, 255, 0.95);
@@ -179,22 +179,14 @@
         .case-tag { font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; background: #F2F0EB; color: #7A6C63; font-weight: 600; }
         .case-desc { font-size: 0.75rem; color: #888; line-height: 1.3; }
 
-        /* --- 4. 顧客好評 (✨ 捲動優化 ✨) --- */
+        /* --- 4. 顧客好評 --- */
         .reviews-horizontal { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; width: 100%; }
         .reviews-horizontal::-webkit-scrollbar { display: none; }
         .review-card-item { flex: 0 0 280px; scroll-snap-align: center; background: #fff; padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.02); display: flex; flex-direction: column; gap: 10px; }
         .review-header { display: flex; align-items: center; gap: 10px; }
         .review-avatar { width: 40px; height: 40px; border-radius: 50%; background: #F2F0EB; display: flex; align-items: center; justify-content: center; color: var(--primary); }
         .review-name { font-weight: 700; color: var(--text); font-size: 0.95rem; }
-        
-        /* ✨ 修改：好評內容支援內部滾動 ✨ */
-        .review-content { 
-            font-size: 0.9rem; color: #666; line-height: 1.6; 
-            background: #F9F8F6; padding: 12px; border-radius: 12px; 
-            max-height: 140px; /* 固定高度 */
-            overflow-y: auto; /* 內容過長可滾動 */
-            display: block; 
-        }
+        .review-content { font-size: 0.9rem; color: #666; line-height: 1.6; background: #F9F8F6; padding: 12px; border-radius: 12px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 
         /* --- 懸浮按鈕 --- */
         .floating-cta { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 85%; max-width: 350px; background: var(--text); color: white; padding: 14px; border-radius: 50px; text-align: center; text-decoration: none; font-weight: 700; font-size: 1rem; box-shadow: 0 10px 25px rgba(90, 72, 63, 0.4); z-index: 950; display: flex; align-items: center; justify-content: center; gap: 8px; }
@@ -203,12 +195,13 @@
         .skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 8px; color: transparent !important; }
         @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-        /* --- 關閉按鈕樣式 --- */
+        /* --- 關閉按鈕樣式 (High Contrast) --- */
         .close-btn-enhanced {
             position: absolute; top: 15px; right: 15px; 
             width: 40px; height: 40px; 
-            background: rgba(0, 0, 0, 0.7); 
-            color: white; border-radius: 50%; 
+            background: rgba(0, 0, 0, 0.7); /* 深色背景 */
+            color: white; 
+            border-radius: 50%; 
             display: flex; align-items: center; justify-content: center; 
             font-size: 24px; cursor: pointer; z-index: 3010;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
@@ -326,7 +319,7 @@
             </div>
         </section>
 
-        <!-- ✨ 優惠活動 ✨ -->
+        <!-- ✨ 新增：優惠活動 ✨ -->
         <section id="promotions">
             <div class="section-header"><h2>最新優惠</h2></div>
             <div class="swipe-hint-text"><span>← 左右滑動查看優惠 →</span></div>
@@ -339,7 +332,7 @@
             </div>
         </section>
 
-        <!-- 2. 服務項目 (橫向圖卡) -->
+        <!-- 2. 服務項目 -->
         <section id="services">
             <div class="section-header"><h2>服務項目</h2></div>
             <div class="swipe-hint-text"><span>← 左右滑動查看服務 →</span></div>
@@ -445,10 +438,10 @@
     </div>
 
     <script>
-        // 設定區
         const SERVICES_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1138837231&single=true&output=csv';
         const REVIEWS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=174294022&single=true&output=csv'; 
         const PORTFOLIO_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=1127370948&single=true&output=csv'; 
+        // ✨ 已更新 Settings URL ✨
         const SETTINGS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQxxxxxxxx/pub?output=csv'; 
         const PROMOTIONS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcHgH5o_qBPjXeQfKA74-D0lmpJr6TjGGR_BbID5UsFM6YCXqoQAFC7my8Bo1XQoHcJdgC4rk08ORY/pub?gid=458650816&single=true&output=csv'; 
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx6grwl5DidK6DScAaZLM8udp-Pjn_FrB33bv6ES0JkwAiiIx-xxJHicxANVGH7caSpEg/exec"; 
@@ -461,7 +454,7 @@
             initLightboxEvents(); 
         });
 
-        // --- Lightbox 邏輯 ---
+        // --- Lightbox 功能 ---
         let lbIndex = 0;
         let lbImages = [];
 
@@ -518,8 +511,10 @@
             const targetId = btn.getAttribute('href').substring(1);
             const targetEl = document.getElementById(targetId);
             if(targetEl) {
+                // 扣掉頂部高度 (Hero + Nav + margin)
+                const offset = 80; 
                 window.scrollTo({
-                    top: targetEl.offsetTop - 150, 
+                    top: targetEl.offsetTop - offset, 
                     behavior: 'smooth'
                 });
             }
@@ -551,7 +546,7 @@
             return arr;
         }
 
-        // 1. 優惠 (✨ 圖片載入修復 ✨)
+        // 1. 優惠
         function loadPromotions() {
             if(PROMOTIONS_CSV.includes('請在此')) {
                 document.getElementById('promo-list').innerHTML = '<p style="padding:20px; color:#ccc; width:100%; text-align:center;">暫無優惠活動</p>';
@@ -566,18 +561,16 @@
                 
                 for(let i=start; i<rows.length; i++){
                     const c = rows[i]; if(c.length<2 || !c[0]) continue;
+                    // ✨ 修正：使用 c[1] (Content) 作為彈窗說明
                     const div = document.createElement('div');
                     div.className = 'promo-card';
-                    div.onclick = () => openServiceModal(c[0], '優惠活動', c[3], c[2]); // c[3]=Detail
-                    
-                    // ✨ 圖片連結修復：使用 c[2] (Image) 並去除空白
-                    const imgSrc = (c[2] && c[2].trim().startsWith('http')) ? c[2].trim() : 'https://via.placeholder.com/300x150?text=Promotion';
+                    div.onclick = () => openServiceModal(c[0], '優惠活動', c[1], c[2]);
                     
                     div.innerHTML = `
-                        <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/300x150?text=Error'" alt="${c[0]}">
+                        <img src="${c[2] || 'https://via.placeholder.com/300x150?text=Promotion'}" alt="${c[0]}">
                         <div class="promo-overlay">
                             <h3 class="promo-title">${c[0]}</h3>
-                            <!-- 移除內容文字，只留標題 -->
+                            <!-- 僅顯示標題 -->
                         </div>
                     `;
                     list.appendChild(div);
@@ -585,7 +578,7 @@
             }).catch(()=> document.getElementById('promo-list').innerHTML='<p style="padding:20px; color:#ccc;">暫無優惠</p>');
         }
 
-        // 2. 服務 (✨ 圖片載入修復 ✨)
+        // 2. 服務
         function loadServices() {
             fetch(SERVICES_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt);
@@ -596,12 +589,8 @@
                     const c = rows[i]; if(c.length<2 || !c[0]) continue;
                     const div = document.createElement('div');
                     div.className = 'service-card-item';
-                    
-                    // ✨ 圖片連結修復：使用 c[3] (Image)
-                    const imgSrc = (c[3] && c[3].trim().startsWith('http')) ? c[3].trim() : 'https://via.placeholder.com/300x200?text=Service';
-                    
                     div.innerHTML = `
-                        <img class="service-img" src="${imgSrc}" onerror="this.src='https://via.placeholder.com/300x200?text=Error'" loading="lazy">
+                        <img class="service-img" src="${c[3] ? c[3].trim() : 'https://via.placeholder.com/150'}" loading="lazy">
                         <div class="service-content">
                             <h3 class="service-title">${c[0]}</h3>
                             <div class="service-tag">${c[2]||''}</div>
@@ -667,7 +656,7 @@
             });
         }
 
-        // 4. 好評 (✨ 捲動修復 ✨)
+        // 4. 好評
         function loadReviews() {
             fetch(REVIEWS_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt);
@@ -701,7 +690,8 @@
                 rows.forEach(row => {
                     if(row.length >= 2) {
                         const key = row[0].trim(); const val = row[1].trim();
-                        // if(key === 'link_booking') document.getElementById('floatBookingBtn').href = val;
+                        if(key === 'link_booking') document.getElementById('floatBookingBtn').href = val;
+                        
                         if(key === 'profile_name') { document.getElementById('profile-name').textContent = val; document.getElementById('profile-name').classList.remove('skeleton'); document.getElementById('profile-name').style.width = 'auto'; }
                         if(key === 'profile_desc') { document.getElementById('profile-desc').textContent = val; document.getElementById('profile-desc').classList.remove('skeleton'); document.getElementById('profile-desc').style.width = 'auto'; }
                         if(key === 'profile_img') { document.getElementById('profile-img-container').innerHTML = `<img src="${val}" class="profile-img" alt="紋綉師">`; document.getElementById('profile-img-container').classList.remove('skeleton'); document.getElementById('profile-img-container').style.background = 'transparent'; }
