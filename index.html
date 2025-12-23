@@ -752,19 +752,45 @@
                 }
             }).catch(()=> document.getElementById('review-list').innerHTML='<p style="text-align:center;color:#ccc">尚無評論</p>');
         }
+        // --- 設定 (包含 LINE 瀏覽器判斷) ---
         function loadSettings() {
+            // 偵測是否為 LINE 內建瀏覽器
+            const isLineBrowser = /Line/i.test(navigator.userAgent);
+            
             fetch(SETTINGS_CSV).then(r=>r.text()).then(csv => {
                 const rows = parseCSV(csv);
+                
+                // 先定義變數來存兩種連結
+                let liffUrl = '';
+                let oaUrl = '';
+
                 rows.forEach(row => {
                     if(row.length >= 2) {
                         const key = row[0].trim(); const val = row[1].trim();
-                        if(key === 'link_booking') document.getElementById('floatBookingBtn').href = val;
+                        
+                        // 存連結，稍後判斷
+                        if(key === 'link_booking') liffUrl = val;
+                        if(key === 'link_line_oa') oaUrl = val;
+
+                        // 其他設定照常執行
                         if(key === 'profile_name') { document.getElementById('profile-name').textContent = val; document.getElementById('profile-name').classList.remove('skeleton'); document.getElementById('profile-name').style.width = 'auto'; }
                         if(key === 'profile_desc') { document.getElementById('profile-desc').textContent = val; document.getElementById('profile-desc').classList.remove('skeleton'); document.getElementById('profile-desc').style.width = 'auto'; }
                         if(key === 'profile_img') { document.getElementById('profile-img-container').innerHTML = `<img src="${val}" class="profile-img" alt="紋綉師">`; document.getElementById('profile-img-container').classList.remove('skeleton'); document.getElementById('profile-img-container').style.background = 'transparent'; }
                         if(key === 'profile_tags') { const c = document.getElementById('profile-tags'); c.innerHTML = ''; val.split(';').forEach(tag => { if(tag.trim()) c.innerHTML += `<span class="tag-pill">${tag.trim()}</span>`; }); }
                     }
                 });
+
+                // 🌟 核心判斷邏輯 🌟
+                const btn = document.getElementById('floatBookingBtn');
+                if (isLineBrowser) {
+                    // 如果在 LINE 裡面，優先用 LIFF
+                    if(liffUrl) btn.href = liffUrl;
+                } else {
+                    // 如果在 LINE 以外 (Chrome/Safari)，優先用 OA 加好友連結
+                    // 如果沒設定 OA 連結，就只好還是用 LIFF
+                    btn.href = oaUrl ? oaUrl : liffUrl;
+                }
+
             });
         }
     </script>
