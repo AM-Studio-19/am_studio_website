@@ -21,7 +21,7 @@
             --text-light: #8D7B72;
             --bg-color: #F9F8F6;  
             --card-shadow: 0 10px 30px -10px rgba(214, 191, 168, 0.4);
-            --nav-height: 70px;
+            --nav-height: 60px;   /* 導航高度 */
         }
 
         /* 全域設定 */
@@ -35,26 +35,32 @@
             color: var(--text);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0; padding: 0;
-            padding-bottom: calc(var(--nav-height) + 60px); /* 留更多空間給大按鈕 */
+            padding-bottom: 100px;
             -webkit-font-smoothing: antialiased;
             scroll-behavior: smooth;
             overflow-x: hidden; width: 100%;
         }
 
-        /* --- 導覽列 --- */
+        /* --- 導覽列 (可橫向滑動以容納更多按鈕) --- */
         .top-nav {
-            position: sticky; top: 0; width: 100%; height: 60px;
+            position: sticky; top: 0; width: 100%; height: var(--nav-height);
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            display: flex; justify-content: space-around; align-items: center;
+            display: flex; align-items: center;
             z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.05);
+            overflow-x: auto; /* 允許橫向滑動 */
+            white-space: nowrap;
         }
+        /* 隱藏捲軸 */
+        .top-nav::-webkit-scrollbar { display: none; }
+        
         .nav-btn {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
             color: #999; text-decoration: none; font-size: 0.65rem; gap: 3px;
-            width: 20%; height: 100%; transition: 0.3s; position: relative;
-            letter-spacing: 0.5px;
+            min-width: 70px; /* 固定最小寬度 */
+            flex: 1; 
+            height: 100%; transition: 0.3s; position: relative;
         }
         .nav-btn svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.5; fill: none; transition: 0.3s; }
         .nav-btn.active { color: var(--text); font-weight: bold; }
@@ -83,13 +89,25 @@
         .profile-card {
             background: #fff; border-radius: 20px; padding: 20px; width: 90%; max-width: 500px; 
             margin: -50px auto 20px auto; box-shadow: 0 15px 30px -5px rgba(0,0,0,0.1);
-            display: flex; align-items: center; gap: 15px; position: relative; z-index: 10;
+            display: flex; align-items: flex-start; gap: 15px; position: relative; z-index: 10;
         }
         .profile-img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid var(--bg-color); flex-shrink: 0; background: #eee; }
+        .profile-info { flex: 1; }
         .profile-info h3 { margin: 0; font-size: 1.1rem; color: var(--text); font-weight: 700; }
         .profile-info p { margin: 4px 0 0 0; font-size: 0.85rem; color: #888; line-height: 1.4; }
-        .tags-row { display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap; }
+        .tags-row { display: flex; gap: 5px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
         .tag-pill { font-size: 0.65rem; background: #F2F0EB; color: #8D7B72; padding: 2px 8px; border-radius: 4px; }
+        
+        /* IG 按鈕 */
+        .btn-instagram {
+            display: inline-flex; align-items: center; gap: 4px;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            color: white; font-size: 0.65rem; font-weight: bold;
+            padding: 2px 8px; border-radius: 20px; text-decoration: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15); transition: 0.3s;
+        }
+        .btn-instagram svg { width: 12px; height: 12px; fill: white; }
+        .btn-instagram:active { transform: scale(0.95); opacity: 0.9; }
 
         .container { max-width: 600px; margin: 0 auto; padding: 0 20px; overflow: hidden; }
         .section-header { text-align: center; margin: 40px 0 20px 0; display: flex; align-items: center; justify-content: center; gap: 15px; cursor: pointer; user-select: none; }
@@ -98,7 +116,7 @@
         .header-arrow { transition: transform 0.3s ease; font-size: 0.8rem; opacity: 0.6; }
         .section-header.collapsed .header-arrow { transform: rotate(-90deg); }
 
-        /* --- 1. 價格試算機 (純文字按鈕版) --- */
+        /* --- 1. 價格試算機 --- */
         .calculator-card {
             background: #fff; border-radius: 24px; padding: 30px 25px;
             box-shadow: var(--card-shadow); text-align: center; margin-top: 10px; width: 100%;
@@ -111,10 +129,10 @@
         .service-option {
             flex: 1; padding: 20px 15px; border: 2px solid #eee; border-radius: 16px;
             cursor: pointer; transition: 0.2s; position: relative;
-            display: flex; align-items: center; justify-content: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
-        .service-option.selected { border-color: var(--primary); background: #FAF8F5; color: var(--primary); box-shadow: 0 0 0 3px rgba(214, 191, 168, 0.2); }
-        .service-option-name { font-weight: bold; font-size: 1.1rem; }
+        .service-option.selected { border-color: var(--primary); background: #FAF8F5; color: var(--primary); }
+        .service-option-name { font-weight: bold; font-size: 1rem; margin-top: 5px; }
         
         .dark-lip-box { 
             background: #FFF5F5; padding: 15px; border-radius: 12px; 
@@ -159,7 +177,7 @@
         .final-price { font-size: 2rem; font-weight: 800; line-height: 1; }
         .price-detail { font-size: 0.8rem; margin-top: 8px; opacity: 0.7; }
 
-        /* --- 優惠活動 --- */
+        /* --- 優惠活動 (橫向) --- */
         .promo-horizontal { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; width: 100%; }
         .promo-horizontal::-webkit-scrollbar { display: none; }
         .promo-card { flex: 0 0 260px; scroll-snap-align: center; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); animation: fadeIn 0.6s ease; position: relative; height: 160px; cursor: pointer; }
@@ -168,7 +186,7 @@
         .promo-title { font-size: 1.1rem; font-weight: 700; margin: 0; }
         .promo-desc { font-size: 0.85rem; opacity: 0.9; margin: 2px 0 0 0; }
 
-        /* --- 2. 服務項目 --- */
+        /* --- 2. 服務項目 (橫向圖卡) --- */
         .service-horizontal { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; width: 100%; }
         .service-horizontal::-webkit-scrollbar { display: none; }
         .service-card-item { flex: 0 0 200px; scroll-snap-align: start; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.04); animation: fadeIn 0.6s ease; display: flex; flex-direction: column; cursor: pointer; }
@@ -204,17 +222,8 @@
         .review-name { font-weight: 700; color: var(--text); font-size: 0.95rem; }
         .review-content { font-size: 0.9rem; color: #666; line-height: 1.6; background: #F9F8F6; padding: 12px; border-radius: 12px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 
-        /* --- ✨ 修改：漂浮按鈕 (LINE 明確版) ✨ --- */
-        .floating-cta { 
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); 
-            width: auto; min-width: 200px; /* 寬度自動適應，但有最小值 */
-            background: #06C755; /* LINE 官方綠色 */
-            color: white; padding: 14px 25px; border-radius: 50px; 
-            text-align: center; text-decoration: none; font-weight: 700; font-size: 1.1rem; 
-            box-shadow: 0 4px 15px rgba(6, 199, 85, 0.4); 
-            z-index: 950; display: flex; align-items: center; justify-content: center; gap: 10px; 
-            transition: 0.3s;
-        }
+        /* --- 懸浮按鈕 --- */
+        .floating-cta { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); width: auto; min-width: 200px; background: #06C755; color: white; padding: 14px 25px; border-radius: 50px; text-align: center; text-decoration: none; font-weight: 700; font-size: 1.1rem; box-shadow: 0 10px 25px rgba(90, 72, 63, 0.4); z-index: 950; display: flex; align-items: center; justify-content: center; gap: 8px; transition: transform 0.2s; }
         .floating-cta:active { transform: translateX(-50%) scale(0.96); }
         .line-icon { width: 24px; height: 24px; fill: currentColor; }
 
@@ -289,6 +298,10 @@
             <h3 id="profile-name" class="skeleton" style="width:50%; height:20px; margin-bottom:5px;"></h3>
             <p id="profile-desc" class="skeleton" style="width:90%; height:40px;"></p>
             <div id="profile-tags" class="tags-row"></div>
+            <!-- IG 按鈕 (動態生成) -->
+            <a id="ig-link-btn" href="#" target="_blank" class="btn-instagram" style="display:none; margin-top:10px;">
+                <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg> Instagram
+            </a>
         </div>
     </div>
 
@@ -314,11 +327,15 @@
             <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
             好評
         </a>
+        <a href="#check" class="nav-btn" onclick="setActiveNav(this)">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            舊客
+        </a>
     </div>
 
     <div class="container">
 
-        <!-- 1. 新客價格試算 (純文字版) -->
+        <!-- 1. 新客價格試算 (Updated) -->
         <section id="calculator">
             <div class="section-header"><h2>服務價格</h2></div>
             <div class="calculator-card">
@@ -337,6 +354,7 @@
                         <input type="checkbox" id="check-dark-lip" onchange="calculatePrice()">
                         <span>我有烏唇困擾</span>
                     </div>
+                    <!-- ✨ 烏唇範例連結 (打開專屬燈箱) ✨ -->
                     <div class="dark-lip-link" onclick="openDarkLipExamples()">什麼是烏唇?</div>
                 </div>
 
@@ -350,7 +368,8 @@
                     <div class="discount-chip" data-val="discount_referral" onclick="toggleDiscount(this)">舊客介紹</div>
                 </div>
                 
-                <div class="step-title" style="margin-top:20px;">3. 服務價格</div>
+                <!-- ✨ 早鳥優惠 (預設開啟) ✨ -->
+                <div class="step-title" style="margin-top:20px;">3. 限時加碼 (可疊加)</div>
                 <div id="earlyBirdContainer" class="stackable-opt selected" onclick="toggleEarlyBird(this)">
                     <div class="stackable-label">期間限定優惠 (早鳥折扣)</div>
                     <div class="stackable-check"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="4" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
@@ -596,21 +615,21 @@
                 }
             }
 
-            // 2. 預設優惠 (所有人都有)
-            if(priceConfig.discount_default > 0) {
-                total -= priceConfig.discount_default;
-                breakdown.push(`期間限定優惠 -$${priceConfig.discount_default}`);
-            }
-
-            // 3. 身份優惠 (單選，可與預設疊加)
+            // 2. 身份優惠 (單選)
             if (selectedDiscount) {
                 const amt = priceConfig[selectedDiscount] || 0;
                 const label = document.querySelector(`.discount-chip[data-val="${selectedDiscount}"]`).innerText;
                 total -= amt;
                 breakdown.push(`${label} -$${amt}`);
+            } else {
+                // 若無身份，套用預設優惠 (12/31前)
+                if(priceConfig.discount_default > 0) {
+                    total -= priceConfig.discount_default;
+                    breakdown.push(`期間限定優惠 -$${priceConfig.discount_default}`);
+                }
             }
 
-            // 4. 早鳥 (疊加)
+            // 3. 早鳥 (疊加)
             if(isEarlyBird && priceConfig.discount_early > 0) {
                 total -= priceConfig.discount_early;
                 breakdown.push(`早鳥優惠 -$${priceConfig.discount_early}`);
@@ -678,13 +697,32 @@
         }
         function openAdminPanel() { const pwd = prompt("請輸入管理員密碼："); if(pwd === "1234") document.getElementById('adminPanel').style.display = 'flex'; else if(pwd !== null) alert("密碼錯誤"); }
         function closeAdminPanel(e) { if(e.target.id === 'adminPanel') e.target.style.display = 'none'; }
+
         function setActiveNav(btn) {
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
-            const targetId = btn.getAttribute('href').substring(1); const targetEl = document.getElementById(targetId);
-            if(targetEl) { window.scrollTo({ top: targetEl.offsetTop - 150, behavior: 'smooth' }); }
+            
+            const targetId = btn.getAttribute('href').substring(1);
+            const sections = ['calculator', 'services', 'promotions', 'portfolio', 'reviews', 'check'];
+            
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                if(el) {
+                    el.style.display = (id === targetId) ? 'block' : 'none';
+                }
+            });
+            window.scrollTo(0,0);
         }
-        function toggleSection(contentId, headerEl) { const content = document.getElementById(contentId); content.classList.toggle('collapsed'); headerEl.classList.toggle('collapsed'); }
-        function hideHint(elementId) { const el = document.getElementById(elementId); if(el) el.classList.add('hint-hidden'); }
+        
+        function toggleSection(contentId, headerEl) {
+            const content = document.getElementById(contentId);
+            content.classList.toggle('collapsed');
+            headerEl.classList.toggle('collapsed');
+        }
+        function hideHint(elementId) {
+            const el = document.getElementById(elementId);
+            if(el) el.classList.add('hint-hidden');
+        }
+
         function parseCSV(str) {
             const arr = []; let quote = false; let col = 0, row = 0;
             for (let c = 0; c < str.length; c++) {
@@ -703,32 +741,61 @@
 
         // 1. 優惠
         function loadPromotions() {
-            if(PROMOTIONS_CSV.includes('請在此')) { document.getElementById('promo-list').innerHTML = '<p style="padding:20px; color:#ccc; width:100%; text-align:center;">暫無優惠活動</p>'; return; }
+            if(PROMOTIONS_CSV.includes('請在此')) {
+                document.getElementById('promo-list').innerHTML = '<p style="padding:20px; color:#ccc; width:100%; text-align:center;">暫無優惠活動</p>';
+                return;
+            }
+
             fetch(PROMOTIONS_CSV).then(r=>r.text()).then(txt=>{
-                const rows = parseCSV(txt); const list = document.getElementById('promo-list'); list.innerHTML = '';
+                const rows = parseCSV(txt);
+                const list = document.getElementById('promo-list');
+                list.innerHTML = '';
                 let start = (rows.length>0 && rows[0][0].toLowerCase().includes('title')) ? 1 : 0;
+                
                 for(let i=start; i<rows.length; i++){
                     const c = rows[i]; if(c.length<2 || !c[0]) continue;
-                    const div = document.createElement('div'); div.className = 'promo-card';
+                    // ✨ 修正：使用 c[1] (Content) 作為彈窗說明
                     const imgSrc = (c[2] && c[2].trim().startsWith('http')) ? c[2].trim() : 'https://via.placeholder.com/300x150?text=Promotion';
-                    div.onclick = () => openServiceModal(c[0], '優惠活動', c[3], c[2]); // c[3]=Detail
-                    div.innerHTML = `<img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/300x150?text=Error'" alt="${c[0]}"><div class="promo-overlay"><h3 class="promo-title">${c[0]}</h3></div>`;
+                    const div = document.createElement('div');
+                    div.className = 'promo-card';
+                    div.onclick = () => openServiceModal(c[0], '優惠活動', c[1], c[2]);
+                    
+                    div.innerHTML = `
+                        <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/300x150?text=Error'" alt="${c[0]}">
+                        <div class="promo-overlay">
+                            <h3 class="promo-title">${c[0]}</h3>
+                        </div>
+                    `;
                     list.appendChild(div);
                 }
             }).catch(()=> document.getElementById('promo-list').innerHTML='<p style="padding:20px; color:#ccc;">暫無優惠</p>');
         }
 
-        // 2. 服務
+        // 2. 服務 (✨ 修正：縮圖只抓第一張 ✨)
         function loadServices() {
             fetch(SERVICES_CSV).then(r=>r.text()).then(txt=>{
-                const rows = parseCSV(txt); const list = document.getElementById('service-list'); list.innerHTML = '';
+                const rows = parseCSV(txt);
+                const list = document.getElementById('service-list');
+                list.innerHTML = '';
                 let start = (rows.length>0 && rows[0][0].toLowerCase().includes('name')) ? 1 : 0;
                 for(let i=start; i<rows.length; i++){
                     const c = rows[i]; if(c.length<2 || !c[0]) continue;
-                    const div = document.createElement('div'); div.className = 'service-card-item';
-                    let imgRaw = c[3] || ''; let thumbSrc = imgRaw.split(';')[0].trim();
+                    const div = document.createElement('div');
+                    div.className = 'service-card-item';
+                    
+                    // ✨ 圖片防呆：分割字串只取第一張 ✨
+                    let imgRaw = c[3] || '';
+                    let thumbSrc = imgRaw.split(';')[0].trim();
                     if(!thumbSrc.startsWith('http')) thumbSrc = 'https://via.placeholder.com/300x200?text=Service';
-                    div.innerHTML = `<img class="service-img" src="${thumbSrc}" onerror="this.src='https://via.placeholder.com/300x200?text=Error'" loading="lazy"><div class="service-content"><h3 class="service-title">${c[0]}</h3><div class="service-tag">${c[2]||''}</div><div class="service-price">NT$ ${c[1]}</div></div>`;
+
+                    div.innerHTML = `
+                        <img class="service-img" src="${thumbSrc}" onerror="this.src='https://via.placeholder.com/300x200?text=Error'" loading="lazy">
+                        <div class="service-content">
+                            <h3 class="service-title">${c[0]}</h3>
+                            <div class="service-tag">${c[2]||''}</div>
+                            <div class="service-price">NT$ ${c[1]}</div>
+                        </div>
+                    `;
                     div.onclick = () => openServiceModal(c[0], c[1], c[4], c[3]);
                     list.appendChild(div);
                 }
@@ -739,7 +806,9 @@
             document.getElementById('modalPrice').textContent = (p==='優惠活動') ? p : 'NT$ ' + p;
             document.getElementById('modalDesc').textContent = d ? d.replace(/\|/g, '\n') : '暫無介紹';
             const c = document.getElementById('carouselContainer'); c.innerHTML = '';
-            if(imgs) imgs.split(';').forEach(src=>{ if(src.trim()) c.innerHTML += `<div class="carousel-slide"><img src="${src.trim()}"></div>`; });
+            if(imgs) imgs.split(';').forEach(src=>{ 
+                if(src.trim()) c.innerHTML += `<div class="carousel-slide"><img src="${src.trim()}"></div>`; 
+            });
             c.style.display = imgs ? 'flex' : 'none';
             document.getElementById('serviceModal').classList.add('show');
             document.body.style.overflow = 'hidden';
@@ -750,52 +819,69 @@
                 m.classList.remove('show'); document.body.style.overflow = '';
             }
         }
+
+        // 3. 作品
         function loadPortfolio() {
             fetch(PORTFOLIO_CSV).then(r=>r.text()).then(txt=>{
                 const rows = parseCSV(txt); allPortfolioData = [];
                 let start = (rows.length>0 && rows[0][0].toLowerCase().includes('image')) ? 1 : 0;
                 for(let i=start; i<rows.length; i++){
                     const c = rows[i]; if(!c[0]) continue;
-                    // c[2]是分類，dark_ref 不放入一般作品集，只給烏唇連結用
-                    const cat = (c[2]||'').trim().toLowerCase();
-                    allPortfolioData.push({ img: c[0].trim(), desc: c[1]||'', cat: cat });
+                    allPortfolioData.push({ img: c[0].trim(), desc: c[1]||'', cat: (c[2]||'').trim().toLowerCase() });
                 }
-                currentPortfolioData = allPortfolioData.filter(i => i.cat !== 'dark_ref'); // 預設排除 dark_ref
+                currentPortfolioData = allPortfolioData.filter(i => i.cat !== 'dark_ref'); 
                 renderPortfolio();
             });
         }
         function filterPortfolio(cat, btn) {
-            document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active')); if(btn) btn.classList.add('active');
-            // 一般篩選不顯示 dark_ref
-            if(cat === 'all') {
-                currentPortfolioData = allPortfolioData.filter(i => i.cat !== 'dark_ref');
-            } else {
-                currentPortfolioData = allPortfolioData.filter(i => i.cat === cat);
-            }
+            document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+            currentPortfolioData = (cat === 'all') ? allPortfolioData : allPortfolioData.filter(i => i.cat === cat);
             renderPortfolio();
         }
         function renderPortfolio() {
             const container = document.getElementById('portfolio-horizontal'); container.innerHTML = '';
             if(currentPortfolioData.length === 0) { container.innerHTML = '<p style="text-align:center;color:#ccc;width:100%;">暫無作品</p>'; return; }
+            
             currentPortfolioData.forEach(item => {
-                const parts = item.desc.split('|'); const tag = parts.length > 1 ? parts[0].trim() : ''; const text = parts.length > 1 ? parts[1].trim() : parts[0].trim();
+                const parts = item.desc.split('|');
+                const tag = parts.length > 1 ? parts[0].trim() : '';
+                const text = parts.length > 1 ? parts[1].trim() : parts[0].trim();
                 const div = document.createElement('div'); div.className = 'case-card';
                 div.onclick = () => openLightbox(item.img);
                 div.innerHTML = `<div class="case-img-box"><img src="${item.img}" loading="lazy"></div><div class="case-info">${tag ? `<div class="case-tags"><span class="case-tag">${tag}</span></div>` : ''}<div class="case-desc">${text}</div></div>`;
                 container.appendChild(div);
             });
         }
+
+        // 4. 好評
         function loadReviews() {
             fetch(REVIEWS_CSV).then(r=>r.text()).then(txt=>{
-                const rows = parseCSV(txt); const list = document.getElementById('review-list'); list.innerHTML = ''; 
+                const rows = parseCSV(txt);
+                const list = document.getElementById('review-list'); list.innerHTML = ''; 
                 let start = (rows.length>0 && rows[0][0].toLowerCase().includes('name')) ? 1 : 0;
                 for(let i=start; i<rows.length; i++){
-                    const c = rows[i]; if(c.length<3 || !c[0]) continue; 
-                    const name = c[0] || '顧客'; const content = c[2] || ''; 
-                    list.innerHTML += `<div class="review-card-item"><div class="review-header"><div class="review-avatar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><span class="review-name">${name}</span></div><div class="review-content">${content}</div></div>`;
+                    const c = rows[i]; 
+                    if(c.length<3 || !c[0]) continue; 
+                    const name = c[0] || '顧客';
+                    const content = c[2] || ''; 
+                    const div = document.createElement('div');
+                    div.className = 'review-card-item';
+                    div.innerHTML = `
+                        <div class="review-header">
+                            <div class="review-avatar">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            </div>
+                            <span class="review-name">${name}</span>
+                        </div>
+                        <div class="review-content">${content}</div>
+                    `;
+                    list.appendChild(div);
                 }
             }).catch(()=> document.getElementById('review-list').innerHTML='<p style="text-align:center;color:#ccc">尚無評論</p>');
         }
+
+        // 設定
         function loadSettings() {
             fetch(SETTINGS_CSV).then(r=>r.text()).then(csv => {
                 const rows = parseCSV(csv);
@@ -809,12 +895,10 @@
                         if(key === 'profile_desc') { document.getElementById('profile-desc').textContent = val; document.getElementById('profile-desc').classList.remove('skeleton'); document.getElementById('profile-desc').style.width = 'auto'; }
                         if(key === 'profile_img') { document.getElementById('profile-img-container').innerHTML = `<img src="${val}" class="profile-img" alt="紋綉師">`; document.getElementById('profile-img-container').classList.remove('skeleton'); document.getElementById('profile-img-container').style.background = 'transparent'; }
                         if(key === 'profile_tags') { const c = document.getElementById('profile-tags'); c.innerHTML = ''; val.split(';').forEach(tag => { if(tag.trim()) c.innerHTML += `<span class="tag-pill">${tag.trim()}</span>`; }); }
-                        // ✨ IG 按鈕網址 (如果有的話) ✨
+                        // ✨ IG 按鈕網址 ✨
                         if(key === 'link_instagram') { 
-                            const igBtn = document.createElement('a');
-                            igBtn.href = val; igBtn.target = "_blank"; igBtn.className = "btn-instagram"; igBtn.style.marginTop = "10px"; igBtn.style.display = "inline-flex";
-                            igBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg> Instagram`;
-                            document.querySelector('.profile-info').appendChild(igBtn);
+                            const igBtn = document.getElementById('ig-link-btn');
+                            igBtn.href = val; igBtn.style.display = "inline-flex";
                         }
                     }
                 });
